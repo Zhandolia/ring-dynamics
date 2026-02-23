@@ -22,14 +22,19 @@ class Settings(BaseSettings):
     
     # Video Storage
     VIDEO_STORAGE_PATH: str = "./storage/videos"
+    ANNOTATED_VIDEO_PATH: str = "./storage/annotated"
     MODELS_PATH: str = "./models/weights"
+    YOLO_MODEL: str = "./models/yolov8n.pt"
     
     # Processing
     MAX_VIDEO_SIZE_MB: int = 500
     FRAMES_PER_SECOND: int = 30
+    ANNOTATION_SCALE: float = 0.5
+    ANNOTATION_IMGSZ: int = 640
+    ANNOTATION_CONF: float = 0.30
     
     # GPU
-    DEVICE: str = "cuda:0"  # or "cpu" for development
+    DEVICE: str = "mps"  # 'mps' for Mac, 'cuda:0' for NVIDIA, 'cpu' for fallback
     
     class Config:
         env_file = ".env"

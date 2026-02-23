@@ -56,11 +56,14 @@ class FightCreate(BaseModel):
 class FightResponse(BaseModel):
     """Fight response"""
     id: UUID
-    status: str  # pending, processing, completed, completed_mock, failed, not_found
+    status: str  # pending, annotating, completed, failed
     created_at: datetime
     total_rounds: Optional[int] = None
     duration_seconds: Optional[float] = None
     video_url: Optional[str] = None
+    annotated_video_url: Optional[str] = None
+    processing_time: Optional[float] = None
+    metrics_url: Optional[str] = None
     win_probabilities: Optional[Dict[str, float]] = None
     round_scores: Optional[List[Dict[str, Any]]] = None
 

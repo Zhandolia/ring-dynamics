@@ -4,20 +4,20 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 10, 10, 15;
-  --background-end-rgb: 0, 0, 0;
-  --primary-blue: 59, 130, 246;
-  --primary-red: 239, 68, 68;
+  --bg-primary: #0a0a0f;
+  --bg-card: #111118;
+  --bg-card-hover: #1a1a24;
+  --accent-red: #e53e3e;
+  --accent-red-dim: #c53030;
+  --accent-blue: #4299e1;
+  --text-muted: #6b7280;
+  --text-dim: #9ca3af;
+  --border-color: #1f1f2e;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: var(--bg-primary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
@@ -25,26 +25,96 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .glass {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
   }
-  
-  .fighter-0-color {
-    color: rgb(var(--primary-blue));
+
+  .glass-red {
+    background: rgba(229, 62, 62, 0.06);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(229, 62, 62, 0.15);
   }
-  
-  .fighter-1-color {
-    color: rgb(var(--primary-red));
+
+  .fighter-a-color {
+    color: var(--accent-red);
   }
-  
-  .bg-fighter-0 {
-    background-color: rgb(var(--primary-blue));
+
+  .fighter-b-color {
+    color: var(--accent-blue);
   }
-  
-  .bg-fighter-1 {
-    background-color: rgb(var(--primary-red));
+
+  .bg-fighter-a {
+    background-color: var(--accent-red);
+  }
+
+  .bg-fighter-b {
+    background-color: var(--accent-blue);
+  }
+
+  .stat-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: #1f1f2e;
+    overflow: hidden;
+  }
+
+  .stat-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  .event-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 13px;
+  }
+
+  .event-row:last-child {
+    border-bottom: none;
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-red);
+    animation: pulse-anim 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-anim {
+
+    0%,
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.4);
+    }
+
+    50% {
+      opacity: 0.7;
+      box-shadow: 0 0 0 6px rgba(229, 62, 62, 0);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .progress-shimmer {
+    background: linear-gradient(90deg, var(--accent-red) 0%, #ff6b6b 50%, var(--accent-red) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
   }
 }
