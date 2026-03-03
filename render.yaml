@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: ring-dynamics-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: DEVICE
+        value: cpu
+      - key: YOLO_MODEL
+        value: yolov8n.pt
+      - key: ANNOTATION_SCALE
+        value: "0.5"
+      - key: ANNOTATION_CONF
+        value: "0.30"
+      - key: ANNOTATION_IMGSZ
+        value: "640"
+      - key: MAX_VIDEO_SIZE_MB
+        value: "100"
+      - key: FRAMES_PER_SECOND
+        value: "30"

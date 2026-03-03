@@ -1,40 +1,20 @@
+# Core API
 fastapi==0.109.0
 uvicorn[standard]==0.27.0
 python-multipart==0.0.6
 pydantic==2.5.3
 pydantic-settings==2.1.0
 
-# Database
-sqlalchemy==2.0.25
-asyncpg==0.29.0
-psycopg2-binary==2.9.9
-
-# Task Queue
-celery==5.3.4
-redis==5.0.1
-
 # Computer Vision
-torch==2.1.2
-torchvision==0.16.2
+torch==2.1.2+cpu
+torchvision==0.16.2+cpu
 ultralytics==8.1.9
-opencv-python==4.9.0.80
-mediapipe==0.10.9
+opencv-python-headless==4.9.0.80
+numpy==1.26.3
 
 # Tracking
 filterpy==1.4.5
 scipy==1.11.4
-numpy==1.26.3
-
-# Bayesian Modeling
-pymc==5.10.3
-arviz==0.17.0
-
-# Video Processing
-yt-dlp==2024.1.0
-ffmpeg-python==0.2.0
 
 # Utilities
-python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
 python-dotenv==1.0.0
-websockets==12.0

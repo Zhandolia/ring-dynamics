@@ -1,37 +1,35 @@
-FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
+FROM python:3.11-slim
 
-# Prevent interactive prompts
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install Python and dependencies
+# Install system dependencies for OpenCV
 RUN apt-get update && apt-get install -y \
-    python3.10 \
-    python3-pip \
     ffmpeg \
     libsm6 \
     libxext6 \
     libxrender-dev \
     libgomp1 \
+    libglib2.0-0 \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
 WORKDIR /app
 
 # Copy requirements first for layer caching
 COPY requirements.txt .
 
-# Install Python packages
-RUN pip3 install --no-cache-dir -r requirements.txt
+# Install Python packages (CPU-only PyTorch)
+RUN pip3 install --no-cache-dir \
+    --extra-index-url https://download.pytorch.org/whl/cpu \
+    -r requirements.txt
 
 # Copy application code
 COPY . .
 
 # Create storage directories
-RUN mkdir -p /app/storage/videos /app/models/weights
+RUN mkdir -p /app/storage/videos /app/storage/annotated /app/models
 
-# Expose port
+# Download YOLOv8 nano model
+RUN python3 -c "from ultralytics import YOLO; YOLO('yolov8n.pt')" || true
+
 EXPOSE 8000
 
-# Run server
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

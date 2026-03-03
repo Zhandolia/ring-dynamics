@@ -1,16 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export default function Home() {
-    const router = useRouter();
     const [file, setFile] = useState<File | null>(null);
     const [youtubeUrl, setYoutubeUrl] = useState('');
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState('');
+
+    const navigateToFight = (id: string) => {
+        const base = process.env.NODE_ENV === 'production' ? '/ring-dynamics' : '';
+        window.location.href = `${base}/fight/#${id}`;
+    };
 
     const handleFileUpload = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -34,7 +37,7 @@ export default function Home() {
 
             const data = await response.json();
             setUploadProgress('Redirecting to analysis...');
-            router.push(`/fight/${data.id}`);
+            navigateToFight(data.id);
         } catch (error: unknown) {
             console.error('Upload failed:', error);
             const message = error instanceof Error ? error.message : 'Upload failed';
@@ -57,7 +60,7 @@ export default function Home() {
                 body: JSON.stringify({ youtube_url: youtubeUrl }),
             });
             const data = await response.json();
-            router.push(`/fight/${data.id}`);
+            navigateToFight(data.id);
         } catch (error) {
             console.error('Failed:', error);
             alert('Failed. Is the backend running?');
