@@ -416,19 +416,28 @@ export default function FightPage() {
                             <div className="space-y-2">
                                 <button
                                     onClick={async () => {
+                                        const btn = document.getElementById('dl-btn');
+                                        if (btn) btn.textContent = '⏳ Downloading...';
                                         try {
                                             const res = await fetch(`${API_URL}/api/fights/${fightId}/video`);
+                                            if (!res.ok) throw new Error('Failed to fetch');
                                             const blob = await res.blob();
-                                            const url = URL.createObjectURL(blob);
+                                            const file = new Blob([blob], { type: 'video/mp4' });
+                                            const url = window.URL.createObjectURL(file);
                                             const a = document.createElement('a');
+                                            a.style.display = 'none';
                                             a.href = url;
-                                            a.download = `fight_${fightId?.slice(0, 8)}_annotated.mp4`;
+                                            a.download = `ring_dynamics_${(fightId || 'fight').slice(0, 8)}.mp4`;
                                             document.body.appendChild(a);
                                             a.click();
-                                            document.body.removeChild(a);
-                                            URL.revokeObjectURL(url);
-                                        } catch { alert('Download failed'); }
+                                            setTimeout(() => {
+                                                window.URL.revokeObjectURL(url);
+                                                document.body.removeChild(a);
+                                            }, 200);
+                                        } catch { alert('Download failed. Is the backend running?'); }
+                                        if (btn) btn.textContent = '⬇️ Download Video';
                                     }}
+                                    id="dl-btn"
                                     className="w-full py-2.5 rounded-lg font-semibold text-sm text-white transition-all cursor-pointer"
                                     style={{ background: 'linear-gradient(135deg, #e53e3e, #c53030)' }}
                                 >

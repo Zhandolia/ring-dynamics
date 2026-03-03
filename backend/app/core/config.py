@@ -8,7 +8,12 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Ring Dynamics"
     
     # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8000"]
+    CORS_ORIGINS: List[str] = [
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "https://zhandolia.github.io",
+        "https://ring-dynamics-api.onrender.com",
+    ]
     
     # Database
     DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/ring_dynamics"
