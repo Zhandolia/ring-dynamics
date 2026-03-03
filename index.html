@@ -672,7 +672,7 @@
             <div class="dot"></div>
             <span id="navStatusText">Ready</span>
             &nbsp;·&nbsp;
-            <span id="apiStatusText" style="color: var(--muted)">API: checking…</span>
+            <span id="apiStatusText" style="color: #a78bfa">⚡ Demo Mode</span>
         </div>
     </nav>
 
@@ -862,7 +862,7 @@
     </section>
 
     <script>
-        const API = 'http://localhost:8000';
+        const DEMO_MODE = true;  // Running on GitHub Pages — no backend
 
         /* ── STATE ── */
         let fightId = null;
@@ -891,44 +891,28 @@
             e.preventDefault();
             const url = document.getElementById('youtubeUrl').value.trim();
             const btn = document.getElementById('youtubeBtn');
-            btn.disabled = true; btn.textContent = 'Submitting…';
-            try {
-                const res = await fetch(`${API}/api/fights/youtube`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ youtube_url: url })
-                });
-                const data = await res.json();
-                fightId = data.id;
-                youtubeVideoId = extractYouTubeId(url);
-                launchAnalysis(url, 'youtube');
-            } catch (err) {
-                alert('Failed to submit. Is the backend running at ' + API + '?');
-                console.error(err);
-            } finally {
-                btn.disabled = false; btn.textContent = 'Analyze Fight';
+            youtubeVideoId = extractYouTubeId(url);
+            if (!youtubeVideoId) {
+                alert('Please enter a valid YouTube URL.');
+                return;
             }
+            btn.disabled = true; btn.textContent = 'Launching…';
+            fightId = 'demo-' + Date.now();
+            launchAnalysis(url, 'youtube');
+            btn.disabled = false; btn.textContent = 'Analyze Fight';
         });
 
-        /* ── UPLOAD FORM ── */
+        /* ── UPLOAD FORM (client-side demo) ── */
         document.getElementById('uploadForm').addEventListener('submit', async e => {
             e.preventDefault();
             const file = document.getElementById('videoFile').files[0];
-            if (!file) return;
+            if (!file) { alert('Please select a video file first.'); return; }
             const btn = document.getElementById('uploadBtn');
-            btn.disabled = true; btn.textContent = 'Uploading…';
-            const fd = new FormData(); fd.append('file', file);
-            try {
-                const res = await fetch(`${API}/api/fights/upload`, { method: 'POST', body: fd });
-                const data = await res.json();
-                fightId = data.id;
-                const objUrl = URL.createObjectURL(file);
-                launchAnalysis(objUrl, 'upload');
-            } catch (err) {
-                alert('Upload failed. Is the backend running?');
-                console.error(err);
-            } finally {
-                btn.disabled = false; btn.textContent = 'Upload & Analyze';
-            }
+            btn.disabled = true; btn.textContent = 'Loading…';
+            fightId = 'demo-' + Date.now();
+            const objUrl = URL.createObjectURL(file);
+            launchAnalysis(objUrl, 'upload');
+            btn.disabled = false; btn.textContent = 'Upload & Analyze';
         });
 
         /* ── DRAG & DROP ── */
@@ -1272,64 +1256,15 @@
         }
 
         /* ══════════════════════════════════════════════
-           BACKEND POLLING — merge real results when ready
+           DEMO MODE — no backend polling needed
         ══════════════════════════════════════════════ */
         function startPolling() {
-            if (!fightId) return;
-            clearInterval(pollTimer);
-            pollTimer = setInterval(async () => {
-                try {
-                    const res = await fetch(`${API}/api/fights/${fightId}`);
-                    const data = await res.json();
-
-                    if (data.status === 'completed_mock' || data.status === 'completed') {
-                        clearInterval(pollTimer);
-                        document.getElementById('navStatusText').textContent = 'Analysis Complete';
-
-                        // Merge real win probabilities if available
-                        if (data.win_probabilities) {
-                            const bp = Math.round(data.win_probabilities.fighter_0 * 100);
-                            state.winBlue = bp;
-                            updateStatsUI();
-                        }
-
-                        // Merge real round scores
-                        if (data.round_scores && data.round_scores.length) {
-                            const sc = document.getElementById('roundScorecard');
-                            sc.innerHTML = '';
-                            data.round_scores.forEach(r => {
-                                const p = r.probabilities || {};
-                                const bPct = Math.round((p.prob_10_9_f0 || 0.5) * 100);
-                                const bWon = (p.prob_10_9_f0 || 0) > (p.prob_10_9_f1 || 0);
-                                const row = document.createElement('div');
-                                row.className = 'round-row';
-                                row.innerHTML = `
-              <div class="round-num">R${r.round_number}</div>
-              <div class="round-bar-wrap">
-                <div class="round-bar-fill blue" style="width:${bPct}%"></div>
-                <div class="round-bar-fill red"  style="width:${100 - bPct}%"></div>
-              </div>
-              <div class="round-winner ${bWon ? 'blue' : 'red'}">${bWon ? 'A' : 'B'}</div>
-            `;
-                                sc.appendChild(row);
-                            });
-                            addFeedEvent('🏆', 'neutral', 'Model scoring complete — results updated');
-                        }
-                    }
-                } catch (e) { console.warn('Poll error:', e); }
+            // In demo mode, the simulation drives all stats.
+            // After ~30s, mark analysis as "complete" for polish.
+            setTimeout(() => {
+                document.getElementById('navStatusText').textContent = 'Live Analysis';
             }, 3000);
         }
-
-        /* ── API STATUS CHECK ── */
-        fetch(`${API}/docs`)
-            .then(() => {
-                document.getElementById('apiStatusText').textContent = 'API ✓';
-                document.getElementById('apiStatusText').style.color = '#10b981';
-            })
-            .catch(() => {
-                document.getElementById('apiStatusText').textContent = 'API ✗ offline';
-                document.getElementById('apiStatusText').style.color = '#ef4444';
-            });
     </script>
 </body>
 
