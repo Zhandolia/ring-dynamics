@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -9,6 +9,14 @@ export default function Home() {
     const [youtubeUrl, setYoutubeUrl] = useState('');
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState('');
+    const [apiStatus, setApiStatus] = useState<'checking' | 'online' | 'offline'>('checking');
+
+    // Check if backend API is reachable
+    useEffect(() => {
+        fetch(`${API_URL}/health`, { mode: 'cors' })
+            .then(r => r.ok ? setApiStatus('online') : setApiStatus('offline'))
+            .catch(() => setApiStatus('offline'));
+    }, []);
 
     const navigateToFight = (id: string) => {
         const base = process.env.NODE_ENV === 'production' ? '/ring-dynamics' : '';
@@ -70,115 +78,164 @@ export default function Home() {
     };
 
     return (
-        <main className="min-h-screen bg-[#0a0a0f] text-white">
-            {/* Nav */}
-            <nav className="flex items-center justify-between px-6 py-3 border-b border-[#1f1f2e]">
-                <h1 className="text-lg font-bold tracking-wider uppercase" style={{ color: '#e53e3e' }}>
-                    🥊 Ring Dynamics
-                </h1>
-                <span className="text-green-400 text-xs">API ✓</span>
-            </nav>
+        <main className="relative min-h-screen text-white overflow-hidden">
 
-            <div className="container mx-auto px-4 py-16">
-                <div className="text-center mb-12">
-                    <h1 className="text-6xl font-bold mb-4 pb-2 leading-normal"
-                        style={{ color: '#e53e3e' }}>
-                        Ring Dynamics
+            {/* ── Background Video ──────────────────────────────── */}
+            <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ zIndex: 0 }}
+            >
+                <source src={`${process.env.NODE_ENV === 'production' ? '/ring-dynamics' : ''}/demo.mp4`} type="video/mp4" />
+            </video>
+
+            {/* Dark overlay to dim the video */}
+            <div
+                className="absolute inset-0"
+                style={{
+                    zIndex: 1,
+                    background: 'linear-gradient(180deg, rgba(10,10,15,0.92) 0%, rgba(10,10,15,0.80) 40%, rgba(10,10,15,0.92) 100%)',
+                }}
+            />
+
+            {/* ── Foreground Content ───────────────────────────── */}
+            <div className="relative" style={{ zIndex: 2 }}>
+
+                {/* Nav */}
+                <nav className="flex items-center justify-between px-6 py-3"
+                    style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                    <h1 className="text-lg font-bold tracking-wider uppercase" style={{ color: '#e53e3e' }}>
+                        🥊 Ring Dynamics
                     </h1>
-                    <p className="text-lg text-gray-500">
-                        AI-powered boxing analysis with 3-box fighter tracking & live scoring
-                    </p>
-                </div>
+                    <span className={`text-xs ${apiStatus === 'online' ? 'text-green-400' :
+                        apiStatus === 'offline' ? 'text-red-400' : 'text-gray-500'
+                        }`}>
+                        {apiStatus === 'online' ? 'API ✓' :
+                            apiStatus === 'offline' ? 'API ✕ (backend offline)' : 'API ...'}
+                    </span>
+                </nav>
 
-                <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-                    {/* Video Upload */}
-                    <div className="glass-red rounded-2xl p-8">
-                        <h2 className="text-2xl font-bold mb-6 fighter-a-color">Upload Video</h2>
-                        <form onSubmit={handleFileUpload} className="space-y-4">
-                            <div className="border-2 border-dashed border-[#2a1a1a] rounded-lg p-8 text-center hover:border-red-700 transition-colors">
-                                <input
-                                    type="file"
-                                    accept="video/*"
-                                    onChange={(e) => setFile(e.target.files?.[0] || null)}
-                                    style={{ position: 'absolute', width: '1px', height: '1px', opacity: 0, overflow: 'hidden' }}
-                                    id="file-upload"
-                                />
-                                <label htmlFor="file-upload" className="cursor-pointer">
-                                    <div className="text-4xl mb-2">🎥</div>
-                                    <div className="text-sm text-gray-400">
-                                        {file ? (
-                                            <span className="text-red-400 font-semibold">{file.name}</span>
-                                        ) : (
-                                            'Click to select video'
-                                        )}
-                                    </div>
-                                    <div className="text-xs text-gray-600 mt-2">
-                                        MP4, AVI, MOV (max 500MB)
-                                    </div>
-                                </label>
-                            </div>
-                            <button
-                                type="submit"
-                                disabled={!file || uploading}
-                                className="w-full text-white font-semibold py-3 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                                style={{ background: !file || uploading ? '#333' : 'linear-gradient(135deg, #e53e3e, #c53030)' }}
-                            >
-                                {uploading ? uploadProgress || 'Uploading...' : 'Upload & Analyze'}
-                            </button>
-                        </form>
+                <div className="container mx-auto px-4 py-16">
+                    <div className="text-center mb-12">
+                        <h1 className="text-7xl font-black mb-4 pb-2 leading-tight tracking-tight"
+                            style={{
+                                background: 'linear-gradient(135deg, #e53e3e 0%, #ff6b6b 50%, #e53e3e 100%)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                textShadow: 'none',
+                            }}>
+                            Ring Dynamics
+                        </h1>
+                        <p className="text-xl text-gray-300 max-w-2xl mx-auto" style={{ lineHeight: '1.6' }}>
+                            Computational physics meets real-time biomechanics — quantifying every punch, step, and shift through mathematical modeling and statistical inference.
+                        </p>
                     </div>
 
-                    {/* YouTube URL */}
-                    <div className="glass rounded-2xl p-8">
-                        <h2 className="text-2xl font-bold mb-6 fighter-b-color">YouTube URL</h2>
-                        <form onSubmit={handleYoutubeSubmit} className="space-y-4">
-                            <div>
-                                <input
-                                    type="url"
-                                    placeholder="https://youtube.com/watch?v=..."
-                                    value={youtubeUrl}
-                                    onChange={(e) => setYoutubeUrl(e.target.value)}
-                                    className="w-full bg-[#111118] border border-[#1f1f2e] rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors"
-                                />
+                    <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+                        {/* Video Upload */}
+                        <div className="rounded-2xl p-8"
+                            style={{
+                                background: 'rgba(229, 62, 62, 0.08)',
+                                backdropFilter: 'blur(20px)',
+                                border: '1px solid rgba(229, 62, 62, 0.2)',
+                            }}>
+                            <h2 className="text-2xl font-bold mb-6 fighter-a-color">Upload Video</h2>
+                            <form onSubmit={handleFileUpload} className="space-y-4">
+                                <div className="border-2 border-dashed rounded-lg p-8 text-center hover:border-red-600 transition-colors"
+                                    style={{ borderColor: 'rgba(229, 62, 62, 0.25)' }}>
+                                    <input
+                                        type="file"
+                                        accept="video/*"
+                                        onChange={(e) => setFile(e.target.files?.[0] || null)}
+                                        style={{ position: 'absolute', width: '1px', height: '1px', opacity: 0, overflow: 'hidden' }}
+                                        id="file-upload"
+                                    />
+                                    <label htmlFor="file-upload" className="cursor-pointer">
+                                        <div className="text-4xl mb-2">🎥</div>
+                                        <div className="text-sm text-gray-300">
+                                            {file ? (
+                                                <span className="text-red-400 font-semibold">{file.name}</span>
+                                            ) : (
+                                                'Click to select video'
+                                            )}
+                                        </div>
+                                        <div className="text-xs text-gray-500 mt-2">
+                                            MP4, AVI, MOV (max 500MB)
+                                        </div>
+                                    </label>
+                                </div>
+                                <button
+                                    type="submit"
+                                    disabled={!file || uploading}
+                                    className="w-full text-white font-semibold py-3 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                                    style={{ background: !file || uploading ? 'rgba(50,50,50,0.6)' : 'linear-gradient(135deg, #e53e3e, #c53030)' }}
+                                >
+                                    {uploading ? uploadProgress || 'Uploading...' : 'Upload & Analyze'}
+                                </button>
+                            </form>
+                        </div>
+
+                        {/* YouTube URL */}
+                        <div className="rounded-2xl p-8"
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.04)',
+                                backdropFilter: 'blur(20px)',
+                                border: '1px solid rgba(255, 255, 255, 0.08)',
+                            }}>
+                            <h2 className="text-2xl font-bold mb-6 fighter-b-color">YouTube URL</h2>
+                            <form onSubmit={handleYoutubeSubmit} className="space-y-4">
+                                <div>
+                                    <input
+                                        type="url"
+                                        placeholder="https://youtube.com/watch?v=..."
+                                        value={youtubeUrl}
+                                        onChange={(e) => setYoutubeUrl(e.target.value)}
+                                        className="w-full rounded-lg px-4 py-3 focus:outline-none transition-colors"
+                                        style={{
+                                            background: 'rgba(17,17,24,0.7)',
+                                            border: '1px solid rgba(255,255,255,0.08)',
+                                        }}
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    disabled={!youtubeUrl || uploading}
+                                    className="w-full text-white font-semibold py-3 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                                    style={{ background: !youtubeUrl || uploading ? 'rgba(50,50,50,0.6)' : 'linear-gradient(135deg, #4299e1, #3182ce)' }}
+                                >
+                                    {uploading ? 'Processing...' : 'Process YouTube Video'}
+                                </button>
+                            </form>
+                            <div className="mt-6 text-xs text-gray-400 space-y-1">
+                                <p>✓ Automatically downloads in best quality</p>
+                                <p>✓ YOLOv8 + ByteTrack fighter detection</p>
+                                <p>✓ 3-box tracking: body, head, core</p>
                             </div>
-                            <button
-                                type="submit"
-                                disabled={!youtubeUrl || uploading}
-                                className="w-full text-white font-semibold py-3 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                                style={{ background: !youtubeUrl || uploading ? '#333' : 'linear-gradient(135deg, #4299e1, #3182ce)' }}
-                            >
-                                {uploading ? 'Processing...' : 'Process YouTube Video'}
-                            </button>
-                        </form>
-                        <div className="mt-6 text-xs text-gray-600 space-y-1">
-                            <p>✓ Automatically downloads in best quality</p>
-                            <p>✓ YOLOv8 + ByteTrack fighter detection</p>
-                            <p>✓ 3-box tracking: body, head, core</p>
                         </div>
                     </div>
-                </div>
 
-                {/* Features */}
-                <div className="mt-16 grid md:grid-cols-4 gap-6 text-center">
-                    <div className="glass rounded-xl p-6">
-                        <div className="text-3xl mb-2">🥊</div>
-                        <h3 className="font-semibold mb-2">Fighter Detection</h3>
-                        <p className="text-sm text-gray-500">YOLOv8 + anti-audience filtering</p>
-                    </div>
-                    <div className="glass rounded-xl p-6">
-                        <div className="text-3xl mb-2">🎯</div>
-                        <h3 className="font-semibold mb-2">3-Box Tracking</h3>
-                        <p className="text-sm text-gray-500">Full body, head, and core zones</p>
-                    </div>
-                    <div className="glass rounded-xl p-6">
-                        <div className="text-3xl mb-2">📊</div>
-                        <h3 className="font-semibold mb-2">Live Scoring</h3>
-                        <p className="text-sm text-gray-500">Real-time activity & aggression metrics</p>
-                    </div>
-                    <div className="glass rounded-xl p-6">
-                        <div className="text-3xl mb-2">📹</div>
-                        <h3 className="font-semibold mb-2">Camera-Cut Proof</h3>
-                        <p className="text-sm text-gray-500">Auto-recovers after angle changes</p>
+                    {/* Features */}
+                    <div className="mt-16 grid md:grid-cols-4 gap-6 text-center">
+                        {[
+                            { icon: '🥊', title: 'Fighter Detection', desc: 'YOLOv8 + anti-audience filtering' },
+                            { icon: '🎯', title: '3-Box Tracking', desc: 'Full body, head, and core zones' },
+                            { icon: '📊', title: 'Live Scoring', desc: 'Real-time activity & aggression metrics' },
+                            { icon: '📹', title: 'Camera-Cut Proof', desc: 'Auto-recovers after angle changes' },
+                        ].map((f, i) => (
+                            <div key={i} className="rounded-xl p-6"
+                                style={{
+                                    background: 'rgba(255, 255, 255, 0.04)',
+                                    backdropFilter: 'blur(12px)',
+                                    border: '1px solid rgba(255, 255, 255, 0.06)',
+                                }}>
+                                <div className="text-3xl mb-2">{f.icon}</div>
+                                <h3 className="font-semibold mb-2">{f.title}</h3>
+                                <p className="text-sm text-gray-400">{f.desc}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

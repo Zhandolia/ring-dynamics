@@ -41,15 +41,33 @@ def run_annotation_background(
             # Update status
             if fight_id in fight_storage:
                 fight_storage[fight_id]["status"] = "annotating"
+                fight_storage[fight_id]["progress"] = {
+                    "stage": 0,
+                    "stage_name": "Queued",
+                    "pct": 0,
+                    "frames_done": 0,
+                    "frames_total": 0,
+                }
 
             logger.info(f"[Annotation] Starting: {fight_id}")
             logger.info(f"  Input:  {input_path}")
             logger.info(f"  Output: {output_path}")
             logger.info(f"  Model:  {model_path}  Device: {device}")
 
+            # Progress callback
+            def on_progress(stage: int, stage_name: str, pct: float,
+                            frames_done: int = 0, frames_total: int = 0):
+                if fight_id in fight_storage:
+                    fight_storage[fight_id]["progress"] = {
+                        "stage": stage,
+                        "stage_name": stage_name,
+                        "pct": round(pct, 1),
+                        "frames_done": frames_done,
+                        "frames_total": frames_total,
+                    }
+
             # Import the annotation function
             import sys
-            # Add backend root to path so we can import workers.annotate_video
             backend_root = os.path.dirname(os.path.dirname(os.path.dirname(
                 os.path.abspath(__file__)
             )))
@@ -68,6 +86,7 @@ def run_annotation_background(
                 imgsz=imgsz,
                 scale=scale,
                 target_fps=target_fps,
+                progress_cb=on_progress,
             )
 
             elapsed = time.time() - t0
@@ -77,12 +96,10 @@ def run_annotation_background(
             if fight_id in fight_storage:
                 fight_storage[fight_id]["status"] = "completed"
                 fight_storage[fight_id]["processing_time"] = round(elapsed, 1)
-                # Relative URL for serving
                 filename = os.path.basename(output_path)
                 fight_storage[fight_id]["annotated_video_url"] = (
                     f"/storage/annotated/{filename}"
                 )
-                # Metrics JSON URL
                 metrics_filename = filename.rsplit('.', 1)[0] + '_metrics.json'
                 fight_storage[fight_id]["metrics_url"] = (
                     f"/storage/annotated/{metrics_filename}"

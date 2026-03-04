@@ -827,7 +827,11 @@ def annotate_video(input_path: str, output_path: str,
                    imgsz: int = 1280,
                    scale: float = 1.0,
                    target_fps: float = 0,
-                   max_frames: int = 0) -> str:
+                   max_frames: int = 0,
+                   progress_cb=None) -> str:
+    def _prog(stage, name, pct, done=0, total=0):
+        if progress_cb:
+            progress_cb(stage, name, pct, done, total)
     print(f"\n{'='*60}")
     print(f"  Ring Dynamics — Video Tracking Annotator v5")
     print(f"{'='*60}")
@@ -838,10 +842,13 @@ def annotate_video(input_path: str, output_path: str,
     print(f"  Mode   : Hardened 2-fighter tracking (anti-audience)")
     print(f"{'='*60}\n")
 
-    print("[1/4] Loading YOLOv8 model …")
+    _prog(1, "Loading YOLOv8 model", 5)
+    print("[1/5] Loading YOLOv8 model …")
     model = YOLO(model_name)
+    _prog(1, "Loading YOLOv8 model", 10)
 
-    print("[2/4] Opening video …")
+    _prog(2, "Analyzing video properties", 15)
+    print("[2/5] Analyzing video properties …")
     cap = cv2.VideoCapture(input_path)
     if not cap.isOpened():
         raise FileNotFoundError(f"Cannot open video: {input_path}")
@@ -884,7 +891,8 @@ def annotate_video(input_path: str, output_path: str,
 
     metrics_snapshots = []   # per-second metrics for JSON export
 
-    print("[3/4] Processing frames …")
+    _prog(2, "Analyzing video properties", 20, 0, frames_to_process)
+    print("[3/5] Processing frames …")
     frame_idx = 0
     processed = 0
     t_start   = time.time()
@@ -987,6 +995,9 @@ def annotate_video(input_path: str, output_path: str,
             elapsed = time.time() - t_start
             pct = (processed / frames_to_process * 100) if frames_to_process > 0 else 0
             eta = (elapsed / processed) * (frames_to_process - processed) if processed > 0 else 0
+            # Progress: stages 3-4 span 20%-90%
+            overall_pct = 20 + (pct * 0.7)
+            _prog(3, "Tracking & scoring", overall_pct, processed, frames_to_process)
             print(f"    Frame {processed:>5}/{frames_to_process}  ({pct:5.1f}%)  "
                   f"elapsed {elapsed:5.1f}s  ETA {eta:5.1f}s")
 
@@ -994,7 +1005,8 @@ def annotate_video(input_path: str, output_path: str,
     writer.release()
 
     elapsed = time.time() - t_start
-    print(f"\n[4/4] Done! {processed} frames in {elapsed:.1f}s → {output_path}\n")
+    _prog(4, "Exporting metrics", 92, processed, frames_to_process)
+    print(f"\n[4/5] Exporting metrics …")
 
     # ── Export metrics JSON ───────────────────────────────────────
     metrics_path = output_path.rsplit('.', 1)[0] + '_metrics.json'
@@ -1014,6 +1026,9 @@ def annotate_video(input_path: str, output_path: str,
     with open(metrics_path, 'w') as f:
         json.dump(metrics_data, f, indent=2)
     print(f"  Metrics → {metrics_path}")
+
+    _prog(5, "Complete", 100, processed, frames_to_process)
+    print(f"\n[5/5] Done! {processed} frames in {elapsed:.1f}s → {output_path}\n")
 
     return output_path
 

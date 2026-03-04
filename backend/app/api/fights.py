@@ -110,6 +110,23 @@ async def get_fight(fight_id: str):
     )
 
 
+@router.get("/fights/{fight_id}/progress")
+async def get_fight_progress(fight_id: str):
+    """Get detailed processing progress for pipeline UI"""
+    if fight_id not in FIGHT_STORAGE:
+        raise HTTPException(status_code=404, detail="Fight not found")
+
+    data = FIGHT_STORAGE[fight_id]
+    progress = data.get("progress", {
+        "stage": 0, "stage_name": "Queued", "pct": 0,
+        "frames_done": 0, "frames_total": 0,
+    })
+    return {
+        "status": data["status"],
+        "progress": progress,
+    }
+
+
 @router.get("/fights/{fight_id}/video")
 async def get_annotated_video(fight_id: str):
     """Serve the annotated video file"""
