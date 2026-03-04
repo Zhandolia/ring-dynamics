@@ -29,6 +29,20 @@ export default function Home() {
 
         setUploading(true);
         setUploadProgress('Uploading video...');
+
+        // Render's proxy limits uploads to ~100MB
+        const isDeployed = !API_URL.includes('localhost');
+        const maxSizeMB = isDeployed ? 95 : 500;
+        if (file.size > maxSizeMB * 1024 * 1024) {
+            alert(`File too large (${(file.size / 1024 / 1024).toFixed(0)}MB).\n\n${isDeployed
+                ? `The hosted version supports up to ${maxSizeMB}MB due to Render's proxy limits.\n\nFor larger videos, run the app locally:\n  cd backend && uvicorn app.main:app --port 8000\n  cd frontend && npm run dev`
+                : `Max file size: ${maxSizeMB}MB.`
+                }`);
+            setUploading(false);
+            setUploadProgress('');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('file', file);
 
@@ -49,7 +63,7 @@ export default function Home() {
         } catch (error: unknown) {
             console.error('Upload failed:', error);
             const message = error instanceof Error ? error.message : 'Upload failed';
-            alert(`Upload failed: ${message}\n\nMake sure the backend is running:\ncd backend && uvicorn app.main:app --reload --port 8000`);
+            alert(`Upload failed: ${message}`);
         } finally {
             setUploading(false);
             setUploadProgress('');
@@ -163,7 +177,7 @@ export default function Home() {
                                             )}
                                         </div>
                                         <div className="text-xs text-gray-500 mt-2">
-                                            MP4, AVI, MOV (max 500MB)
+                                            MP4, AVI, MOV (max {API_URL.includes('localhost') ? '500' : '95'}MB)
                                         </div>
                                     </label>
                                 </div>
