@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { readSubmission } from '../lib/api';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -9,13 +10,28 @@ export default function Home() {
     const [youtubeUrl, setYoutubeUrl] = useState('');
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState('');
+    const [requestError, setRequestError] = useState('');
     const [apiStatus, setApiStatus] = useState<'checking' | 'online' | 'offline'>('checking');
 
     // Check if backend API is reachable
     useEffect(() => {
-        fetch(`${API_URL}/health`, { mode: 'cors' })
-            .then(r => r.ok ? setApiStatus('online') : setApiStatus('offline'))
-            .catch(() => setApiStatus('offline'));
+        let stopped = false;
+        let retry: ReturnType<typeof setTimeout>;
+        const controller = new AbortController();
+        async function checkHealth() {
+            try {
+                const response = await fetch(`${API_URL}/health`, { signal: controller.signal });
+                if (!stopped) setApiStatus(response.ok ? 'online' : 'offline');
+                if (!response.ok && !stopped) retry = setTimeout(checkHealth, 15000);
+            } catch {
+                if (!stopped) {
+                    setApiStatus('offline');
+                    retry = setTimeout(checkHealth, 15000);
+                }
+            }
+        }
+        checkHealth();
+        return () => { stopped = true; controller.abort(); clearTimeout(retry); };
     }, []);
 
     const navigateToFight = (id: string) => {
@@ -28,16 +44,14 @@ export default function Home() {
         if (!file) return;
 
         setUploading(true);
+        setRequestError('');
         setUploadProgress('Uploading video...');
 
         // Render's proxy limits uploads to ~100MB
         const isDeployed = !API_URL.includes('localhost');
         const maxSizeMB = isDeployed ? 95 : 500;
         if (file.size > maxSizeMB * 1024 * 1024) {
-            alert(`File too large (${(file.size / 1024 / 1024).toFixed(0)}MB).\n\n${isDeployed
-                ? `The hosted version supports up to ${maxSizeMB}MB due to Render's proxy limits.\n\nFor larger videos, run the app locally:\n  cd backend && uvicorn app.main:app --port 8000\n  cd frontend && npm run dev`
-                : `Max file size: ${maxSizeMB}MB.`
-                }`);
+            setRequestError(`This video is too large. Choose a file under ${maxSizeMB} MB.`);
             setUploading(false);
             setUploadProgress('');
             return;
@@ -52,18 +66,13 @@ export default function Home() {
                 body: formData,
             });
 
-            if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err.detail || `Upload failed (${response.status})`);
-            }
-
-            const data = await response.json();
+            const data = await readSubmission(response);
             setUploadProgress('Redirecting to analysis...');
             navigateToFight(data.id);
         } catch (error: unknown) {
             console.error('Upload failed:', error);
             const message = error instanceof Error ? error.message : 'Upload failed';
-            alert(`Upload failed: ${message}`);
+            setRequestError(`Upload failed: ${message}`);
         } finally {
             setUploading(false);
             setUploadProgress('');
@@ -75,19 +84,22 @@ export default function Home() {
         if (!youtubeUrl) return;
 
         setUploading(true);
+        setRequestError('');
+        setUploadProgress('Submitting YouTube video...');
         try {
             const response = await fetch(`${API_URL}/api/fights/youtube`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ youtube_url: youtubeUrl }),
+                body: JSON.stringify({ youtube_url: youtubeUrl.trim() }),
             });
-            const data = await response.json();
+            const data = await readSubmission(response);
             navigateToFight(data.id);
         } catch (error) {
             console.error('Failed:', error);
-            alert('Failed. Is the backend running?');
+            setRequestError(error instanceof Error ? error.message : 'Could not connect to the server. Please try again.');
         } finally {
             setUploading(false);
+            setUploadProgress('');
         }
     };
 
@@ -148,6 +160,8 @@ export default function Home() {
                         </p>
                     </div>
 
+                    {requestError && <p role="alert" className="max-w-4xl mx-auto mb-6 rounded-lg border border-red-800 bg-red-950 p-4 text-red-100">{requestError}</p>}
+                    {apiStatus !== 'online' && <p role="status" className="max-w-4xl mx-auto mb-6 text-sm text-gray-300">The analysis server may take a minute to wake up. If a submission fails, wait a moment and try again.</p>}
                     <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
                         {/* Video Upload */}
                         <div className="rounded-2xl p-8"
@@ -204,6 +218,7 @@ export default function Home() {
                                 <div>
                                     <input
                                         type="url"
+                                        aria-label="YouTube video URL"
                                         placeholder="https://youtube.com/watch?v=..."
                                         value={youtubeUrl}
                                         onChange={(e) => setYoutubeUrl(e.target.value)}
@@ -224,7 +239,8 @@ export default function Home() {
                                 </button>
                             </form>
                             <div className="mt-6 text-xs text-gray-400 space-y-1">
-                                <p>✓ Automatically downloads in best quality</p>
+                                <p>✓ Public YouTube videos, up to 720p</p>
+                                <p>If YouTube restricts a video, upload the file instead.</p>
                                 <p>✓ YOLOv8 + ByteTrack fighter detection</p>
                                 <p>✓ 3-box tracking: body, head, core</p>
                             </div>

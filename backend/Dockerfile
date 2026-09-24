@@ -1,5 +1,8 @@
 FROM python:3.11-slim
 
+# YouTube's JavaScript challenges require a supported runtime.
+COPY --from=denoland/deno:bin-2.9.7 /deno /usr/local/bin/deno
+
 # Install system dependencies for OpenCV
 RUN apt-get update && apt-get install -y \
     ffmpeg \

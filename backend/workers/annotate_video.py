@@ -881,10 +881,15 @@ def annotate_video(input_path: str, output_path: str,
     print(f"    Source     : {width}×{height}  |  FPS: {fps:.1f}  |  Frames: {total}")
     print(f"    Output     : {canvas_out_w}×{canvas_out_h}  |  FPS: {out_fps:.1f}  |  Frames: ~{frames_to_process}")
 
-    fourcc = cv2.VideoWriter_fourcc(*"avc1")
-    writer = cv2.VideoWriter(output_path, fourcc, out_fps, (canvas_out_w, canvas_out_h))
-    if not writer.isOpened():
-        raise RuntimeError(f"Cannot create output video: {output_path}")
+    try:
+        from .video_writer import BrowserVideoWriter
+    except ImportError:  # Direct CLI execution
+        from video_writer import BrowserVideoWriter
+    try:
+        writer = BrowserVideoWriter(output_path, out_fps, (canvas_out_w, canvas_out_h))
+    except Exception:
+        cap.release()
+        raise
 
     identity_tracker = FighterIdentityTracker()
     scorer = FightScorer()
@@ -897,112 +902,118 @@ def annotate_video(input_path: str, output_path: str,
     processed = 0
     t_start   = time.time()
 
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            break
-        if frame_skip > 1 and frame_idx % frame_skip != 0:
-            frame_idx += 1
-            continue
-        if max_frames > 0 and processed >= max_frames:
-            break
-        if scale != 1.0:
-            frame = cv2.resize(frame, (out_w, out_h), interpolation=cv2.INTER_AREA)
-
-        results = model.track(
-            frame, persist=True, classes=[0], conf=conf, iou=0.45,
-            imgsz=imgsz, tracker="bytetrack.yaml", verbose=False,
-            device=device,
-        )
-
-        all_dets = []
-        for result in results:
-            boxes = result.boxes
-            if boxes is None or len(boxes) == 0:
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            if frame_skip > 1 and frame_idx % frame_skip != 0:
+                frame_idx += 1
                 continue
-            for box in boxes:
-                if box.id is None:
+            if max_frames > 0 and processed >= max_frames:
+                break
+            if scale != 1.0:
+                frame = cv2.resize(frame, (out_w, out_h), interpolation=cv2.INTER_AREA)
+
+            results = model.track(
+                frame, persist=True, classes=[0], conf=conf, iou=0.45,
+                imgsz=imgsz, tracker="bytetrack.yaml", verbose=False,
+                device=device,
+            )
+
+            all_dets = []
+            for result in results:
+                boxes = result.boxes
+                if boxes is None or len(boxes) == 0:
                     continue
-                track_id = int(box.id.item())
-                conf_val = float(box.conf.item())
-                x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
-                area = (x2 - x1) * (y2 - y1)
-                all_dets.append({
-                    "track_id": track_id, "conf": conf_val,
-                    "x1": x1, "y1": y1, "x2": x2, "y2": y2,
-                    "area": area,
+                for box in boxes:
+                    if box.id is None:
+                        continue
+                    track_id = int(box.id.item())
+                    conf_val = float(box.conf.item())
+                    x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
+                    area = (x2 - x1) * (y2 - y1)
+                    all_dets.append({
+                        "track_id": track_id, "conf": conf_val,
+                        "x1": x1, "y1": y1, "x2": x2, "y2": y2,
+                        "area": area,
+                    })
+
+            fighters = identity_tracker.assign(all_dets, frame)
+
+            for d in fighters:
+                sid   = d["stable_id"]
+                color = FIGHTER_COLORS[sid]
+                x1, y1, x2, y2 = d["x1"], d["y1"], d["x2"], d["y2"]
+                bw = x2 - x1
+                bh = y2 - y1
+
+                # ── Full-body outer box (with jitter) ────────────────────
+                jx1, jy1, jx2, jy2 = jitter_box(x1, y1, x2, y2)
+                draw_rounded_rect(frame, jx1, jy1, jx2, jy2, color, BOX_THICKNESS)
+
+                # ── Head sub-box (green accent, with jitter) ─────────────
+                head_inset = max(1, int(bw * HEAD_INSET_X))
+                hx1 = x1 + head_inset
+                hx2 = x2 - head_inset
+                hy1 = y1 + int(bh * HEAD_TOP)
+                hy2 = y1 + int(bh * HEAD_BOTTOM)
+                if hy2 > hy1 + 4 and hx2 > hx1 + 4:
+                    jhx1, jhy1, jhx2, jhy2 = jitter_box(hx1, hy1, hx2, hy2, 1)
+                    cv2.rectangle(frame, (jhx1, jhy1), (jhx2, jhy2), HEAD_COLOR, SUB_BOX_THICK)
+
+                # ── Body / core sub-box (fighter color, with jitter) ─────
+                body_inset = max(1, int(bw * BODY_INSET_X))
+                bx1 = x1 + body_inset
+                bx2 = x2 - body_inset
+                by1 = y1 + int(bh * BODY_TOP)
+                by2 = y1 + int(bh * BODY_BOTTOM)
+                if by2 > by1 + 4 and bx2 > bx1 + 4:
+                    jbx1, jby1, jbx2, jby2 = jitter_box(bx1, by1, bx2, by2, 1)
+                    cv2.rectangle(frame, (jbx1, jby1), (jbx2, jby2), color, SUB_BOX_THICK)
+
+                # ── Label ────────────────────────────────────────────────
+                draw_label(frame, f"{FIGHTER_NAMES[sid]}  {d['conf']:.0%}", x1, y1, color)
+
+
+            # ── Update scorer & render scoreboard ────────────────────
+            scorer.update(fighters, frame.shape[1], frame_idx)
+            canvas = draw_scoreboard(frame, scorer, out_fps)
+            writer.write(canvas)
+
+            # ── Capture metrics snapshot every second ────────────────
+            if frame_idx > 0 and frame_idx % int(out_fps) == 0:
+                sec = frame_idx / out_fps
+                metrics_snapshots.append({
+                    "time": round(sec, 1),
+                    "activity": [round(v, 2) for v in scorer.activity],
+                    "aggression": [round(v, 2) for v in scorer.aggression],
+                    "ring_control": [round(v, 2) for v in scorer.ring_control],
+                    "pressure": [round(v, 2) for v in scorer.pressure],
+                    "distance": scorer.distance_label,
+                    "round_pts": [int(v) for v in scorer.round_pts],
                 })
 
-        fighters = identity_tracker.assign(all_dets, frame)
+            frame_idx += 1
+            processed += 1
 
-        for d in fighters:
-            sid   = d["stable_id"]
-            color = FIGHTER_COLORS[sid]
-            x1, y1, x2, y2 = d["x1"], d["y1"], d["x2"], d["y2"]
-            bw = x2 - x1
-            bh = y2 - y1
+            if processed % 50 == 0 or processed == 1:
+                elapsed = time.time() - t_start
+                pct = (processed / frames_to_process * 100) if frames_to_process > 0 else 0
+                eta = (elapsed / processed) * (frames_to_process - processed) if processed > 0 else 0
+                # Progress: stages 3-4 span 20%-90%
+                overall_pct = 20 + (pct * 0.7)
+                _prog(3, "Tracking & scoring", overall_pct, processed, frames_to_process)
+                print(f"    Frame {processed:>5}/{frames_to_process}  ({pct:5.1f}%)  "
+                      f"elapsed {elapsed:5.1f}s  ETA {eta:5.1f}s")
 
-            # ── Full-body outer box (with jitter) ────────────────────
-            jx1, jy1, jx2, jy2 = jitter_box(x1, y1, x2, y2)
-            draw_rounded_rect(frame, jx1, jy1, jx2, jy2, color, BOX_THICKNESS)
+    finally:
+        cap.release()
+        writer.release()
 
-            # ── Head sub-box (green accent, with jitter) ─────────────
-            head_inset = max(1, int(bw * HEAD_INSET_X))
-            hx1 = x1 + head_inset
-            hx2 = x2 - head_inset
-            hy1 = y1 + int(bh * HEAD_TOP)
-            hy2 = y1 + int(bh * HEAD_BOTTOM)
-            if hy2 > hy1 + 4 and hx2 > hx1 + 4:
-                jhx1, jhy1, jhx2, jhy2 = jitter_box(hx1, hy1, hx2, hy2, 1)
-                cv2.rectangle(frame, (jhx1, jhy1), (jhx2, jhy2), HEAD_COLOR, SUB_BOX_THICK)
+    if processed == 0:
+        raise ValueError("The video contains no decodable frames.")
 
-            # ── Body / core sub-box (fighter color, with jitter) ─────
-            body_inset = max(1, int(bw * BODY_INSET_X))
-            bx1 = x1 + body_inset
-            bx2 = x2 - body_inset
-            by1 = y1 + int(bh * BODY_TOP)
-            by2 = y1 + int(bh * BODY_BOTTOM)
-            if by2 > by1 + 4 and bx2 > bx1 + 4:
-                jbx1, jby1, jbx2, jby2 = jitter_box(bx1, by1, bx2, by2, 1)
-                cv2.rectangle(frame, (jbx1, jby1), (jbx2, jby2), color, SUB_BOX_THICK)
-
-            # ── Label ────────────────────────────────────────────────
-            draw_label(frame, f"{FIGHTER_NAMES[sid]}  {d['conf']:.0%}", x1, y1, color)
-
-
-        # ── Update scorer & render scoreboard ────────────────────
-        scorer.update(fighters, frame.shape[1], frame_idx)
-        canvas = draw_scoreboard(frame, scorer, out_fps)
-        writer.write(canvas)
-
-        # ── Capture metrics snapshot every second ────────────────
-        if frame_idx > 0 and frame_idx % int(out_fps) == 0:
-            sec = frame_idx / out_fps
-            metrics_snapshots.append({
-                "time": round(sec, 1),
-                "activity": [round(v, 2) for v in scorer.activity],
-                "aggression": [round(v, 2) for v in scorer.aggression],
-                "ring_control": [round(v, 2) for v in scorer.ring_control],
-                "pressure": [round(v, 2) for v in scorer.pressure],
-                "distance": scorer.distance_label,
-                "round_pts": [int(v) for v in scorer.round_pts],
-            })
-
-        frame_idx += 1
-        processed += 1
-
-        if processed % 50 == 0 or processed == 1:
-            elapsed = time.time() - t_start
-            pct = (processed / frames_to_process * 100) if frames_to_process > 0 else 0
-            eta = (elapsed / processed) * (frames_to_process - processed) if processed > 0 else 0
-            # Progress: stages 3-4 span 20%-90%
-            overall_pct = 20 + (pct * 0.7)
-            _prog(3, "Tracking & scoring", overall_pct, processed, frames_to_process)
-            print(f"    Frame {processed:>5}/{frames_to_process}  ({pct:5.1f}%)  "
-                  f"elapsed {elapsed:5.1f}s  ETA {eta:5.1f}s")
-
-    cap.release()
-    writer.release()
 
     elapsed = time.time() - t_start
     _prog(4, "Exporting metrics", 92, processed, frames_to_process)

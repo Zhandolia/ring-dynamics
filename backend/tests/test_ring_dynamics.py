@@ -248,9 +248,9 @@ def test_fight_processor_mock():
 def test_video_ingestion_import():
     """Test video ingestion service"""
     try:
-        from app.services.video_ingestion import process_youtube_url, process_video_upload
-        assert process_youtube_url is not None
-        assert process_video_upload is not None
+        from app.services.video_ingestion import normalize_youtube_url, download_youtube_video
+        assert normalize_youtube_url is not None
+        assert download_youtube_video is not None
         print("✓ Video ingestion service imports successful")
     except ImportError as e:
         pytest.fail(f"Failed to import video ingestion: {e}")

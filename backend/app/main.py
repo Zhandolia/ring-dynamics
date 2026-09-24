@@ -44,7 +44,7 @@ app.add_middleware(
 app.include_router(fights.router, prefix="/api", tags=["fights"])
 
 # Mount storage for serving annotated videos
-app.mount("/storage", StaticFiles(directory="storage"), name="storage")
+app.mount("/storage", StaticFiles(directory="storage", check_dir=False), name="storage")
 
 
 @app.get("/")

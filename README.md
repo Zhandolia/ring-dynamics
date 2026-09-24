@@ -94,6 +94,27 @@ Open `http://localhost:3000` in your browser.
    - **Left (~70%)** — Annotated video with scoring HUD overlay
    - **Right (~30%)** — Live stats panel synced to video playback
 
+### YouTube videos and hosted limits
+
+Paste a public YouTube watch, short, or `youtu.be` link to queue a download and analysis.
+The download runs in the background and uses the same annotation pipeline as a file upload.
+YouTube can restrict particular videos or block downloads from a hosting provider; the
+results page reports that failure and offers file upload as the alternative. Private,
+age-restricted, and live videos are not supported. No browser cookies are collected.
+
+The hosted UI accepts uploads up to 95 MB; the local API defaults to 500 MB. Analysis jobs
+run one at a time to avoid loading multiple models on the small hosted instance. The free
+backend can take a minute to wake up. Its job history and files are temporary and may be
+lost on a restart or deployment.
+
+FFmpeg must be on `PATH` (or set `FFMPEG_BINARY`) for browser-compatible H.264 output.
+The Docker image includes FFmpeg, a JavaScript runtime for YouTube, and the downloader.
+When running locally, install Deno or a supported Node.js runtime for YouTube support.
+
+Run backend regression tests with `pytest backend/tests` after installing `pytest` and
+`httpx<0.28` in the backend environment. The submission tests use deterministic download
+failures; a live download still depends on YouTube availability.
+
 <br>
 
 ## Standalone CLI

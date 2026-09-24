@@ -7,11 +7,12 @@ FIGHT_STORAGE with status and the annotated video URL.
 
 import logging
 import os
-import threading
+from concurrent.futures import ThreadPoolExecutor
 import time
 from typing import Optional
 
 logger = logging.getLogger(__name__)
+_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="fight-analysis")
 
 
 def run_annotation_background(
@@ -19,12 +20,13 @@ def run_annotation_background(
     input_path: str,
     output_path: str,
     fight_storage: dict,
-    device: str = "mps",
+    device: str = "cpu",
     model_path: str = "models/yolov8n.pt",
     scale: float = 0.5,
     target_fps: float = 30,
     conf: float = 0.30,
     imgsz: int = 640,
+    youtube_url: Optional[str] = None,
 ):
     """
     Run annotation in a background thread.
@@ -65,6 +67,18 @@ def run_annotation_background(
                         "frames_done": frames_done,
                         "frames_total": frames_total,
                     }
+
+            if youtube_url:
+                from app.services.video_ingestion import download_youtube_video
+                from app.core.config import settings
+                fight_storage[fight_id]["status"] = "downloading"
+                on_progress(0, "Downloading YouTube video", 0)
+                download_youtube_video(
+                    youtube_url, input_path,
+                    max_bytes=settings.MAX_VIDEO_SIZE_MB * 1024 * 1024,
+                    progress_cb=on_progress,
+                )
+                fight_storage[fight_id]["status"] = "annotating"
 
             # Import the annotation function
             import sys
@@ -112,6 +126,4 @@ def run_annotation_background(
                 fight_storage[fight_id]["status"] = "failed"
                 fight_storage[fight_id]["error"] = str(e)
 
-    thread = threading.Thread(target=_worker, daemon=True)
-    thread.start()
-    return thread
+    return _executor.submit(_worker)

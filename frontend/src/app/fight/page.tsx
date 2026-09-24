@@ -12,6 +12,7 @@ interface FightData {
     annotated_video_url?: string;
     processing_time?: number;
     metrics_url?: string;
+    error?: string;
 }
 
 interface MetricsData {
@@ -82,6 +83,7 @@ export default function FightPage() {
             }
             const data = await res.json();
             setFight(data);
+            setError(null);
 
             // Fetch metrics when completed
             if (data.status === 'completed' && !metrics) {
@@ -141,7 +143,8 @@ export default function FightPage() {
     const getCurrentSnapshot = () => {
         if (!metrics?.timeline?.length) return null;
         const idx = metrics.timeline.findIndex(s => s.time > currentTime);
-        if (idx <= 0) return metrics.timeline[0];
+        if (idx === -1) return metrics.timeline[metrics.timeline.length - 1];
+        if (idx === 0) return metrics.timeline[0];
         return metrics.timeline[idx - 1];
     };
 
@@ -228,7 +231,7 @@ export default function FightPage() {
                         style={{ height: 'calc(100vh - 52px)' }}>
 
                         <h2 className="text-2xl font-bold mb-2 tracking-wide">
-                            {fight.status === 'pending' ? 'Preparing Analysis' : 'Analyzing Fight'}
+                            {fight.status === 'pending' ? 'Preparing Analysis' : fight.status === 'downloading' ? 'Downloading YouTube Video' : 'Analyzing Fight'}
                         </h2>
                         <p className="text-sm text-gray-500 mb-10">
                             {progress.frames_total > 0
@@ -335,7 +338,7 @@ export default function FightPage() {
                 <div className="flex items-center justify-center" style={{ height: 'calc(100vh - 52px)' }}>
                     <div className="text-center">
                         <div className="text-5xl mb-4">❌</div>
-                        <p className="text-red-300 mb-6">Analysis failed. Please try again.</p>
+                        <p role="alert" className="text-red-300 mb-6 max-w-xl break-words px-4">{fight.error || 'Analysis failed. Please try another video.'}</p>
                         <button onClick={goHome}
                             className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-semibold">
                             Try Again

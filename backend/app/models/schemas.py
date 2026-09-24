@@ -64,6 +64,7 @@ class FightResponse(BaseModel):
     annotated_video_url: Optional[str] = None
     processing_time: Optional[float] = None
     metrics_url: Optional[str] = None
+    error: Optional[str] = None
     win_probabilities: Optional[Dict[str, float]] = None
     round_scores: Optional[List[Dict[str, Any]]] = None
 

@@ -9,6 +9,7 @@ import json
 from app.models.schemas import FightCreate, FightResponse
 from app.core.config import settings
 from app.services.annotation_service import run_annotation_background
+from app.services.video_ingestion import normalize_youtube_url
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -32,10 +33,17 @@ async def upload_fight_video(file: UploadFile = File(...)):
             detail=f"File too large. Max size: {settings.MAX_VIDEO_SIZE_MB}MB"
         )
 
+    if file_size == 0:
+        raise HTTPException(status_code=400, detail="The video file is empty.")
+
     # Validate file type
     allowed_types = ["video/mp4", "video/avi", "video/mov", "video/mkv",
-                     "video/quicktime", "video/x-msvideo"]
-    if file.content_type and file.content_type not in allowed_types:
+                     "video/quicktime", "video/x-msvideo", "video/x-matroska", "video/webm"]
+    generic_type = file.content_type in (None, "", "application/octet-stream")
+    valid_extension = os.path.splitext(file.filename or "")[1].lower() in (
+        ".mp4", ".avi", ".mov", ".mkv", ".webm"
+    )
+    if file.content_type not in allowed_types and not (generic_type and valid_extension):
         raise HTTPException(
             status_code=400,
             detail=f"Invalid file type '{file.content_type}'. Allowed: MP4, AVI, MOV, MKV"
@@ -52,8 +60,8 @@ async def upload_fight_video(file: UploadFile = File(...)):
     output_path = os.path.join(settings.ANNOTATED_VIDEO_PATH, f"{fight_id}_annotated.mp4")
 
     with open(input_path, "wb") as f:
-        content = await file.read()
-        f.write(content)
+        while chunk := await file.read(1024 * 1024):
+            f.write(chunk)
 
     logger.info(f"Video uploaded: {fight_id} ({file_size / 1024 / 1024:.1f} MB)")
 
@@ -88,6 +96,32 @@ async def upload_fight_video(file: UploadFile = File(...)):
     )
 
 
+@router.post("/fights/youtube", response_model=FightResponse)
+async def submit_youtube_video(request: FightCreate):
+    """Queue one YouTube video through the upload annotation pipeline."""
+    try:
+        url = normalize_youtube_url(request.youtube_url or "")
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    fight_id = str(uuid4())
+    os.makedirs(settings.VIDEO_STORAGE_PATH, exist_ok=True)
+    os.makedirs(settings.ANNOTATED_VIDEO_PATH, exist_ok=True)
+    input_path = os.path.join(settings.VIDEO_STORAGE_PATH, f"{fight_id}.mp4")
+    output_path = os.path.join(settings.ANNOTATED_VIDEO_PATH, f"{fight_id}_annotated.mp4")
+    FIGHT_STORAGE[fight_id] = {
+        "id": fight_id, "status": "pending", "created_at": datetime.now(),
+        "video_url": input_path,
+    }
+    run_annotation_background(
+        fight_id=fight_id, input_path=input_path, output_path=output_path,
+        fight_storage=FIGHT_STORAGE, youtube_url=url,
+        device=settings.DEVICE, model_path=settings.YOLO_MODEL,
+        scale=settings.ANNOTATION_SCALE, target_fps=settings.FRAMES_PER_SECOND,
+        conf=settings.ANNOTATION_CONF, imgsz=settings.ANNOTATION_IMGSZ,
+    )
+    return FightResponse(**FIGHT_STORAGE[fight_id])
+
+
 @router.get("/fights/{fight_id}", response_model=FightResponse)
 async def get_fight(fight_id: str):
     """Get fight analysis status and results"""
@@ -103,6 +137,7 @@ async def get_fight(fight_id: str):
         annotated_video_url=data.get("annotated_video_url"),
         processing_time=data.get("processing_time"),
         metrics_url=data.get("metrics_url"),
+        error=data.get("error"),
         total_rounds=data.get("total_rounds"),
         duration_seconds=data.get("duration_seconds"),
         win_probabilities=data.get("win_probabilities"),
