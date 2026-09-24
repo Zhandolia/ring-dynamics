@@ -27,6 +27,7 @@ def run_annotation_background(
     conf: float = 0.30,
     imgsz: int = 640,
     youtube_url: Optional[str] = None,
+    inference_threads: int = 1,
 ):
     """
     Run annotation in a background thread.
@@ -89,6 +90,11 @@ def run_annotation_background(
                 sys.path.insert(0, backend_root)
 
             from workers.annotate_video import annotate_video
+
+            # Host CPU counts can exceed a container's actual CPU quota. Excess
+            # BLAS threads make small-model inference much slower on free hosts.
+            import torch
+            torch.set_num_threads(max(1, inference_threads))
 
             # Run annotation
             annotate_video(

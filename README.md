@@ -104,6 +104,7 @@ age-restricted, and live videos are not supported. No browser cookies are collec
 
 The hosted UI accepts uploads up to 95 MB; the local API defaults to 500 MB. Analysis jobs
 run one at a time to avoid loading multiple models on the small hosted instance. The free
+instance uses one inference thread by default (`INFERENCE_THREADS=1`) to avoid oversubscribing its CPU quota. The free
 backend can take a minute to wake up. Its job history and files are temporary and may be
 lost on a restart or deployment.
 

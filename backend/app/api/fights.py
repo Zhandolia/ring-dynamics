@@ -86,6 +86,7 @@ async def upload_fight_video(file: UploadFile = File(...)):
         target_fps=settings.FRAMES_PER_SECOND,
         conf=settings.ANNOTATION_CONF,
         imgsz=settings.ANNOTATION_IMGSZ,
+        inference_threads=settings.INFERENCE_THREADS,
     )
 
     return FightResponse(
@@ -118,6 +119,7 @@ async def submit_youtube_video(request: FightCreate):
         device=settings.DEVICE, model_path=settings.YOLO_MODEL,
         scale=settings.ANNOTATION_SCALE, target_fps=settings.FRAMES_PER_SECOND,
         conf=settings.ANNOTATION_CONF, imgsz=settings.ANNOTATION_IMGSZ,
+        inference_threads=settings.INFERENCE_THREADS,
     )
     return FightResponse(**FIGHT_STORAGE[fight_id])
 

@@ -37,6 +37,7 @@ class Settings(BaseSettings):
     ANNOTATION_SCALE: float = 0.5
     ANNOTATION_IMGSZ: int = 640
     ANNOTATION_CONF: float = 0.30
+    INFERENCE_THREADS: int = 1
     
     # GPU
     DEVICE: str = "cpu"  # Set 'mps' for Mac or 'cuda:0' for NVIDIA explicitly.
