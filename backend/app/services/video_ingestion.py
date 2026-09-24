@@ -1,8 +1,11 @@
 """Download one public YouTube video for the annotation worker."""
+import logging
 import os
 import re
 from urllib.parse import urlsplit, parse_qs
 import yt_dlp
+
+logger = logging.getLogger(__name__)
 
 
 def normalize_youtube_url(value: str) -> str:
@@ -64,11 +67,12 @@ def download_youtube_video(youtube_url: str, output_path: str, max_bytes: int,
             raise ValueError("YouTube video exceeds the maximum video size.")
         return output_path
     except Exception as exc:
+        logger.warning("YouTube download failed: %s", exc)
         for suffix in ("", ".part", ".ytdl"):
             path = output_path + suffix
             if os.path.isfile(path):
                 os.remove(path)
         raise RuntimeError(
             "YouTube download failed. The video may be private, restricted, or blocked by "
-            "YouTube on this server. Try uploading the video file instead. " + str(exc)
+            "YouTube on this server. Try uploading the video file instead."
         ) from exc

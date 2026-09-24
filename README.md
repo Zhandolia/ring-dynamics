@@ -287,7 +287,8 @@ Environment variables (optional — sane defaults used):
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `DEVICE` | `mps` | Inference device (`cpu`, `mps`, `cuda`) |
+| `DEVICE` | `cpu` | Inference device (`cpu`, `mps`, `cuda`) |
+| `INFERENCE_THREADS` | `1` | CPU inference threads; keep low on small hosted instances |
 | `YOLO_MODEL` | `yolov8n.pt` | YOLO model name |
 | `ANNOTATION_SCALE` | `0.5` | Frame resize factor |
 | `ANNOTATION_CONF` | `0.30` | Detection confidence |
