@@ -74,397 +74,515 @@ def jitter_box(x1, y1, x2, y2, px=JITTER_PX):
 CONF_THRESHOLD = 0.35
 
 
+# ── Fighter Pose & Inversion Detection ─────────────────────────────────────────
+def compute_fighter_pose_boxes(d: dict, frame_shape: tuple) -> tuple:
+    """
+    Computes anatomical head and core/body sub-boxes for a tracked fighter.
+
+    Correctly handles fighters:
+      1. Standing upright (head at top, feet at bottom)
+      2. Knocked down / inverted on canvas (heads at bottom of screen, feet on top of screen)
+      3. Lying horizontally on ground (head at left or right)
+
+    Returns:
+      (hx1, hy1, hx2, hy2), (bx1, by1, bx2, by2), orientation_str
+    """
+    x1, y1, x2, y2 = d["x1"], d["y1"], d["x2"], d["y2"]
+    bw = max(1, x2 - x1)
+    bh = max(1, y2 - y1)
+    kpts = d.get("keypoints")
+    kpts_conf = d.get("keypoints_conf")
+
+    head_pts = []
+    shoulder_pts = []
+    hip_pts = []
+    feet_pts = []
+
+    # COCO Keypoint format:
+    # 0: nose, 1-2: eyes, 3-4: ears
+    # 5-6: shoulders, 11-12: hips, 13-14: knees, 15-16: ankles
+    if kpts is not None and len(kpts) >= 17:
+        for idx in [0, 1, 2, 3, 4]:
+            p = kpts[idx]
+            c = float(kpts_conf[idx]) if kpts_conf is not None else 1.0
+            if p[0] > 0 and p[1] > 0 and c >= 0.15:
+                head_pts.append((float(p[0]), float(p[1])))
+
+        for idx in [5, 6]:
+            p = kpts[idx]
+            c = float(kpts_conf[idx]) if kpts_conf is not None else 1.0
+            if p[0] > 0 and p[1] > 0 and c >= 0.15:
+                shoulder_pts.append((float(p[0]), float(p[1])))
+
+        for idx in [11, 12]:
+            p = kpts[idx]
+            c = float(kpts_conf[idx]) if kpts_conf is not None else 1.0
+            if p[0] > 0 and p[1] > 0 and c >= 0.15:
+                hip_pts.append((float(p[0]), float(p[1])))
+
+        for idx in [15, 16]:
+            p = kpts[idx]
+            c = float(kpts_conf[idx]) if kpts_conf is not None else 1.0
+            if p[0] > 0 and p[1] > 0 and c >= 0.15:
+                feet_pts.append((float(p[0]), float(p[1])))
+
+        if not feet_pts:
+            for idx in [13, 14]:
+                p = kpts[idx]
+                c = float(kpts_conf[idx]) if kpts_conf is not None else 1.0
+                if p[0] > 0 and p[1] > 0 and c >= 0.15:
+                    feet_pts.append((float(p[0]), float(p[1])))
+
+    head_cy = float(np.mean([p[1] for p in head_pts])) if head_pts else None
+    head_cx = float(np.mean([p[0] for p in head_pts])) if head_pts else None
+    feet_cy = float(np.mean([p[1] for p in feet_pts])) if feet_pts else None
+    feet_cx = float(np.mean([p[0] for p in feet_pts])) if feet_pts else None
+    core_pts = shoulder_pts + hip_pts
+    core_cy = float(np.mean([p[1] for p in core_pts])) if core_pts else None
+    core_cx = float(np.mean([p[0] for p in core_pts])) if core_pts else None
+
+    # Detect inverted state (head at bottom of screen, feet on top of screen)
+    is_inverted = False
+    is_horizontal = False
+
+    if head_cy is not None and feet_cy is not None:
+        if head_cy > feet_cy + 8:
+            is_inverted = True
+    elif head_cy is not None and core_cy is not None:
+        if head_cy > core_cy + 8:
+            is_inverted = True
+
+    # Detect horizontal state (fighter lying down flat or on side)
+    if bw > 1.25 * bh:
+        is_horizontal = True
+    elif head_cx is not None and feet_cx is not None and head_cy is not None and feet_cy is not None:
+        if abs(head_cx - feet_cx) > 1.20 * abs(head_cy - feet_cy):
+            is_horizontal = True
+
+    # ── Head Sub-box ──────────────────────────────────────────────────────────
+    if len(head_pts) >= 2:
+        min_hx = min(p[0] for p in head_pts)
+        max_hx = max(p[0] for p in head_pts)
+        min_hy = min(p[1] for p in head_pts)
+        max_hy = max(p[1] for p in head_pts)
+        pad_x = max(int(bw * 0.08), int((max_hx - min_hx) * 0.45), 10)
+        pad_y = max(int(bh * 0.08), int((max_hy - min_hy) * 0.45), 10)
+        hx1 = max(x1, int(min_hx - pad_x))
+        hx2 = min(x2, int(max_hx + pad_x))
+        hy1 = max(y1, int(min_hy - pad_y))
+        hy2 = min(y2, int(max_hy + pad_y))
+    elif len(head_pts) == 1:
+        px, py = head_pts[0]
+        radius_x = max(int(bw * 0.14), 14)
+        radius_y = max(int(bh * 0.14), 14)
+        hx1 = max(x1, int(px - radius_x))
+        hx2 = min(x2, int(px + radius_x))
+        hy1 = max(y1, int(py - radius_y))
+        hy2 = min(y2, int(py + radius_y))
+    elif is_inverted:
+        # Head at bottom of bounding box (inverted fighter on canvas)
+        head_inset = max(1, int(bw * HEAD_INSET_X))
+        hx1 = x1 + head_inset
+        hx2 = x2 - head_inset
+        hy1 = y2 - int(bh * HEAD_BOTTOM)
+        hy2 = y2 - int(bh * HEAD_TOP)
+    elif is_horizontal:
+        head_inset = max(1, int(bh * HEAD_INSET_X))
+        hy1 = y1 + head_inset
+        hy2 = y2 - head_inset
+        head_on_right = (head_cx is not None and core_cx is not None and head_cx > core_cx) or (head_cx is not None and head_cx > (x1 + x2) / 2)
+        if head_on_right:
+            hx1 = x2 - int(bw * HEAD_BOTTOM)
+            hx2 = x2
+        else:
+            hx1 = x1
+            hx2 = x1 + int(bw * HEAD_BOTTOM)
+    else:
+        # Standard upright
+        head_inset = max(1, int(bw * HEAD_INSET_X))
+        hx1 = x1 + head_inset
+        hx2 = x2 - head_inset
+        hy1 = y1 + int(bh * HEAD_TOP)
+        hy2 = y1 + int(bh * HEAD_BOTTOM)
+
+    # ── Core / Body Sub-box ──────────────────────────────────────────────────
+    if len(core_pts) >= 2:
+        min_cx = min(p[0] for p in core_pts)
+        max_cx = max(p[0] for p in core_pts)
+        min_cy = min(p[1] for p in core_pts)
+        max_cy = max(p[1] for p in core_pts)
+        pad_cx = max(int(bw * 0.06), 10)
+        pad_cy = max(int(bh * 0.06), 10)
+        bx1 = max(x1, int(min_cx - pad_cx))
+        bx2 = min(x2, int(max_cx + pad_cx))
+        by1 = max(y1, int(min_cy - pad_cy))
+        by2 = min(y2, int(max_cy + pad_cy))
+    elif is_inverted:
+        body_inset = max(1, int(bw * BODY_INSET_X))
+        bx1 = x1 + body_inset
+        bx2 = x2 - body_inset
+        by1 = y2 - int(bh * BODY_BOTTOM)
+        by2 = y2 - int(bh * BODY_TOP)
+    elif is_horizontal:
+        body_inset = max(1, int(bh * BODY_INSET_X))
+        by1 = y1 + body_inset
+        by2 = y2 - body_inset
+        bx1 = x1 + int(bw * BODY_TOP)
+        bx2 = x1 + int(bw * BODY_BOTTOM)
+    else:
+        body_inset = max(1, int(bw * BODY_INSET_X))
+        bx1 = x1 + body_inset
+        bx2 = x2 - body_inset
+        by1 = y1 + int(bh * BODY_TOP)
+        by2 = y1 + int(bh * BODY_BOTTOM)
+
+    hx1, hx2 = min(hx1, hx2), max(hx1, hx2)
+    hy1, hy2 = min(hy1, hy2), max(hy1, hy2)
+    bx1, bx2 = min(bx1, bx2), max(bx1, bx2)
+    by1, by2 = min(by1, by2), max(by1, by2)
+
+    orient_str = "inverted" if is_inverted else ("horizontal" if is_horizontal else "upright")
+    return (hx1, hy1, hx2, hy2), (bx1, by1, bx2, by2), orient_str
+
+
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Fighter Identity Tracker  (v5 — hardened against audience false-matches)
+# Fighter Identity Tracker (v6 — Referee Rejection & Persistent Re-ID)
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 class FighterIdentityTracker:
     """
-    Maintains stable Fighter A / Fighter B identity across the entire video.
+    Maintains stable Fighter A / Fighter B identity across the entire fight.
 
-    Anti-audience hardening:
-      1. RING-ZONE constraint: fighters bbox center should be within the
-         central horizontal band (10-90%) and vertical band (5-85%) of frame
-      2. MAX POSITION JUMP: a fighter can't move more than 40% of the frame
-         width between consecutive frames
-      3. MINIMUM SIZE: bbox must be >= 20% frame height AND >= 2.5% frame area
-      4. SCORE THRESHOLD: MIN_ACCEPT_SCORE = 0.42 (raised from 0.35)
-      5. SKIN RATIO: central-column skin detection rejects clothed persons
-      6. TRUNKS HISTOGRAM: most distinctive feature for boxer identification
+    v6 Enhancements:
+      1. PHYSIOLOGICAL & CLOTHING REFEREE DETECTOR:
+         - Referees wear black/dark polo or t-shirt + long black trousers.
+         - Fighters are bare-chested / shirtless (high torso skin, bare legs).
+         - Rejects referee candidates in bootstrap and steady-state based on
+           torso skin coverage, dark clothing ratio, and long pants detection.
+      2. MULTI-REGION CIELAB & HSV COLOR RE-ID:
+         - 3D color histogram and dominant color in CIELAB space for trunks.
+         - Perceptual Delta-E color distance accurately distinguishes black,
+           white, colored, and patterned trunks across camera cuts and zooms.
+         - Torso skin tone profiling preserves fighter individuality.
+      3. TRACKLET BINDING:
+         - Leverages ByteTrack's continuous track IDs across frames within a shot.
+         - Avoids frame-by-frame ID jitter and preserves Fighter A / B consistency.
+      4. CAMERA-CUT & OCCLUSION RESILIENCE:
+         - Optimal bipartite matching on appearance similarity.
+         - Eliminates flawed left/right X-position ordering across camera cuts.
+      5. OCCLUSION & CLINCH COASTING:
+         - Smooths temporary 1-to-4 frame clinch occlusions so boxes don't vanish.
     """
 
-    INIT_FRAMES       = 30      # broader bootstrap to capture more variation
-    MIN_ACCEPT_SCORE  = 0.40    # main threshold
-    CAMERA_CUT_SCORE  = 0.35    # lower threshold during camera cuts
-    SWAP_MARGIN       = 0.03    # min score gap to prevent ambiguous swaps
-    HIST_ALPHA        = 0.05    # EMA for histogram (very slow)
-    PROFILE_ALPHA     = 0.05    # EMA for scalar features
-    MAX_POS_JUMP      = 0.30    # max normalised distance per frame
+    INIT_BOOTSTRAP_FRAMES = 25
+    MIN_APPEARANCE_SIM    = 0.30
+    TRACK_REBIND_SIM      = 0.26
 
-    # Ring-zone bounds (normalised coordinates) — audience sits outside
-    RING_X_MIN = 0.12   # left bound (tight to reject audience)
-    RING_X_MAX = 0.88   # right bound
-    RING_Y_MIN = 0.05   # top bound
-    RING_Y_MAX = 0.85   # bottom bound
+    # Ring-zone bounds (normalised coordinates)
+    RING_X_MIN = 0.05
+    RING_X_MAX = 0.95
+    RING_Y_MIN = 0.03
+    RING_Y_MAX = 0.95
 
-    # Minimum size constraints — fighters are BIG in the frame
-    MIN_HEIGHT_RATIO  = 0.25    # bbox height >= 25% of frame height
-    MIN_AREA_RATIO    = 0.035   # bbox area >= 3.5% of frame area
+    # Size constraints
+    MIN_HEIGHT_RATIO = 0.18
+    MIN_AREA_RATIO   = 0.020
 
     def __init__(self):
         self._frame_count = 0
-
-        # Per-fighter profiles (indexed 0, 1)
-        self._torso_hists:  List[Optional[np.ndarray]] = [None, None]
-        self._trunks_hists: List[Optional[np.ndarray]] = [None, None]
-        self._body_hists:   List[Optional[np.ndarray]] = [None, None]
-        self._skin_ratios:  List[float] = [0.0, 0.0]
-        self._ref_heights:  List[float] = [0.0, 0.0]
-
-        # ByteTrack ID → stable ID mapping
-        self._id_map: Dict[int, int] = {}
-
-        # Last known normalised position per fighter
-        self._last_pos: List[Optional[Tuple[float, float]]] = [None, None]
-
-        # Bootstrap spatial reference: average X position per fighter
-        self._bootstrap_cx: List[float] = [0.0, 0.0]  # learned in bootstrap
-        self._ring_cx_accumulator: List[List[float]] = [[], []]
-
-    # ── Feature extraction ─────────────────────────────────────────────────
-    @staticmethod
-    def _hs_histogram(frame: np.ndarray, x1: int, y1: int,
-                      x2: int, y2: int) -> np.ndarray:
-        """2-D Hue×Saturation histogram."""
-        crop = frame[max(0, y1):y2, max(0, x1):x2]
-        if crop.size == 0:
-            return np.zeros((30, 32), dtype=np.float32)
-        hsv = cv2.cvtColor(crop, cv2.COLOR_BGR2HSV)
-        hist = cv2.calcHist([hsv], [0, 1], None,
-                            [30, 32], [0, 180, 0, 256])
-        cv2.normalize(hist, hist, 0, 1, cv2.NORM_MINMAX)
-        return hist
-
-    @classmethod
-    def _torso_histogram(cls, frame: np.ndarray, x1: int, y1: int,
-                         x2: int, y2: int) -> np.ndarray:
-        """HS histogram of the upper-torso region  (top 15-45% of bbox)."""
-        h = y2 - y1
-        w = x2 - x1
-        inset_x = max(1, int(w * 0.2))
-        ry1 = y1 + int(h * 0.15)
-        ry2 = y1 + int(h * 0.45)
-        rx1 = x1 + inset_x
-        rx2 = x2 - inset_x
-        return cls._hs_histogram(frame, rx1, ry1, rx2, ry2)
-
-    @classmethod
-    def _trunks_histogram(cls, frame: np.ndarray, x1: int, y1: int,
-                          x2: int, y2: int) -> np.ndarray:
-        """HS histogram of the trunks/shorts region  (40-70% of bbox)."""
-        h = y2 - y1
-        w = x2 - x1
-        inset_x = max(1, int(w * 0.15))
-        ry1 = y1 + int(h * 0.40)
-        ry2 = y1 + int(h * 0.70)
-        rx1 = x1 + inset_x
-        rx2 = x2 - inset_x
-        return cls._hs_histogram(frame, rx1, ry1, rx2, ry2)
+        self._profiles = [None, None]  # 0: Fighter A, 1: Fighter B
+        self._last_pos = [None, None]
+        self._last_seen = [-1, -1]
+        self._last_det = [None, None]
+        self._track_id_map: Dict[int, int] = {}  # ByteTrack ID -> stable ID
+        self._bootstrapped = False
 
     @staticmethod
-    def _central_skin_ratio(frame: np.ndarray, x1: int, y1: int,
-                            x2: int, y2: int) -> float:
-        """Skin pixel fraction using central column only."""
+    def is_referee(frame: np.ndarray, x1: int, y1: int, x2: int, y2: int, orientation: str = "upright") -> bool:
+        """
+        Detect whether a candidate bounding box is the referee or a clothed official.
+        Referees wear dark shirts and long dark pants, while fighters are shirtless
+        with bare legs and combat shorts.
+        """
         h = y2 - y1
         w = x2 - x1
-        if h <= 0 or w <= 0:
-            return 0.0
-        cx1 = x1 + int(w * 0.3)
-        cx2 = x1 + int(w * 0.7)
-        cy1 = y1 + int(h * 0.05)
-        cy2 = y1 + int(h * 0.45)
-        crop = frame[max(0, cy1):cy2, max(0, cx1):cx2]
-        if crop.size == 0:
-            return 0.0
-        ycrcb = cv2.cvtColor(crop, cv2.COLOR_BGR2YCrCb)
-        lower = np.array([0, 133, 77], dtype=np.uint8)
-        upper = np.array([255, 173, 127], dtype=np.uint8)
-        mask = cv2.inRange(ycrcb, lower, upper)
-        return float(np.count_nonzero(mask)) / mask.size
-
-    @staticmethod
-    def _hist_sim(h1: np.ndarray, h2: np.ndarray) -> float:
-        """Bhattacharyya similarity (0..1)."""
-        if h1 is None or h2 is None:
-            return 0.0
-        dist = cv2.compareHist(h1.astype(np.float32),
-                               h2.astype(np.float32),
-                               cv2.HISTCMP_BHATTACHARYYA)
-        return max(0.0, 1.0 - dist)
-
-    # ── Enrich detection with features ─────────────────────────────────────
-    def _enrich(self, det: dict, frame: np.ndarray) -> None:
-        h_frame, w_frame = frame.shape[:2]
-        x1, y1, x2, y2 = det["x1"], det["y1"], det["x2"], det["y2"]
-        det["_torso_hist"]   = self._torso_histogram(frame, x1, y1, x2, y2)
-        det["_trunks_hist"]  = self._trunks_histogram(frame, x1, y1, x2, y2)
-        det["_body_hist"]    = self._hs_histogram(frame, x1, y1, x2, y2)
-        det["_skin_ratio"]   = self._central_skin_ratio(frame, x1, y1, x2, y2)
-        det["_height_ratio"] = (y2 - y1) / h_frame
-        det["_area_ratio"]   = det["area"] / (h_frame * w_frame)
-        cx = (x1 + x2) / 2.0
-        cy = (y1 + y2) / 2.0
-        det["_cx_norm"] = cx / w_frame
-        det["_cy_norm"] = cy / h_frame
-
-    # ── Spatial checks ─────────────────────────────────────────────────────
-    def _in_ring_zone(self, det: dict) -> bool:
-        cx = det["_cx_norm"]
-        cy = det["_cy_norm"]
-        return (self.RING_X_MIN <= cx <= self.RING_X_MAX and
-                self.RING_Y_MIN <= cy <= self.RING_Y_MAX)
-
-    def _within_jump_limit(self, det: dict, fid: int) -> bool:
-        if self._last_pos[fid] is None:
+        if h < 20 or w < 20:
             return True
-        lx, ly = self._last_pos[fid]
-        dist = ((det["_cx_norm"] - lx)**2 + (det["_cy_norm"] - ly)**2) ** 0.5
-        return dist <= self.MAX_POS_JUMP
 
-    # ── Scoring ────────────────────────────────────────────────────────────
-    def _appearance_components(self, det: dict, fid: int) -> Tuple[float, float, float, float, float]:
-        """Return (trunks_sim, torso_sim, body_sim, skin_sim, height_sim)."""
-        trunks_sim = self._hist_sim(det["_trunks_hist"], self._trunks_hists[fid])
-        torso_sim  = self._hist_sim(det["_torso_hist"],  self._torso_hists[fid])
-        body_sim   = self._hist_sim(det["_body_hist"],   self._body_hists[fid])
-
-        ref_skin = self._skin_ratios[fid]
-        det_skin = det["_skin_ratio"]
-        skin_sim = 1.0 - min(abs(det_skin - ref_skin) / (ref_skin + 0.01), 1.0)
-
-        ref_h = self._ref_heights[fid]
-        det_h = det["_height_ratio"]
-        h_sim = 1.0 - min(abs(det_h - ref_h) / (ref_h + 0.01), 1.0)
-
-        return trunks_sim, torso_sim, body_sim, skin_sim, h_sim
-
-    def _score(self, det: dict, fid: int) -> float:
-        """Full score (appearance + position continuity)."""
-        trunks_sim, torso_sim, body_sim, skin_sim, h_sim = self._appearance_components(det, fid)
-
-        pos_sim = 0.5
-        if self._last_pos[fid] is not None:
-            lx, ly = self._last_pos[fid]
-            dist = ((det["_cx_norm"] - lx)**2 + (det["_cy_norm"] - ly)**2) ** 0.5
-            pos_sim = max(0.0, 1.0 - dist * 3.0)
-
-        return (0.30 * trunks_sim +
-                0.15 * torso_sim +
-                0.15 * body_sim +
-                0.15 * skin_sim +
-                0.10 * h_sim +
-                0.15 * pos_sim)
-
-    def _score_appearance_only(self, det: dict, fid: int) -> float:
-        """Appearance-only score — used after camera cuts."""
-        trunks_sim, torso_sim, body_sim, skin_sim, h_sim = self._appearance_components(det, fid)
-        return (0.35 * trunks_sim +
-                0.20 * torso_sim +
-                0.20 * body_sim +
-                0.15 * skin_sim +
-                0.10 * h_sim)
-
-    # ── Profile update ─────────────────────────────────────────────────────
-    def _update_profile(self, det: dict, fid: int, alpha: Optional[float] = None,
-                        bootstrap: bool = False):
-        """After bootstrap: ONLY position + height updated. Histograms FROZEN."""
-        if self._torso_hists[fid] is None or bootstrap:
-            a = alpha if alpha is not None else self.HIST_ALPHA
-            ap = alpha if alpha is not None else self.PROFILE_ALPHA
-            if self._torso_hists[fid] is None:
-                self._torso_hists[fid]  = det["_torso_hist"].copy()
-                self._trunks_hists[fid] = det["_trunks_hist"].copy()
-                self._body_hists[fid]   = det["_body_hist"].copy()
-                self._skin_ratios[fid]  = det["_skin_ratio"]
-                self._ref_heights[fid]  = det["_height_ratio"]
-            else:
-                self._torso_hists[fid]  = (1-a)*self._torso_hists[fid]  + a*det["_torso_hist"]
-                self._trunks_hists[fid] = (1-a)*self._trunks_hists[fid] + a*det["_trunks_hist"]
-                self._body_hists[fid]   = (1-a)*self._body_hists[fid]   + a*det["_body_hist"]
-                self._skin_ratios[fid]  = (1-ap)*self._skin_ratios[fid] + ap*det["_skin_ratio"]
-                self._ref_heights[fid]  = (1-ap)*self._ref_heights[fid] + ap*det["_height_ratio"]
+        if orientation == "inverted":
+            # Torso: lower portion of bbox; Legs: upper portion of bbox
+            tx1, tx2 = x1 + int(w * 0.15), x2 - int(w * 0.15)
+            ty1, ty2 = y2 - int(h * 0.45), y2 - int(h * 0.15)
+            lx1, lx2 = x1 + int(w * 0.15), x2 - int(w * 0.15)
+            ly1, ly2 = y1 + int(h * 0.05), y1 + int(h * 0.35)
+        elif orientation == "horizontal":
+            tx1, tx2 = x1 + int(w * 0.15), x1 + int(w * 0.50)
+            ty1, ty2 = y1 + int(h * 0.15), y2 - int(h * 0.15)
+            lx1, lx2 = x1 + int(w * 0.50), x1 + int(w * 0.85)
+            ly1, ly2 = y1 + int(h * 0.15), y2 - int(h * 0.15)
         else:
-            ap = self.PROFILE_ALPHA
-            self._ref_heights[fid] = (1-ap)*self._ref_heights[fid] + ap*det["_height_ratio"]
-        self._last_pos[fid] = (det["_cx_norm"], det["_cy_norm"])
+            # Torso: 15% to 45% of bbox height, central 70% width
+            tx1, tx2 = x1 + int(w * 0.15), x2 - int(w * 0.15)
+            ty1, ty2 = y1 + int(h * 0.15), y1 + int(h * 0.45)
+            # Legs: 65% to 95% of bbox height, central 70% width
+            lx1, lx2 = x1 + int(w * 0.15), x2 - int(w * 0.15)
+            ly1, ly2 = y1 + int(h * 0.65), y1 + int(h * 0.95)
 
-    # ── Main entry point ───────────────────────────────────────────────────
+        torso = frame[max(0, ty1):min(frame.shape[0], ty2), max(0, tx1):min(frame.shape[1], tx2)]
+        legs  = frame[max(0, ly1):min(frame.shape[0], ly2), max(0, lx1):min(frame.shape[1], lx2)]
+
+        if torso.size == 0 or legs.size == 0:
+            return False
+
+        # Skin detection across illumination: combination of YCrCb and HSV skin tone
+        ycrcb_t = cv2.cvtColor(torso, cv2.COLOR_BGR2YCrCb)
+        skin_ycrcb = cv2.inRange(ycrcb_t, np.array([0, 133, 77], dtype=np.uint8),
+                                          np.array([255, 173, 127], dtype=np.uint8))
+        hsv_t = cv2.cvtColor(torso, cv2.COLOR_BGR2HSV)
+        skin_hsv = cv2.inRange(hsv_t, np.array([0, 28, 40], dtype=np.uint8),
+                                      np.array([30, 255, 255], dtype=np.uint8))
+        skin_mask = cv2.bitwise_or(skin_ycrcb, skin_hsv)
+        torso_skin = float(np.count_nonzero(skin_mask)) / torso.size
+
+        # Dark clothing detection: HSV Value < 55 (black / dark fabric)
+        torso_dark = float(np.count_nonzero(hsv_t[:, :, 2] < 55)) / torso.size
+        hsv_l = cv2.cvtColor(legs, cv2.COLOR_BGR2HSV)
+        legs_dark = float(np.count_nonzero(hsv_l[:, :, 2] < 55)) / legs.size
+
+        # Classification rules:
+        # 1. Dark shirt + dark pants + low skin: textbook referee
+        if torso_skin < 0.16 and (torso_dark > 0.20 or legs_dark > 0.35):
+            return True
+        # 2. Torso is almost completely covered in clothing (fighters are shirtless)
+        if torso_skin < 0.10:
+            return True
+        # 3. Long dark trousers + low/moderate skin
+        if legs_dark > 0.50 and torso_skin < 0.22:
+            return True
+
+        return False
+
+    @staticmethod
+    def extract_features(frame: np.ndarray, x1: int, y1: int, x2: int, y2: int, orientation: str = "upright") -> dict:
+        """Extract multi-region color signatures in CIELAB and HSV."""
+        h = y2 - y1
+        w = x2 - x1
+        rx1, rx2 = x1 + int(w * 0.15), x2 - int(w * 0.15)
+
+        if orientation == "inverted":
+            # Inverted fighter: trunks in upper portion, torso in lower portion
+            ry1, ry2 = y2 - int(h * 0.70), y2 - int(h * 0.40)
+            ty1, ty2 = y2 - int(h * 0.42), y2 - int(h * 0.15)
+        elif orientation == "horizontal":
+            ry1, ry2 = y1 + int(h * 0.15), y2 - int(h * 0.15)
+            rx1, rx2 = x1 + int(w * 0.40), x1 + int(w * 0.70)
+            ty1, ty2 = y1 + int(h * 0.15), y2 - int(h * 0.15)
+        else:
+            # Trunks / shorts crop (40% to 70% height)
+            ry1, ry2 = y1 + int(h * 0.40), y1 + int(h * 0.70)
+            # Torso crop (15% to 42% height)
+            ty1, ty2 = y1 + int(h * 0.15), y1 + int(h * 0.42)
+
+        trunks = frame[max(0, ry1):min(frame.shape[0], ry2), max(0, rx1):min(frame.shape[1], rx2)]
+        if trunks.size == 0:
+            trunks = frame[y1:y2, x1:x2]
+
+        lab_trunks = cv2.cvtColor(trunks, cv2.COLOR_BGR2LAB)
+        mean_trunks = np.mean(lab_trunks, axis=(0, 1))
+        hist_trunks = cv2.calcHist([lab_trunks], [0, 1, 2], None, [8, 8, 8], [0, 256, 0, 256, 0, 256])
+        cv2.normalize(hist_trunks, hist_trunks, 0, 1, cv2.NORM_MINMAX)
+
+        torso = frame[max(0, ty1):min(frame.shape[0], ty2), max(0, rx1):min(frame.shape[1], rx2)]
+        if torso.size == 0:
+            torso = frame[y1:y2, x1:x2]
+        lab_torso = cv2.cvtColor(torso, cv2.COLOR_BGR2LAB)
+        mean_torso = np.mean(lab_torso, axis=(0, 1))
+
+        return {
+            "mean_trunks": mean_trunks,
+            "hist_trunks": hist_trunks,
+            "mean_torso":  mean_torso,
+        }
+
+    def appearance_sim(self, feat: dict, fid: int) -> float:
+        """Compute robust multi-region appearance similarity against fighter profile."""
+        prof = self._profiles[fid]
+        if prof is None:
+            return 0.50
+
+        # Trunks 3D color histogram similarity (Bhattacharyya)
+        h_sim = max(0.0, 1.0 - cv2.compareHist(
+            feat["hist_trunks"].astype(np.float32),
+            prof["hist_trunks"].astype(np.float32),
+            cv2.HISTCMP_BHATTACHARYYA
+        ))
+
+        # Trunks dominant color distance (Delta-E in CIELAB)
+        dE_trunks = float(np.linalg.norm(feat["mean_trunks"] - prof["mean_trunks"]))
+        color_sim_trunks = max(0.0, 1.0 - dE_trunks / 60.0)
+
+        # Torso skin tone distance
+        dE_torso = float(np.linalg.norm(feat["mean_torso"] - prof["mean_torso"]))
+        color_sim_torso = max(0.0, 1.0 - dE_torso / 50.0)
+
+        return 0.45 * h_sim + 0.40 * color_sim_trunks + 0.15 * color_sim_torso
+
     def assign(self, all_dets: list, frame: np.ndarray) -> list:
+        """
+        Filter candidate person detections, reject referees/officials,
+        and assign stable IDs (0 = Fighter A, 1 = Fighter B).
+        """
+        self._frame_count += 1
         if not all_dets:
+            # Fallback coasting if active fighters were recently visible
+            return self._get_coasted_fighters([])
+
+        h_f, w_f = frame.shape[:2]
+
+        candidates = []
+        for d in all_dets:
+            x1, y1, x2, y2 = d["x1"], d["y1"], d["x2"], d["y2"]
+            bw = x2 - x1
+            bh = y2 - y1
+
+            # Compute pose-aware sub-boxes & orientation
+            (hx1, hy1, hx2, hy2), (bx1, by1, bx2, by2), orient_str = compute_fighter_pose_boxes(d, frame.shape)
+            d["orientation"] = orient_str
+            d["head_box"] = (hx1, hy1, hx2, hy2)
+            d["core_box"] = (bx1, by1, bx2, by2)
+
+            # 1. Reject referees and clothed officials
+            if self.is_referee(frame, x1, y1, x2, y2, orientation=orient_str):
+                continue
+
+            # 2. Reject detections that are too small (checking max dimension prevents dropping horizontal/ground fighters)
+            max_dim = max(bw, bh)
+            if max_dim < h_f * self.MIN_HEIGHT_RATIO or d["area"] < (w_f * h_f * self.MIN_AREA_RATIO):
+                continue
+
+            # 3. Ring zone constraint
+            cx = (x1 + x2) / (2.0 * w_f)
+            cy = (y1 + y2) / (2.0 * h_f)
+            if not (self.RING_X_MIN <= cx <= self.RING_X_MAX and self.RING_Y_MIN <= cy <= self.RING_Y_MAX):
+                continue
+
+            d["feat"] = self.extract_features(frame, x1, y1, x2, y2, orientation=orient_str)
+            d["_cx_norm"] = cx
+            d["_cy_norm"] = cy
+            candidates.append(d)
+
+        # ── Bootstrap Phase ──────────────────────────────────────────────────
+        if not self._bootstrapped:
+            if len(candidates) >= 2:
+                # Pick largest 2 candidates and sort horizontally initially
+                top2 = sorted(candidates, key=lambda d: d["area"], reverse=True)[:2]
+                top2.sort(key=lambda d: d["x1"])  # 0 on left, 1 on right
+                for fid, d in enumerate(top2):
+                    self._profiles[fid] = d["feat"]
+                    self._track_id_map[d["track_id"]] = fid
+                    self._last_pos[fid] = (d["_cx_norm"], d["_cy_norm"])
+                    self._last_seen[fid] = self._frame_count
+                    self._last_det[fid] = d.copy()
+                    d["stable_id"] = fid
+                self._bootstrapped = True
+                return top2
             return []
 
-        h_frame, w_frame = frame.shape[:2]
+        # ── Steady-State Phase ───────────────────────────────────────────────
+        assigned: Dict[int, dict] = {}
+        unassigned_cand = []
 
-        for d in all_dets:
-            self._enrich(d, frame)
-
-        self._frame_count += 1
-
-        # ── Bootstrap: trust top-2 by area ────────────────────────────────
-        if self._frame_count <= self.INIT_FRAMES:
-            top2 = sorted(all_dets, key=lambda d: d["area"], reverse=True)[:2]
-            for i, d in enumerate(top2):
-                sid = i
-                d["stable_id"] = sid
-                self._id_map[d["track_id"]] = sid
-                alpha_boot = 1.0 / self._frame_count
-                self._update_profile(d, sid, alpha=alpha_boot, bootstrap=True)
-                self._ring_cx_accumulator[sid].append(d["_cx_norm"])
-            # At end of bootstrap, compute average X position per fighter
-            if self._frame_count == self.INIT_FRAMES:
-                for sid in [0, 1]:
-                    if self._ring_cx_accumulator[sid]:
-                        self._bootstrap_cx[sid] = (
-                            sum(self._ring_cx_accumulator[sid]) /
-                            len(self._ring_cx_accumulator[sid])
-                        )
-            return top2
-
-        # ── Steady state ──────────────────────────────────────────────────
-
-        # LAYER 1: Size filter
-        min_h = max(self.MIN_HEIGHT_RATIO, min(self._ref_heights) * 0.5)
-        size_ok = [d for d in all_dets
-                   if d["_height_ratio"] >= min_h
-                   and d["_area_ratio"] >= self.MIN_AREA_RATIO]
-
-        # LAYER 2: Ring-zone filter
-        ring_ok = [d for d in size_ok if self._in_ring_zone(d)]
-
-        # LAYER 3: Skin filter
-        min_skin = max(0.06, min(self._skin_ratios) * 0.30)
-        candidates = [d for d in ring_ok if d["_skin_ratio"] >= min_skin]
-
-        if len(candidates) < 1:
-            candidates = sorted(size_ok if size_ok else all_dets,
-                                key=lambda d: d["area"], reverse=True)[:4]
-
-        # LAYER 4: Score with position continuity
-        n = len(candidates)
-        score_matrix = np.zeros((n, 2), dtype=np.float64)
-        for i, d in enumerate(candidates):
-            for fid in [0, 1]:
-                if not self._within_jump_limit(d, fid):
-                    score_matrix[i, fid] = 0.0
-                else:
-                    score_matrix[i, fid] = self._score(d, fid)
-
-        # CAMERA CUT DETECTION
-        max_pos_score = score_matrix.max() if n > 0 else 0.0
-        is_camera_cut = max_pos_score < self.MIN_ACCEPT_SCORE
-
-        if is_camera_cut and n > 0:
-            for i, d in enumerate(candidates):
-                for fid in [0, 1]:
-                    score_matrix[i, fid] = self._score_appearance_only(d, fid)
-
-        # Effective threshold
-        accept_threshold = self.CAMERA_CUT_SCORE if is_camera_cut else self.MIN_ACCEPT_SCORE
-
-        # LAYER 5: Assignment
-        #
-        # Try OPTIMAL (Hungarian-style) 2-target assignment:
-        # For 2 fighters, try both possible pairings and pick the one
-        # with the highest total score.
-        result = []
-
-        if n >= 2:
-            # Try all possible pairs of candidates for the 2 fighters
-            best_total = -1.0
-            best_pair = None  # ( (det_idx_for_fid0, det_idx_for_fid1) )
-
-            for i in range(n):
-                for j in range(n):
-                    if i == j:
+        # Step 1: ByteTrack tracklet ID binding
+        for d in candidates:
+            tid = d["track_id"]
+            if tid in self._track_id_map:
+                fid = self._track_id_map[tid]
+                if fid not in assigned:
+                    sim = self.appearance_sim(d["feat"], fid)
+                    if sim >= self.TRACK_REBIND_SIM:
+                        d["stable_id"] = fid
+                        assigned[fid] = d
                         continue
-                    s0 = score_matrix[i, 0]
-                    s1 = score_matrix[j, 1]
-                    total = s0 + s1
-                    if total > best_total:
-                        best_total = total
-                        best_pair = (i, j)
+            unassigned_cand.append(d)
 
-            if best_pair is not None:
-                i0, i1 = best_pair
-                s0 = score_matrix[i0, 0]
-                s1 = score_matrix[i1, 1]
+        # Step 2: Global appearance matching for unassigned fighters
+        unassigned_fids = [fid for fid in [0, 1] if fid not in assigned]
+        if unassigned_fids and unassigned_cand:
+            if len(unassigned_fids) == 2 and len(unassigned_cand) >= 2:
+                c0, c1 = unassigned_cand[0], unassigned_cand[1]
+                s_00 = self.appearance_sim(c0["feat"], 0)
+                s_11 = self.appearance_sim(c1["feat"], 1)
+                s_01 = self.appearance_sim(c0["feat"], 1)
+                s_10 = self.appearance_sim(c1["feat"], 0)
 
-                # Check if both pass threshold
-                both_pass = s0 >= accept_threshold and s1 >= accept_threshold
-
-                # If appearance is ambiguous (scores are close), use
-                # SPATIAL ORDERING as tiebreaker during camera cuts
-                if is_camera_cut and both_pass:
-                    margin0 = score_matrix[i0, 0] - score_matrix[i0, 1]
-                    margin1 = score_matrix[i1, 1] - score_matrix[i1, 0]
-
-                    if abs(margin0) < self.SWAP_MARGIN or abs(margin1) < self.SWAP_MARGIN:
-                        # Ambiguous appearance — use X position ordering
-                        # Sort candidates by X position: leftmost = Fighter 0
-                        pair_dets = [(i0, candidates[i0]), (i1, candidates[i1])]
-                        pair_dets.sort(key=lambda p: p[1]["_cx_norm"])
-                        left_idx = pair_dets[0][0]
-                        right_idx = pair_dets[1][0]
-
-                        # Determine which fighter was typically on the left
-                        if self._bootstrap_cx[0] <= self._bootstrap_cx[1]:
-                            # Fighter 0 was left, Fighter 1 was right
-                            i0, i1 = left_idx, right_idx
-                        else:
-                            # Fighter 0 was right, Fighter 1 was left
-                            i0, i1 = right_idx, left_idx
-
-                        s0 = score_matrix[i0, 0]
-                        s1 = score_matrix[i1, 1]
-
-                if both_pass:
-                    d0 = candidates[i0]
-                    d0["stable_id"] = 0
-                    result.append(d0)
-                    self._id_map[d0["track_id"]] = 0
-
-                    d1 = candidates[i1]
-                    d1["stable_id"] = 1
-                    result.append(d1)
-                    self._id_map[d1["track_id"]] = 1
+                if (s_00 + s_11) >= (s_01 + s_10):
+                    if s_00 >= self.MIN_APPEARANCE_SIM:
+                        c0["stable_id"] = 0
+                        assigned[0] = c0
+                        self._track_id_map[c0["track_id"]] = 0
+                    if s_11 >= self.MIN_APPEARANCE_SIM:
+                        c1["stable_id"] = 1
+                        assigned[1] = c1
+                        self._track_id_map[c1["track_id"]] = 1
                 else:
-                    # Only assign fighters that individually pass
-                    if s0 >= accept_threshold:
-                        d0 = candidates[i0]
-                        d0["stable_id"] = 0
-                        result.append(d0)
-                        self._id_map[d0["track_id"]] = 0
-                    if s1 >= accept_threshold:
-                        d1 = candidates[i1]
-                        d1["stable_id"] = 1
-                        result.append(d1)
-                        self._id_map[d1["track_id"]] = 1
+                    if s_01 >= self.MIN_APPEARANCE_SIM:
+                        c0["stable_id"] = 1
+                        assigned[1] = c0
+                        self._track_id_map[c0["track_id"]] = 1
+                    if s_10 >= self.MIN_APPEARANCE_SIM:
+                        c1["stable_id"] = 0
+                        assigned[0] = c1
+                        self._track_id_map[c1["track_id"]] = 0
+            else:
+                for fid in unassigned_fids:
+                    best_s = -1.0
+                    best_c = None
+                    for c in unassigned_cand:
+                        s = self.appearance_sim(c["feat"], fid)
+                        if s > best_s and s >= self.MIN_APPEARANCE_SIM:
+                            best_s = s
+                            best_c = c
+                    if best_c is not None:
+                        best_c["stable_id"] = fid
+                        assigned[fid] = best_c
+                        self._track_id_map[best_c["track_id"]] = fid
+                        unassigned_cand.remove(best_c)
 
-        elif n == 1:
-            # Only 1 candidate — assign to best-matching fighter
-            s0 = score_matrix[0, 0]
-            s1 = score_matrix[0, 1]
-            if s0 >= accept_threshold or s1 >= accept_threshold:
-                fid = 0 if s0 >= s1 else 1
-                d = candidates[0]
-                d["stable_id"] = fid
-                result.append(d)
-                self._id_map[d["track_id"]] = fid
-
-        # Update profiles (post-bootstrap: only position + height)
+        # Update profiles with moving average
+        result = list(assigned.values())
         for d in result:
-            self._update_profile(d, d["stable_id"])
+            fid = d["stable_id"]
+            self._last_pos[fid] = (d["_cx_norm"], d["_cy_norm"])
+            self._last_seen[fid] = self._frame_count
+            self._last_det[fid] = d.copy()
 
+            # Slowly update profile appearance
+            alpha = 0.02
+            self._profiles[fid]["mean_trunks"] = (
+                (1 - alpha) * self._profiles[fid]["mean_trunks"] + alpha * d["feat"]["mean_trunks"]
+            )
+            self._profiles[fid]["hist_trunks"] = (
+                (1 - alpha) * self._profiles[fid]["hist_trunks"] + alpha * d["feat"]["hist_trunks"]
+            )
+            self._profiles[fid]["mean_torso"] = (
+                (1 - alpha) * self._profiles[fid]["mean_torso"] + alpha * d["feat"]["mean_torso"]
+            )
+
+        # Clinch / occlusion coasting: if 1 fighter was briefly missed (<= 4 frames), carry forward
+        result = self._get_coasted_fighters(result)
         return result
+
+    def _get_coasted_fighters(self, active_fighters: list) -> list:
+        assigned_fids = {d["stable_id"] for d in active_fighters}
+        final_list = list(active_fighters)
+        for fid in [0, 1]:
+            if fid not in assigned_fids and self._last_det[fid] is not None:
+                gap = self._frame_count - self._last_seen[fid]
+                if 1 <= gap <= 4:
+                    coasted = self._last_det[fid].copy()
+                    coasted["coasted"] = True
+                    final_list.append(coasted)
+        return final_list
+
 
 
 # ── Drawing helpers ────────────────────────────────────────────────────────────
@@ -926,17 +1044,23 @@ def annotate_video(input_path: str, output_path: str,
                 boxes = result.boxes
                 if boxes is None or len(boxes) == 0:
                     continue
-                for box in boxes:
+                kpts_data = result.keypoints.xy.cpu().numpy() if result.keypoints is not None else None
+                kpts_conf = result.keypoints.conf.cpu().numpy() if (result.keypoints is not None and result.keypoints.conf is not None) else None
+                for i, box in enumerate(boxes):
                     if box.id is None:
                         continue
                     track_id = int(box.id.item())
                     conf_val = float(box.conf.item())
                     x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
                     area = (x2 - x1) * (y2 - y1)
+                    kpt = kpts_data[i] if kpts_data is not None and i < len(kpts_data) else None
+                    kpt_c = kpts_conf[i] if kpts_conf is not None and i < len(kpts_conf) else None
                     all_dets.append({
                         "track_id": track_id, "conf": conf_val,
                         "x1": x1, "y1": y1, "x2": x2, "y2": y2,
                         "area": area,
+                        "keypoints": kpt,
+                        "keypoints_conf": kpt_c,
                     })
 
             fighters = identity_tracker.assign(all_dets, frame)
@@ -952,28 +1076,30 @@ def annotate_video(input_path: str, output_path: str,
                 jx1, jy1, jx2, jy2 = jitter_box(x1, y1, x2, y2)
                 draw_rounded_rect(frame, jx1, jy1, jx2, jy2, color, BOX_THICKNESS)
 
-                # ── Head sub-box (green accent, with jitter) ─────────────
-                head_inset = max(1, int(bw * HEAD_INSET_X))
-                hx1 = x1 + head_inset
-                hx2 = x2 - head_inset
-                hy1 = y1 + int(bh * HEAD_TOP)
-                hy2 = y1 + int(bh * HEAD_BOTTOM)
+                # ── Pose-aware Head sub-box (green accent, with jitter) ──
+                if "head_box" in d:
+                    hx1, hy1, hx2, hy2 = d["head_box"]
+                else:
+                    (hx1, hy1, hx2, hy2), (bx1, by1, bx2, by2), _ = compute_fighter_pose_boxes(d, frame.shape)
+
                 if hy2 > hy1 + 4 and hx2 > hx1 + 4:
                     jhx1, jhy1, jhx2, jhy2 = jitter_box(hx1, hy1, hx2, hy2, 1)
                     cv2.rectangle(frame, (jhx1, jhy1), (jhx2, jhy2), HEAD_COLOR, SUB_BOX_THICK)
 
-                # ── Body / core sub-box (fighter color, with jitter) ─────
-                body_inset = max(1, int(bw * BODY_INSET_X))
-                bx1 = x1 + body_inset
-                bx2 = x2 - body_inset
-                by1 = y1 + int(bh * BODY_TOP)
-                by2 = y1 + int(bh * BODY_BOTTOM)
+                # ── Pose-aware Body / core sub-box (fighter color, with jitter) ─────
+                if "core_box" in d:
+                    bx1, by1, bx2, by2 = d["core_box"]
+                else:
+                    bx1, bx2 = x1 + max(1, int(bw * BODY_INSET_X)), x2 - max(1, int(bw * BODY_INSET_X))
+                    by1, by2 = y1 + int(bh * BODY_TOP), y1 + int(bh * BODY_BOTTOM)
+
                 if by2 > by1 + 4 and bx2 > bx1 + 4:
                     jbx1, jby1, jbx2, jby2 = jitter_box(bx1, by1, bx2, by2, 1)
                     cv2.rectangle(frame, (jbx1, jby1), (jbx2, jby2), color, SUB_BOX_THICK)
 
                 # ── Label ────────────────────────────────────────────────
-                draw_label(frame, f"{FIGHTER_NAMES[sid]}  {d['conf']:.0%}", x1, y1, color)
+                orient_tag = " [DOWN]" if d.get("orientation") == "inverted" else ""
+                draw_label(frame, f"{FIGHTER_NAMES[sid]}  {d['conf']:.0%}{orient_tag}", x1, y1, color)
 
 
             # ── Update scorer & render scoreboard ────────────────────
@@ -1051,9 +1177,8 @@ def main():
     )
     parser.add_argument("input",  help="Path to input video")
     parser.add_argument("output", nargs="?", default=None)
-    parser.add_argument("--model", default="yolov8n.pt",
-                        choices=["yolov8n.pt", "yolov8s.pt", "yolov8m.pt",
-                                 "yolov8l.pt", "yolov8x.pt"])
+    parser.add_argument("--model", default="yolov8n-pose.pt",
+                        help="YOLO model variant or weights path (e.g. yolov8n-pose.pt, yolov8n.pt)")
     parser.add_argument("--conf", type=float, default=CONF_THRESHOLD)
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--imgsz", type=int, default=1280)

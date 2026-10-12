@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     VIDEO_STORAGE_PATH: str = "./storage/videos"
     ANNOTATED_VIDEO_PATH: str = "./storage/annotated"
     MODELS_PATH: str = "./models/weights"
-    YOLO_MODEL: str = "yolov8n.pt"
+    YOLO_MODEL: str = "yolov8n-pose.pt"
     
     # Processing
     MAX_VIDEO_SIZE_MB: int = 500

@@ -75,3 +75,14 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+
+# YOLO training runs
+runs/
+
+# Transient model downloads in root / backend root
+/yolov8n-pose.pt
+/backend/yolov8n-pose.pt
+/backend/yolov8n.pt
+/backend/models/yolov8s.pt
+
+

@@ -21,7 +21,7 @@ def run_annotation_background(
     output_path: str,
     fight_storage: dict,
     device: str = "cpu",
-    model_path: str = "models/yolov8n.pt",
+    model_path: str = "yolov8n-pose.pt",
     scale: float = 0.5,
     target_fps: float = 30,
     conf: float = 0.30,
