@@ -42,10 +42,19 @@ app.add_middleware(
     expose_headers=["Content-Disposition", "Content-Range", "Accept-Ranges", "Content-Length"],
 )
 
+def _safe_storage_path(base_dir: str, filename: str) -> str:
+    """Resolve filename inside base_dir, rejecting directory traversal."""
+    base = os.path.realpath(base_dir)
+    file_path = os.path.realpath(os.path.join(base, filename))
+    if os.path.commonpath([base, file_path]) != base:
+        raise HTTPException(status_code=404, detail="File not found")
+    return file_path
+
+
 # Direct byte-range endpoints for video streaming / timeline seeking
 @app.get("/storage/annotated/{filename:path}")
 async def serve_annotated_video(filename: str, request: Request):
-    file_path = os.path.join(settings.ANNOTATED_VIDEO_PATH, filename)
+    file_path = _safe_storage_path(settings.ANNOTATED_VIDEO_PATH, filename)
     if not os.path.isfile(file_path):
         raise HTTPException(status_code=404, detail="File not found")
     if filename.lower().endswith((".mp4", ".mov", ".webm")):
@@ -55,7 +64,7 @@ async def serve_annotated_video(filename: str, request: Request):
 
 @app.get("/storage/videos/{filename:path}")
 async def serve_raw_video(filename: str, request: Request):
-    file_path = os.path.join(settings.VIDEO_STORAGE_PATH, filename)
+    file_path = _safe_storage_path(settings.VIDEO_STORAGE_PATH, filename)
     if not os.path.isfile(file_path):
         raise HTTPException(status_code=404, detail="File not found")
     if filename.lower().endswith((".mp4", ".mov", ".webm")):
