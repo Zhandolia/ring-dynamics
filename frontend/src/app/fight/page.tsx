@@ -3,6 +3,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const BASE_PATH = process.env.NODE_ENV === 'production' ? '/ring-dynamics' : '';
+
+// Pre-processed sample served as static files from public/sample (no backend needed)
+const SAMPLE_ID = 'sample';
+const SAMPLE_VIDEO_URL = `${BASE_PATH}/sample/sample_annotated.mp4`;
+const SAMPLE_METRICS_URL = `${BASE_PATH}/sample/sample_metrics.json`;
 
 interface FightData {
     id: string;
@@ -73,8 +79,33 @@ export default function FightPage() {
         return () => clearInterval(interval);
     }, []);
 
+    const isSample = fightId === SAMPLE_ID;
+
+    // Load the static sample once
+    useEffect(() => {
+        if (!isSample) return;
+        let cancelled = false;
+        (async () => {
+            let mData: MetricsData | null = null;
+            try {
+                const mRes = await fetch(SAMPLE_METRICS_URL);
+                if (mRes.ok) mData = await mRes.json();
+            } catch { /* metrics optional */ }
+            if (cancelled) return;
+            setMetrics(mData);
+            setFight({
+                id: SAMPLE_ID,
+                status: 'completed',
+                created_at: '',
+                annotated_video_url: SAMPLE_VIDEO_URL,
+                processing_time: mData?.processing_time,
+            });
+        })();
+        return () => { cancelled = true; };
+    }, [isSample]);
+
     const fetchStatus = useCallback(async () => {
-        if (!fightId) return;
+        if (!fightId || fightId === SAMPLE_ID) return;
         try {
             const res = await fetch(`${API_URL}/api/fights/${fightId}`);
             if (!res.ok) {
@@ -117,7 +148,7 @@ export default function FightPage() {
 
     // Poll progress for pipeline UI
     useEffect(() => {
-        if (!fightId || fight?.status === 'completed' || fight?.status === 'failed') return;
+        if (!fightId || isSample || fight?.status === 'completed' || fight?.status === 'failed') return;
         const interval = setInterval(async () => {
             try {
                 const res = await fetch(`${API_URL}/api/fights/${fightId}/progress`);
@@ -128,7 +159,7 @@ export default function FightPage() {
             } catch { /* ignore */ }
         }, 1500);
         return () => clearInterval(interval);
-    }, [fightId, fight?.status]);
+    }, [fightId, isSample, fight?.status]);
 
     // Video time tracking
     useEffect(() => {
@@ -197,6 +228,12 @@ export default function FightPage() {
                     </h1>
                 </div>
                 <div className="flex items-center gap-4 text-xs">
+                    {isSample && (
+                        <span className="px-2 py-0.5 rounded font-bold uppercase tracking-wider"
+                            style={{ background: 'rgba(66,153,225,0.15)', color: '#63b3ed' }}>
+                            Sample Analysis
+                        </span>
+                    )}
                     {fight && (
                         <span className="text-gray-500">
                             {fight.status === 'completed' ? '● Completed' :
@@ -363,7 +400,7 @@ export default function FightPage() {
                             className="w-full h-full object-contain"
                         >
                             <source
-                                src={`${API_URL}${fight.annotated_video_url}`}
+                                src={isSample ? fight.annotated_video_url : `${API_URL}${fight.annotated_video_url}`}
                                 type="video/mp4"
                             />
                         </video>
@@ -531,6 +568,17 @@ export default function FightPage() {
 
                             {/* Action buttons */}
                             <div className="space-y-2">
+                                {isSample ? (
+                                <a
+                                    href={SAMPLE_VIDEO_URL}
+                                    download="ring_dynamics_sample.mp4"
+                                    id="dl-btn"
+                                    className="block w-full py-2.5 rounded-lg font-semibold text-sm text-white text-center transition-all"
+                                    style={{ background: 'linear-gradient(135deg, #e53e3e, #c53030)' }}
+                                >
+                                    ⬇️ Download Video
+                                </a>
+                                ) : (
                                 <button
                                     onClick={async () => {
                                         const btn = document.getElementById('dl-btn');
@@ -560,11 +608,12 @@ export default function FightPage() {
                                 >
                                     ⬇️ Download Video
                                 </button>
+                                )}
                                 <button
                                     onClick={goHome}
                                     className="w-full py-2.5 rounded-lg font-semibold text-sm text-gray-400 border border-[#1f1f2e] hover:border-gray-600 hover:text-white transition-all"
                                 >
-                                    Upload Another
+                                    {isSample ? 'Analyze Your Own Fight' : 'Upload Another'}
                                 </button>
                             </div>
 

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { readSubmission } from '../lib/api';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const BASE_PATH = process.env.NODE_ENV === 'production' ? '/ring-dynamics' : '';
 
 export default function Home() {
     const [file, setFile] = useState<File | null>(null);
@@ -161,7 +162,42 @@ export default function Home() {
                     </div>
 
                     {requestError && <p role="alert" className="max-w-4xl mx-auto mb-6 rounded-lg border border-red-800 bg-red-950 p-4 text-red-100">{requestError}</p>}
-                    {apiStatus !== 'online' && <p role="status" className="max-w-4xl mx-auto mb-6 text-sm text-gray-300">The analysis server may take a minute to wake up. If a submission fails, wait a moment and try again.</p>}
+                    {apiStatus !== 'online' && <p role="status" className="max-w-4xl mx-auto mb-6 text-sm text-gray-300">The analysis server may take a minute to wake up. If a submission fails, wait a moment and try again — or watch the sample analysis below.</p>}
+
+                    {/* Sample Analysis (static, works without backend) */}
+                    <a
+                        id="sample-analysis-btn"
+                        href={`${BASE_PATH}/fight/#sample`}
+                        className="sample-card group max-w-4xl mx-auto mb-8 flex flex-col md:flex-row items-stretch rounded-2xl overflow-hidden"
+                    >
+                        <div className="relative md:w-2/5 aspect-video md:aspect-auto overflow-hidden bg-black">
+                            <img
+                                src={`${BASE_PATH}/sample/sample_poster.jpg`}
+                                alt="Annotated boxing footage with fighter tracking boxes"
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center"
+                                style={{ background: 'linear-gradient(90deg, rgba(10,10,15,0) 40%, rgba(10,10,15,0.6) 100%)' }}>
+                                <span className="sample-play flex items-center justify-center w-16 h-16 rounded-full text-2xl">
+                                    ▶
+                                </span>
+                            </div>
+                        </div>
+                        <div className="flex-1 p-6 md:p-8 flex flex-col justify-center text-left">
+                            <span className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#ff6b6b' }}>
+                                No upload needed
+                            </span>
+                            <h2 className="text-2xl font-bold mb-2">See It In Action</h2>
+                            <p className="text-sm text-gray-400 mb-5">
+                                A 3-minute fight clip analyzed end to end: fighter tracking, live activity &amp; aggression metrics, event feed, and scorecard.
+                            </p>
+                            <span className="sample-cta inline-flex items-center gap-2 self-start font-semibold text-sm px-5 py-2.5 rounded-lg">
+                                Watch Sample Analysis
+                                <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                            </span>
+                        </div>
+                    </a>
+
                     <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
                         {/* Video Upload */}
                         <div className="rounded-2xl p-8"

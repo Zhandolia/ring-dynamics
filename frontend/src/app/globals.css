@@ -117,4 +117,56 @@ body {
     background-size: 200% 100%;
     animation: shimmer 2s linear infinite;
   }
+
+  /* ── Sample analysis card ─────────────────────────── */
+  .sample-card {
+    background: linear-gradient(135deg, rgba(229, 62, 62, 0.10) 0%, rgba(66, 153, 225, 0.06) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .sample-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(229, 62, 62, 0.45);
+    box-shadow: 0 12px 40px -12px rgba(229, 62, 62, 0.45);
+  }
+
+  .sample-card:focus-visible {
+    outline: 2px solid var(--accent-red);
+    outline-offset: 3px;
+  }
+
+  .sample-play {
+    padding-left: 4px;
+    color: #fff;
+    background: rgba(229, 62, 62, 0.9);
+    box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.5);
+    animation: sample-ring 2.2s ease-out infinite;
+    transition: transform 0.3s ease;
+  }
+
+  .sample-card:hover .sample-play {
+    transform: scale(1.1);
+  }
+
+  @keyframes sample-ring {
+    0% {
+      box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.55);
+    }
+
+    100% {
+      box-shadow: 0 0 0 18px rgba(229, 62, 62, 0);
+    }
+  }
+
+  .sample-cta {
+    color: #fff;
+    background: linear-gradient(135deg, #e53e3e, #c53030);
+    transition: filter 0.3s ease;
+  }
+
+  .sample-card:hover .sample-cta {
+    filter: brightness(1.12);
+  }
 }

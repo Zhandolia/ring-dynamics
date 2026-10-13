@@ -3,6 +3,9 @@
 !test_clip.mp4
 ggg*
 *_metrics.json
+# Static sample analysis shipped with the website
+!frontend/public/sample/*.mp4
+!frontend/public/sample/*_metrics.json
 
 # Agent workspace
 .gemini/
