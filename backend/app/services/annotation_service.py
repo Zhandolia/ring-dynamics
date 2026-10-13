@@ -74,12 +74,16 @@ def run_annotation_background(
                 from app.core.config import settings
                 fight_storage[fight_id]["status"] = "downloading"
                 on_progress(0, "Downloading YouTube video", 0)
-                download_youtube_video(
+                download_res = download_youtube_video(
                     youtube_url, input_path,
                     max_bytes=settings.MAX_VIDEO_SIZE_MB * 1024 * 1024,
                     progress_cb=on_progress,
                 )
+                yt_title = getattr(download_res, "title", "")
+                if yt_title and fight_id in fight_storage:
+                    fight_storage[fight_id]["title"] = yt_title
                 fight_storage[fight_id]["status"] = "annotating"
+
 
             # Import the annotation function
             import sys

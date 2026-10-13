@@ -636,9 +636,12 @@ def draw_hud(img, frame_idx: int, fps: float, n_fighters: int):
         cv2.putText(img, line, (12, y), FONT, 0.55, (220, 220, 220), 1, cv2.LINE_AA)
 
 
-# ── Fight Scorer ───────────────────────────────────────────────────────────────
+# ── Fight Scorer & Strike Tracker ─────────────────────────────────────────────
 class FightScorer:
-    """Computes real-time fight metrics from tracking bounding boxes."""
+    """
+    Computes real-time fight metrics and tracks punches/hits with millisecond timestamps.
+    Classifies Jabs, Crosses, Hooks, Uppercuts, and landed Hits on head/body.
+    """
 
     WINDOW = 30          # rolling average window (frames)
     ROUND_FRAMES = 5400  # 3 min × 30 fps
@@ -656,10 +659,26 @@ class FightScorer:
         self._frame_count = 0
         self._events: list = []        # (frame, text)
         self._img_w = 1.0
+        self._img_h = 1.0
+        self._fps = 30.0
 
-    def update(self, fighters: list, frame_w: int, frame_idx: int):
-        """Feed one frame of fighter data and update all metrics."""
+        # Detailed strike tracking per fighter
+        self._strikes: list = []       # all detected strikes
+        self._hand_history = {
+            0: {"left": deque(maxlen=6), "right": deque(maxlen=6)},
+            1: {"left": deque(maxlen=6), "right": deque(maxlen=6)},
+        }
+        self._strike_cooldown = {
+            0: {"left": 0, "right": 0},
+            1: {"left": 0, "right": 0},
+        }
+        self._active_visuals: list = []  # active visual strike rings/badges on video
+
+    def update(self, fighters: list, frame_w: int, frame_idx: int, fps: float = 30.0, frame_h: int = 720):
+        """Feed one frame of fighter data, update metrics and detect punches/hits."""
         self._img_w = max(frame_w, 1)
+        self._img_h = max(frame_h, 1)
+        self._fps = max(fps, 1.0)
         self._frame_count = frame_idx
 
         # Determine round
@@ -674,71 +693,281 @@ class FightScorer:
             positions[sid] = (cx, cy)
             self._centers[sid].append((cx, cy))
 
-        if len(positions) < 2:
+        if len(positions) >= 2:
+            # ─── Activity (movement speed) ───
+            for sid in range(2):
+                pts = self._centers[sid]
+                if len(pts) >= 2:
+                    dx = pts[-1][0] - pts[-2][0]
+                    dy = pts[-1][1] - pts[-2][1]
+                    speed = (dx * dx + dy * dy) ** 0.5
+                    self._activity[sid] = 0.85 * self._activity[sid] + 0.15 * speed
+
+            # ─── Distance between fighters ───
+            p0, p1 = positions.get(0), positions.get(1)
+            if p0 and p1:
+                dist = ((p0[0] - p1[0]) ** 2 + (p0[1] - p1[1]) ** 2) ** 0.5
+                self._distance = min(dist / self._img_w, 1.0)
+
+            # ─── Aggression (closing distance) ───
+            for sid in range(2):
+                pts = self._centers[sid]
+                opp = 1 - sid
+                if opp in positions and len(pts) >= 2:
+                    ox, oy = positions[opp]
+                    d_now  = ((pts[-1][0] - ox) ** 2 + (pts[-1][1] - oy) ** 2) ** 0.5
+                    d_prev = ((pts[-2][0] - ox) ** 2 + (pts[-2][1] - oy) ** 2) ** 0.5
+                    advance = max(0, d_prev - d_now)
+                    self._aggression[sid] = 0.9 * self._aggression[sid] + 0.1 * advance
+                    self._pressure[sid] = 0.95 * self._pressure[sid] + 0.05 * advance
+
+            # ─── Ring control (distance from center) ───
+            center_x = self._img_w / 2.0
+            for sid in range(2):
+                if sid in positions:
+                    dist_from_center = abs(positions[sid][0] - center_x) / (self._img_w / 2.0)
+                    control = max(0.0, 1.0 - dist_from_center)
+                    self._ring_ctl[sid] = 0.9 * self._ring_ctl[sid] + 0.1 * control
+
+            # ─── Running round score ───
+            act_adv  = self._activity[0] - self._activity[1]
+            agg_adv  = self._aggression[0] - self._aggression[1]
+            ctl_adv  = self._ring_ctl[0] - self._ring_ctl[1]
+            composite = act_adv * 0.3 + agg_adv * 0.4 + ctl_adv * 0.3
+            if composite > 0.3:
+                self._round_pts[0] = 10.0
+                self._round_pts[1] = 9.0
+            elif composite < -0.3:
+                self._round_pts[0] = 9.0
+                self._round_pts[1] = 10.0
+            else:
+                self._round_pts[0] = 10.0
+                self._round_pts[1] = 10.0
+
+        # ─── Strike & Punch Detection with Millisecond Timeline ───
+        self._detect_strikes(fighters, frame_idx)
+
+    def _detect_strikes(self, fighters: list, frame_idx: int):
+        if len(fighters) < 2:
             return
 
-        # ─── Activity (movement speed) ───
-        for sid in range(2):
-            pts = self._centers[sid]
-            if len(pts) >= 2:
-                dx = pts[-1][0] - pts[-2][0]
-                dy = pts[-1][1] - pts[-2][1]
-                speed = (dx*dx + dy*dy) ** 0.5
-                self._activity[sid] = 0.85 * self._activity[sid] + 0.15 * speed
+        fighter_map = {d["stable_id"]: d for d in fighters if "stable_id" in d}
+        if 0 not in fighter_map or 1 not in fighter_map:
+            return
 
-        # ─── Distance between fighters ───
-        p0, p1 = positions.get(0), positions.get(1)
-        if p0 and p1:
-            dist = ((p0[0]-p1[0])**2 + (p0[1]-p1[1])**2) ** 0.5
-            self._distance = min(dist / self._img_w, 1.0)
+        for fid in [0, 1]:
+            opp_id = 1 - fid
+            f_data = fighter_map[fid]
+            opp_data = fighter_map[opp_id]
 
-        # ─── Aggression (closing distance) ───
-        for sid in range(2):
-            pts = self._centers[sid]
-            opp = 1 - sid
-            if opp in positions and len(pts) >= 2:
-                ox, oy = positions[opp]
-                d_now  = ((pts[-1][0]-ox)**2 + (pts[-1][1]-oy)**2) ** 0.5
-                d_prev = ((pts[-2][0]-ox)**2 + (pts[-2][1]-oy)**2) ** 0.5
-                advance = max(0, d_prev - d_now)  # positive = moving forward
-                self._aggression[sid] = 0.9 * self._aggression[sid] + 0.1 * advance
-                # Pressure: sustained forward movement
-                self._pressure[sid] = 0.95 * self._pressure[sid] + 0.05 * advance
+            opp_x1, opp_y1, opp_x2, opp_y2 = opp_data["x1"], opp_data["y1"], opp_data["x2"], opp_data["y2"]
+            opp_cx = (opp_x1 + opp_x2) / 2.0
+            opp_cy = (opp_y1 + opp_y2) / 2.0
 
-        # ─── Ring control (distance from center) ───
-        center_x = self._img_w / 2.0
-        for sid in range(2):
-            if sid in positions:
-                dist_from_center = abs(positions[sid][0] - center_x) / (self._img_w / 2.0)
-                control = max(0.0, 1.0 - dist_from_center)
-                self._ring_ctl[sid] = 0.9 * self._ring_ctl[sid] + 0.1 * control
+            # Opponent target sub-boxes
+            opp_head = opp_data.get("head_box") or (
+                opp_x1 + int((opp_x2 - opp_x1) * 0.2), opp_y1,
+                opp_x2 - int((opp_x2 - opp_x1) * 0.2), opp_y1 + int((opp_y2 - opp_y1) * 0.3)
+            )
+            opp_body = opp_data.get("core_box") or (
+                opp_x1 + int((opp_x2 - opp_x1) * 0.15), opp_y1 + int((opp_y2 - opp_y1) * 0.25),
+                opp_x2 - int((opp_x2 - opp_x1) * 0.15), opp_y1 + int((opp_y2 - opp_y1) * 0.70)
+            )
 
-        # ─── Events ───
-        # Generate events for significant actions
-        if frame_idx > 0 and frame_idx % 30 == 0:  # check every second
-            for sid in range(2):
-                name = FIGHTER_NAMES[sid]
-                if self._aggression[sid] > 3.0:
-                    self._events.append((frame_idx, f"{name} presses forward"))
-                if self._ring_ctl[sid] > 0.7:
-                    self._events.append((frame_idx, f"{name} controls center"))
-            # Keep only last 5 events
-            self._events = self._events[-5:]
+            kpts = f_data.get("keypoints")
+            kpts_conf = f_data.get("keypoints_conf")
 
-        # ─── Running round score ───
-        act_adv  = self._activity[0] - self._activity[1]
-        agg_adv  = self._aggression[0] - self._aggression[1]
-        ctl_adv  = self._ring_ctl[0] - self._ring_ctl[1]
-        composite = act_adv * 0.3 + agg_adv * 0.4 + ctl_adv * 0.3
-        if composite > 0.3:
-            self._round_pts[0] = 10.0
-            self._round_pts[1] = 9.0
-        elif composite < -0.3:
-            self._round_pts[0] = 9.0
-            self._round_pts[1] = 10.0
-        else:
-            self._round_pts[0] = 10.0
-            self._round_pts[1] = 10.0
+            if kpts is not None and len(kpts) >= 11:
+                ls_x = float(kpts[5][0])
+                rs_x = float(kpts[6][0])
+                left_dist_to_opp = abs(ls_x - opp_cx)
+                right_dist_to_opp = abs(rs_x - opp_cx)
+                left_is_lead = left_dist_to_opp < right_dist_to_opp
+
+                hand_configs = [
+                    ("left", 5, 7, 9, left_is_lead),
+                    ("right", 6, 8, 10, not left_is_lead),
+                ]
+
+                for hand_name, s_idx, e_idx, w_idx, is_lead in hand_configs:
+                    conf_w = float(kpts_conf[w_idx]) if (kpts_conf is not None and len(kpts_conf) > w_idx) else 1.0
+                    conf_s = float(kpts_conf[s_idx]) if (kpts_conf is not None and len(kpts_conf) > s_idx) else 1.0
+
+                    if conf_w < 0.20 or conf_s < 0.20:
+                        continue
+
+                    sx, sy = float(kpts[s_idx][0]), float(kpts[s_idx][1])
+                    ex, ey = float(kpts[e_idx][0]), float(kpts[e_idx][1])
+                    wx, wy = float(kpts[w_idx][0]), float(kpts[w_idx][1])
+
+                    hist = self._hand_history[fid][hand_name]
+                    hist.append((frame_idx, wx, wy, sx, sy, ex, ey))
+
+                    if len(hist) < 2:
+                        continue
+
+                    _, prev_wx, prev_wy, prev_sx, prev_sy, _, _ = hist[-2]
+
+                    vx = wx - prev_wx
+                    vy = wy - prev_wy
+                    speed = (vx * vx + vy * vy) ** 0.5
+
+                    arm_len = ((wx - sx) ** 2 + (wy - sy) ** 2) ** 0.5
+                    upper_len = (((ex - sx) ** 2 + (ey - sy) ** 2) ** 0.5) + 1e-3
+                    ext_ratio = arm_len / upper_len
+
+                    to_opp_x = opp_cx - sx
+                    to_opp_y = opp_cy - sy
+                    opp_dist = (to_opp_x ** 2 + to_opp_y ** 2) ** 0.5 + 1e-3
+                    proj = (vx * (to_opp_x / opp_dist)) + (vy * (to_opp_y / opp_dist))
+
+                    speed_thresh = max(6.0, self._img_h * 0.012)
+
+                    if frame_idx >= self._strike_cooldown[fid][hand_name]:
+                        is_punch = False
+                        punch_type = "Jab" if is_lead else "Cross"
+
+                        if (proj > speed_thresh or speed > speed_thresh * 1.3) and ext_ratio > 1.20:
+                            is_punch = True
+
+                            if vy < -speed_thresh * 0.7 and wy < sy:
+                                punch_type = "Uppercut"
+                            elif 0.85 <= ext_ratio <= 1.65 and abs(vx) > abs(to_opp_x / opp_dist * speed) * 0.7:
+                                punch_type = "Hook"
+                            elif is_lead:
+                                punch_type = "Jab"
+                            else:
+                                punch_type = "Cross"
+
+                        if is_punch:
+                            pad_h = max(12, int((opp_head[2] - opp_head[0]) * 0.25))
+                            pad_b = max(12, int((opp_body[2] - opp_body[0]) * 0.20))
+
+                            in_head = (opp_head[0] - pad_h <= wx <= opp_head[2] + pad_h and
+                                       opp_head[1] - pad_h <= wy <= opp_head[3] + pad_h)
+                            in_body = (opp_body[0] - pad_b <= wx <= opp_body[2] + pad_b and
+                                       opp_body[1] - pad_b <= wy <= opp_body[3] + pad_b)
+
+                            if in_head:
+                                outcome = "Hit (Head)"
+                                is_hit = True
+                                impact_x = int((wx + opp_head[0] + opp_head[2]) / 3)
+                                impact_y = int((wy + opp_head[1] + opp_head[3]) / 3)
+                            elif in_body:
+                                outcome = "Hit (Body)"
+                                is_hit = True
+                                impact_x = int((wx + opp_body[0] + opp_body[2]) / 3)
+                                impact_y = int((wy + opp_body[1] + opp_body[3]) / 3)
+                            else:
+                                outcome = "Thrown"
+                                is_hit = False
+                                impact_x = int(wx)
+                                impact_y = int(wy)
+
+                            sec = frame_idx / self._fps
+                            minute = int(sec // 60)
+                            second = int(sec % 60)
+                            millisecond = int((sec * 1000) % 1000)
+
+                            strike_rec = {
+                                "id": len(self._strikes) + 1,
+                                "fighter_id": fid,
+                                "fighter_name": FIGHTER_NAMES[fid],
+                                "punch_type": punch_type,
+                                "hand": hand_name.capitalize(),
+                                "role": "Lead" if is_lead else "Rear",
+                                "outcome": outcome,
+                                "is_hit": is_hit,
+                                "time": round(sec, 3),
+                                "minute": minute,
+                                "second": second,
+                                "millisecond": millisecond,
+                                "timestamp": f"{minute:02d}:{second:02d}.{millisecond:03d}",
+                                "frame": frame_idx,
+                                "impact_x": impact_x,
+                                "impact_y": impact_y,
+                            }
+                            self._strikes.append(strike_rec)
+                            self._strike_cooldown[fid][hand_name] = frame_idx + int(self._fps * 0.25)
+
+                            self._active_visuals.append({
+                                "strike": strike_rec,
+                                "expire_frame": frame_idx + int(self._fps * 0.35),
+                                "born_frame": frame_idx,
+                            })
+
+                            self._events.append((
+                                frame_idx,
+                                f"{FIGHTER_NAMES[fid]} {punch_type} - {outcome}"
+                            ))
+                            self._events = self._events[-6:]
+
+    def draw_strikes(self, frame):
+        """Draw active punch and hit figures directly onto the video frame."""
+        h, w = frame.shape[:2]
+        self._active_visuals = [
+            v for v in self._active_visuals if v["expire_frame"] > self._frame_count
+        ]
+        for v in self._active_visuals:
+            s = v["strike"]
+            fid = s["fighter_id"]
+            color = FIGHTER_COLORS[fid]
+            ix = max(20, min(w - 20, s["impact_x"]))
+            iy = max(20, min(h - 20, s["impact_y"]))
+
+            age = self._frame_count - v["born_frame"]
+            radius = max(8, int(16 + age * 2))
+
+            if s["is_hit"]:
+                flash_color = (0, 220, 255) if fid == 1 else (60, 60, 255)
+                cv2.circle(frame, (ix, iy), radius, flash_color, 2, cv2.LINE_AA)
+                cv2.circle(frame, (ix, iy), max(2, radius // 3), (255, 255, 255), -1, cv2.LINE_AA)
+            else:
+                cv2.circle(frame, (ix, iy), radius, color, 1, cv2.LINE_AA)
+
+            badge_text = f"{s['punch_type'].upper()}" if not s["is_hit"] else f"HIT: {s['punch_type'].upper()}"
+            (tw, th), _ = cv2.getTextSize(badge_text, FONT, 0.45, 1)
+            bx1 = max(4, ix - tw // 2 - 4)
+            by1 = max(th + 4, iy - radius - 6)
+            bx2 = min(w - 4, bx1 + tw + 8)
+            by2 = by1 + th + 6
+
+            sub = frame[by1:by2, bx1:bx2]
+            if sub.shape[0] > 0 and sub.shape[1] > 0:
+                rect = np.full_like(sub, 20)
+                cv2.addWeighted(sub, 0.35, rect, 0.65, 0, sub)
+                cv2.rectangle(frame, (bx1, by1), (bx2, by2), color, 1)
+                text_col = (255, 255, 255) if not s["is_hit"] else (0, 255, 255)
+                cv2.putText(frame, badge_text, (bx1 + 4, by2 - 4), FONT, 0.45, text_col, 1, cv2.LINE_AA)
+
+    @property
+    def strikes(self):
+        return self._strikes
+
+    @property
+    def strike_summary(self):
+        summary = {
+            "fighter_0": {"total_punches": 0, "hits_landed": 0, "accuracy_pct": 0.0, "jabs": 0, "crosses": 0, "hooks": 0, "uppercuts": 0},
+            "fighter_1": {"total_punches": 0, "hits_landed": 0, "accuracy_pct": 0.0, "jabs": 0, "crosses": 0, "hooks": 0, "uppercuts": 0},
+        }
+        for s in self._strikes:
+            key = f"fighter_{s['fighter_id']}"
+            if key not in summary:
+                continue
+            summary[key]["total_punches"] += 1
+            if s["is_hit"]:
+                summary[key]["hits_landed"] += 1
+            ptype = s["punch_type"].lower()
+            if ptype == "jab": summary[key]["jabs"] += 1
+            elif ptype == "cross": summary[key]["crosses"] += 1
+            elif ptype == "hook": summary[key]["hooks"] += 1
+            elif ptype == "uppercut": summary[key]["uppercuts"] += 1
+
+        for key in ["fighter_0", "fighter_1"]:
+            tot = summary[key]["total_punches"]
+            hits = summary[key]["hits_landed"]
+            summary[key]["accuracy_pct"] = round((hits / tot * 100), 1) if tot > 0 else 0.0
+        return summary
 
     @property
     def activity(self): return self._activity
@@ -763,6 +992,7 @@ class FightScorer:
     def events(self): return self._events
     @property
     def frame_count(self): return self._frame_count
+
 
 
 # ── Scoreboard overlay ────────────────────────────────────────────────────────

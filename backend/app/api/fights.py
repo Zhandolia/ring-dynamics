@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Request
 from fastapi.responses import JSONResponse, FileResponse
 from uuid import uuid4
 from datetime import datetime
@@ -8,6 +8,7 @@ import json
 
 from app.models.schemas import FightCreate, FightResponse
 from app.core.config import settings
+from app.core.video_stream import send_bytes_range_requests
 from app.services.annotation_service import run_annotation_background
 from app.services.video_ingestion import normalize_youtube_url
 
@@ -66,8 +67,10 @@ async def upload_fight_video(file: UploadFile = File(...)):
     logger.info(f"Video uploaded: {fight_id} ({file_size / 1024 / 1024:.1f} MB)")
 
     # Store initial status
+    file_title = os.path.splitext(file.filename or "Fight Video")[0].replace("_", " ").replace("-", " ").title()
     FIGHT_STORAGE[fight_id] = {
         "id": fight_id,
+        "title": file_title,
         "status": "pending",
         "created_at": datetime.now(),
         "video_url": input_path,
@@ -91,6 +94,7 @@ async def upload_fight_video(file: UploadFile = File(...)):
 
     return FightResponse(
         id=fight_id,
+        title=file_title,
         status="pending",
         created_at=FIGHT_STORAGE[fight_id]["created_at"],
         video_url=input_path,
@@ -110,7 +114,10 @@ async def submit_youtube_video(request: FightCreate):
     input_path = os.path.join(settings.VIDEO_STORAGE_PATH, f"{fight_id}.mp4")
     output_path = os.path.join(settings.ANNOTATED_VIDEO_PATH, f"{fight_id}_annotated.mp4")
     FIGHT_STORAGE[fight_id] = {
-        "id": fight_id, "status": "pending", "created_at": datetime.now(),
+        "id": fight_id,
+        "title": "YouTube Fight Video",
+        "status": "pending",
+        "created_at": datetime.now(),
         "video_url": input_path,
     }
     run_annotation_background(
@@ -133,6 +140,7 @@ async def get_fight(fight_id: str):
     data = FIGHT_STORAGE[fight_id]
     return FightResponse(
         id=data["id"],
+        title=data.get("title"),
         status=data["status"],
         created_at=data["created_at"],
         video_url=data.get("video_url"),
@@ -145,6 +153,7 @@ async def get_fight(fight_id: str):
         win_probabilities=data.get("win_probabilities"),
         round_scores=data.get("round_scores"),
     )
+
 
 
 @router.get("/fights/{fight_id}/progress")
@@ -165,8 +174,8 @@ async def get_fight_progress(fight_id: str):
 
 
 @router.get("/fights/{fight_id}/video")
-async def get_annotated_video(fight_id: str):
-    """Serve the annotated video file"""
+async def get_annotated_video(fight_id: str, request: Request):
+    """Serve the annotated video file with Range support for seeking"""
     if fight_id not in FIGHT_STORAGE:
         raise HTTPException(status_code=404, detail="Fight not found")
 
@@ -183,11 +192,8 @@ async def get_annotated_video(fight_id: str):
     if not os.path.isfile(output_path):
         raise HTTPException(status_code=404, detail="Annotated video file not found")
 
-    return FileResponse(
-        output_path,
-        media_type="video/mp4",
-        filename=f"{fight_id}_annotated.mp4",
-    )
+    return send_bytes_range_requests(output_path, request.headers.get("range"))
+
 
 
 @router.get("/fights/{fight_id}/metrics")

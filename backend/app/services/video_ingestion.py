@@ -33,6 +33,28 @@ def normalize_youtube_url(value: str) -> str:
         raise ValueError("Enter a valid YouTube video link (not a channel or playlist).") from None
 
 
+class DownloadedVideoPath(str):
+    title: str = ""
+
+    def __new__(cls, path: str, title: str = ""):
+        instance = super().__new__(cls, path)
+        instance.title = title
+        return instance
+
+
+def fetch_youtube_metadata(youtube_url: str) -> dict:
+    url = normalize_youtube_url(youtube_url)
+    options = {
+        "quiet": True, "noplaylist": True, "skip_download": True,
+        "js_runtimes": {"deno": {}, "node": {}},
+    }
+    try:
+        with yt_dlp.YoutubeDL(options) as downloader:
+            return downloader.extract_info(url, download=False) or {}
+    except Exception:
+        return {}
+
+
 def download_youtube_video(youtube_url: str, output_path: str, max_bytes: int,
                            progress_cb=None) -> str:
     url = normalize_youtube_url(youtube_url)
@@ -65,7 +87,9 @@ def download_youtube_video(youtube_url: str, output_path: str, max_bytes: int,
             raise ValueError("Video was unavailable, live, or larger than the upload limit.")
         if os.path.getsize(output_path) > max_bytes:
             raise ValueError("YouTube video exceeds the maximum video size.")
-        return output_path
+        video_title = info.get("title", "") if isinstance(info, dict) else ""
+        return DownloadedVideoPath(output_path, title=video_title)
+
     except Exception as exc:
         logger.warning("YouTube download failed: %s", exc)
         for suffix in ("", ".part", ".ytdl"):

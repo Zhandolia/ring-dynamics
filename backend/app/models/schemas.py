@@ -58,6 +58,7 @@ class FightResponse(BaseModel):
     id: UUID
     status: str  # pending, annotating, completed, failed
     created_at: datetime
+    title: Optional[str] = None
     total_rounds: Optional[int] = None
     duration_seconds: Optional[float] = None
     video_url: Optional[str] = None
@@ -67,6 +68,7 @@ class FightResponse(BaseModel):
     error: Optional[str] = None
     win_probabilities: Optional[Dict[str, float]] = None
     round_scores: Optional[List[Dict[str, Any]]] = None
+
 
 
 class FightStats(BaseModel):
