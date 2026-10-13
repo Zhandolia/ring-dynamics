@@ -1,1 +1,4854 @@
-{"total_frames": 4587, "fps": 25.0, "duration": 183.5, "processing_time": 532.8, "final_scores": [10, 9], "final_activity": [12.74, 3.44], "final_aggression": [0.5, 1.69], "final_ring_control": [0.81, 0.45], "final_pressure": [1.12, 1.98], "events": [{"frame": 4485, "text": "Fighter A Cross - Thrown"}, {"frame": 4506, "text": "Fighter B Jab - Thrown"}, {"frame": 4508, "text": "Fighter B Hook - Thrown"}, {"frame": 4517, "text": "Fighter B Hook - Thrown"}, {"frame": 4518, "text": "Fighter B Hook - Thrown"}, {"frame": 4536, "text": "Fighter B Uppercut - Thrown"}], "timeline": [{"time": 1.0, "activity": [6.25, 16.41], "aggression": [0.38, 1.37], "ring_control": [0.85, 0.45], "pressure": [0.49, 2.27], "distance": "Outside", "round_pts": [9, 10]}, {"time": 2.0, "activity": [2.11, 7.24], "aggression": [0.6, 5.0], "ring_control": [0.62, 0.86], "pressure": [0.52, 6.56], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 3.0, "activity": [12.14, 9.9], "aggression": [7.67, 4.27], "ring_control": [0.53, 0.91], "pressure": [5.1, 5.64], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 4.0, "activity": [4.53, 2.78], "aggression": [3.94, 1.08], "ring_control": [0.9, 0.72], "pressure": [4.38, 2.02], "distance": "Inside", "round_pts": [10, 9]}, {"time": 5.0, "activity": [2.45, 1.75], "aggression": [1.48, 0.7], "ring_control": [0.92, 0.77], "pressure": [2.22, 1.23], "distance": "Inside", "round_pts": [10, 9]}, {"time": 6.0, "activity": [3.48, 1.76], "aggression": [1.7, 0.47], "ring_control": [0.82, 0.87], "pressure": [2.01, 0.83], "distance": "Inside", "round_pts": [10, 9]}, {"time": 7.0, "activity": [4.77, 2.91], "aggression": [0.62, 0.72], "ring_control": [0.71, 0.92], "pressure": [1.0, 0.68], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 8.0, "activity": [4.86, 2.69], "aggression": [1.05, 2.19], "ring_control": [0.63, 0.83], "pressure": [1.04, 1.82], "distance": "Inside", "round_pts": [10, 10]}, {"time": 9.0, "activity": [4.22, 2.44], "aggression": [0.82, 0.64], "ring_control": [0.56, 0.79], "pressure": [0.88, 0.89], "distance": "Inside", "round_pts": [10, 9]}, {"time": 10.0, "activity": [7.8, 5.65], "aggression": [3.89, 0.09], "ring_control": [0.77, 0.92], "pressure": [3.2, 0.32], "distance": "Inside", "round_pts": [10, 9]}, {"time": 11.0, "activity": [4.41, 2.53], "aggression": [0.72, 0.26], "ring_control": [0.77, 0.72], "pressure": [1.32, 0.23], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 12.0, "activity": [2.95, 2.18], "aggression": [0.92, 1.18], "ring_control": [0.66, 0.8], "pressure": [1.18, 1.31], "distance": "Mid-Range", "round_pts": [10, 10]}, {"time": 13.0, "activity": [5.65, 3.02], "aggression": [1.19, 1.25], "ring_control": [0.67, 0.76], "pressure": [1.41, 1.32], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 14.0, "activity": [22.55, 1.88], "aggression": [0.86, 0.61], "ring_control": [0.48, 0.81], "pressure": [1.38, 1.32], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 15.0, "activity": [3.37, 2.33], "aggression": [1.28, 0.57], "ring_control": [0.93, 0.8], "pressure": [2.56, 0.83], "distance": "Inside", "round_pts": [10, 9]}, {"time": 16.0, "activity": [8.62, 17.87], "aggression": [1.3, 10.49], "ring_control": [0.83, 0.77], "pressure": [1.67, 5.93], "distance": "Inside", "round_pts": [9, 10]}, {"time": 17.0, "activity": [10.37, 5.1], "aggression": [6.96, 1.56], "ring_control": [0.65, 0.26], "pressure": [5.02, 2.54], "distance": "Outside", "round_pts": [10, 9]}, {"time": 18.0, "activity": [9.23, 11.16], "aggression": [4.54, 6.24], "ring_control": [0.8, 0.65], "pressure": [4.11, 6.37], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 19.0, "activity": [4.8, 115.78], "aggression": [1.34, 14.16], "ring_control": [0.82, 0.44], "pressure": [1.98, 14.85], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 20.0, "activity": [5.03, 5.89], "aggression": [2.0, 1.09], "ring_control": [0.93, 0.21], "pressure": [2.39, 4.24], "distance": "Outside", "round_pts": [10, 9]}, {"time": 21.0, "activity": [11.65, 31.82], "aggression": [8.37, 2.24], "ring_control": [0.7, 0.28], "pressure": [7.01, 2.62], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 22.0, "activity": [14.0, 29.58], "aggression": [2.29, 7.64], "ring_control": [0.62, 0.51], "pressure": [3.63, 6.91], "distance": "Outside", "round_pts": [9, 10]}, {"time": 23.0, "activity": [14.88, 15.0], "aggression": [2.21, 9.2], "ring_control": [0.49, 0.79], "pressure": [2.6, 8.79], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 24.0, "activity": [7.17, 13.96], "aggression": [2.54, 1.62], "ring_control": [0.51, 0.63], "pressure": [3.16, 3.55], "distance": "Outside", "round_pts": [9, 10]}, {"time": 25.0, "activity": [20.6, 6.58], "aggression": [12.02, 3.69], "ring_control": [0.76, 0.52], "pressure": [8.93, 3.63], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 26.0, "activity": [2.64, 4.11], "aggression": [1.52, 3.13], "ring_control": [0.94, 0.67], "pressure": [3.29, 3.01], "distance": "Inside", "round_pts": [9, 10]}, {"time": 27.0, "activity": [3.74, 4.27], "aggression": [0.87, 0.43], "ring_control": [0.84, 0.25], "pressure": [1.36, 1.11], "distance": "Outside", "round_pts": [10, 10]}, {"time": 28.0, "activity": [10.03, 4.78], "aggression": [5.03, 3.18], "ring_control": [0.67, 0.21], "pressure": [5.25, 2.19], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 29.0, "activity": [16.67, 7.62], "aggression": [7.61, 1.83], "ring_control": [0.64, 0.68], "pressure": [6.91, 2.41], "distance": "Inside", "round_pts": [10, 9]}, {"time": 30.0, "activity": [30.61, 2.29], "aggression": [4.99, 0.82], "ring_control": [0.71, 0.8], "pressure": [5.17, 1.4], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 31.0, "activity": [10.0, 6.8], "aggression": [3.49, 0.73], "ring_control": [0.81, 0.74], "pressure": [4.04, 0.8], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 32.0, "activity": [11.8, 8.14], "aggression": [0.9, 0.72], "ring_control": [0.65, 0.8], "pressure": [2.05, 0.88], "distance": "Outside", "round_pts": [10, 9]}, {"time": 33.0, "activity": [15.22, 4.21], "aggression": [10.81, 1.74], "ring_control": [0.52, 0.4], "pressure": [6.98, 1.46], "distance": "Outside", "round_pts": [10, 9]}, {"time": 34.0, "activity": [5.03, 58.33], "aggression": [1.43, 22.82], "ring_control": [0.73, 0.55], "pressure": [2.92, 13.96], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 35.0, "activity": [9.85, 8.88], "aggression": [1.94, 2.92], "ring_control": [0.71, 0.42], "pressure": [2.7, 5.73], "distance": "Outside", "round_pts": [10, 10]}, {"time": 36.0, "activity": [19.69, 10.39], "aggression": [9.31, 4.99], "ring_control": [0.74, 0.47], "pressure": [6.96, 5.12], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 37.0, "activity": [2.47, 3.7], "aggression": [0.83, 2.58], "ring_control": [0.25, 0.8], "pressure": [2.09, 4.27], "distance": "Outside", "round_pts": [9, 10]}, {"time": 38.0, "activity": [0.91, 5.9], "aggression": [0.27, 2.24], "ring_control": [0.21, 0.78], "pressure": [0.86, 2.41], "distance": "Outside", "round_pts": [9, 10]}, {"time": 39.0, "activity": [0.9, 10.89], "aggression": [0.2, 6.26], "ring_control": [0.16, 0.76], "pressure": [0.35, 4.49], "distance": "Outside", "round_pts": [9, 10]}, {"time": 40.0, "activity": [5.8, 8.04], "aggression": [4.37, 4.34], "ring_control": [0.34, 0.79], "pressure": [3.18, 4.58], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 41.0, "activity": [10.9, 3.3], "aggression": [5.46, 0.65], "ring_control": [0.54, 0.77], "pressure": [6.29, 1.63], "distance": "Inside", "round_pts": [10, 9]}, {"time": 42.0, "activity": [12.47, 14.82], "aggression": [1.58, 9.59], "ring_control": [0.55, 0.84], "pressure": [2.84, 5.96], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 43.0, "activity": [6.72, 13.6], "aggression": [2.15, 5.18], "ring_control": [0.44, 0.85], "pressure": [2.66, 5.37], "distance": "Outside", "round_pts": [9, 10]}, {"time": 44.0, "activity": [17.79, 9.2], "aggression": [4.5, 3.32], "ring_control": [0.74, 0.82], "pressure": [4.72, 3.34], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 45.0, "activity": [10.47, 7.94], "aggression": [3.29, 3.87], "ring_control": [0.75, 0.85], "pressure": [4.16, 4.57], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 46.0, "activity": [5.87, 2.92], "aggression": [4.27, 2.33], "ring_control": [0.68, 0.95], "pressure": [3.71, 2.85], "distance": "Inside", "round_pts": [10, 9]}, {"time": 47.0, "activity": [4.68, 3.38], "aggression": [0.4, 0.81], "ring_control": [0.47, 0.95], "pressure": [1.19, 1.25], "distance": "Mid-Range", "round_pts": [10, 10]}, {"time": 48.0, "activity": [2.77, 2.76], "aggression": [0.32, 1.16], "ring_control": [0.3, 0.95], "pressure": [0.48, 1.21], "distance": "Outside", "round_pts": [9, 10]}, {"time": 49.0, "activity": [7.75, 4.82], "aggression": [0.5, 1.14], "ring_control": [0.22, 0.89], "pressure": [0.64, 1.66], "distance": "Outside", "round_pts": [10, 9]}, {"time": 50.0, "activity": [14.21, 6.21], "aggression": [8.33, 0.23], "ring_control": [0.77, 0.77], "pressure": [9.49, 0.6], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 51.0, "activity": [15.33, 12.18], "aggression": [2.9, 4.77], "ring_control": [0.5, 0.75], "pressure": [4.23, 3.2], "distance": "Outside", "round_pts": [10, 10]}, {"time": 52.0, "activity": [90.36, 7.54], "aggression": [46.98, 0.8], "ring_control": [0.74, 0.61], "pressure": [35.36, 1.48], "distance": "Inside", "round_pts": [10, 9]}, {"time": 53.0, "activity": [42.75, 23.36], "aggression": [7.95, 8.41], "ring_control": [0.72, 0.58], "pressure": [13.95, 7.12], "distance": "Outside", "round_pts": [10, 9]}, {"time": 54.0, "activity": [10.85, 7.59], "aggression": [4.12, 3.78], "ring_control": [0.77, 0.33], "pressure": [8.85, 4.15], "distance": "Outside", "round_pts": [10, 9]}, {"time": 55.0, "activity": [6.33, 11.03], "aggression": [3.35, 1.69], "ring_control": [0.76, 0.24], "pressure": [4.88, 2.12], "distance": "Outside", "round_pts": [9, 10]}, {"time": 56.0, "activity": [21.67, 8.37], "aggression": [12.34, 4.0], "ring_control": [0.81, 0.41], "pressure": [9.34, 4.59], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 57.0, "activity": [29.25, 7.11], "aggression": [15.26, 3.6], "ring_control": [0.83, 0.47], "pressure": [10.95, 4.36], "distance": "Inside", "round_pts": [10, 9]}, {"time": 58.0, "activity": [31.69, 7.38], "aggression": [20.82, 1.43], "ring_control": [0.74, 0.35], "pressure": [15.42, 2.61], "distance": "Inside", "round_pts": [10, 9]}, {"time": 59.0, "activity": [3.58, 12.11], "aggression": [3.13, 6.82], "ring_control": [0.55, 0.81], "pressure": [5.75, 5.87], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 60.0, "activity": [9.13, 4.49], "aggression": [6.69, 1.06], "ring_control": [0.8, 0.79], "pressure": [6.2, 2.22], "distance": "Inside", "round_pts": [10, 9]}, {"time": 61.0, "activity": [2.57, 2.92], "aggression": [2.5, 0.17], "ring_control": [0.88, 0.62], "pressure": [3.5, 0.68], "distance": "Inside", "round_pts": [10, 9]}, {"time": 62.0, "activity": [7.68, 11.37], "aggression": [0.99, 8.77], "ring_control": [0.75, 0.8], "pressure": [1.95, 6.46], "distance": "Inside", "round_pts": [9, 10]}, {"time": 63.0, "activity": [12.42, 8.28], "aggression": [0.26, 4.58], "ring_control": [0.85, 0.88], "pressure": [0.91, 5.07], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 64.0, "activity": [7.07, 20.67], "aggression": [1.59, 0.85], "ring_control": [0.66, 0.6], "pressure": [1.83, 2.23], "distance": "Outside", "round_pts": [9, 10]}, {"time": 65.0, "activity": [9.48, 7.51], "aggression": [0.58, 5.07], "ring_control": [0.44, 0.38], "pressure": [0.85, 4.01], "distance": "Outside", "round_pts": [9, 10]}, {"time": 66.0, "activity": [9.62, 7.16], "aggression": [6.29, 5.91], "ring_control": [0.51, 0.59], "pressure": [4.31, 4.73], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 67.0, "activity": [3.37, 4.46], "aggression": [1.24, 1.13], "ring_control": [0.64, 0.6], "pressure": [2.1, 2.1], "distance": "Outside", "round_pts": [10, 10]}, {"time": 68.0, "activity": [5.25, 4.96], "aggression": [3.9, 1.1], "ring_control": [0.74, 0.47], "pressure": [3.19, 1.24], "distance": "Outside", "round_pts": [10, 9]}, {"time": 69.0, "activity": [6.72, 6.61], "aggression": [1.41, 3.25], "ring_control": [0.95, 0.78], "pressure": [2.22, 3.13], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 70.0, "activity": [9.88, 6.8], "aggression": [1.86, 3.54], "ring_control": [0.61, 0.9], "pressure": [2.15, 3.04], "distance": "Mid-Range", "round_pts": [10, 10]}, {"time": 71.0, "activity": [4.04, 3.45], "aggression": [2.05, 0.64], "ring_control": [0.59, 0.89], "pressure": [2.09, 1.32], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 72.0, "activity": [3.31, 2.86], "aggression": [0.48, 1.65], "ring_control": [0.69, 0.96], "pressure": [1.08, 1.45], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 73.0, "activity": [6.18, 5.91], "aggression": [0.03, 1.58], "ring_control": [0.31, 0.88], "pressure": [0.3, 1.32], "distance": "Outside", "round_pts": [9, 10]}, {"time": 74.0, "activity": [8.38, 6.54], "aggression": [4.9, 4.79], "ring_control": [0.66, 0.88], "pressure": [5.68, 3.93], "distance": "Inside", "round_pts": [10, 9]}, {"time": 75.0, "activity": [82.25, 11.42], "aggression": [40.1, 3.39], "ring_control": [0.45, 0.66], "pressure": [22.31, 3.83], "distance": "Inside", "round_pts": [10, 9]}, {"time": 76.0, "activity": [24.08, 5.2], "aggression": [5.65, 2.69], "ring_control": [0.71, 0.9], "pressure": [8.73, 3.21], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 77.0, "activity": [6.08, 20.64], "aggression": [3.44, 3.05], "ring_control": [0.38, 0.63], "pressure": [6.16, 3.35], "distance": "Outside", "round_pts": [9, 10]}, {"time": 78.0, "activity": [9.29, 4.17], "aggression": [3.65, 1.74], "ring_control": [0.52, 0.6], "pressure": [5.26, 1.95], "distance": "Outside", "round_pts": [10, 9]}, {"time": 79.0, "activity": [13.14, 32.83], "aggression": [3.95, 3.56], "ring_control": [0.9, 0.72], "pressure": [5.77, 3.08], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 80.0, "activity": [8.31, 50.75], "aggression": [0.71, 6.1], "ring_control": [0.4, 0.59], "pressure": [2.0, 5.73], "distance": "Outside", "round_pts": [9, 10]}, {"time": 81.0, "activity": [5.6, 9.02], "aggression": [1.57, 6.6], "ring_control": [0.68, 0.77], "pressure": [1.59, 6.33], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 82.0, "activity": [19.33, 7.6], "aggression": [3.2, 2.38], "ring_control": [0.4, 0.91], "pressure": [3.77, 3.35], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 83.0, "activity": [6.0, 4.71], "aggression": [3.48, 0.81], "ring_control": [0.66, 0.8], "pressure": [3.92, 1.5], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 84.0, "activity": [27.08, 6.88], "aggression": [7.26, 2.86], "ring_control": [0.44, 0.86], "pressure": [5.4, 3.05], "distance": "Outside", "round_pts": [10, 9]}, {"time": 85.0, "activity": [3.23, 10.48], "aggression": [1.79, 4.73], "ring_control": [0.35, 0.94], "pressure": [2.59, 3.81], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 86.0, "activity": [10.28, 5.18], "aggression": [5.01, 2.45], "ring_control": [0.7, 0.86], "pressure": [5.99, 2.57], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 87.0, "activity": [34.16, 10.67], "aggression": [9.82, 0.68], "ring_control": [0.6, 0.54], "pressure": [9.83, 1.5], "distance": "Outside", "round_pts": [10, 9]}, {"time": 88.0, "activity": [5.67, 7.3], "aggression": [2.34, 0.81], "ring_control": [0.48, 0.29], "pressure": [3.91, 1.3], "distance": "Outside", "round_pts": [10, 10]}, {"time": 89.0, "activity": [4.74, 15.63], "aggression": [2.15, 7.64], "ring_control": [0.49, 0.81], "pressure": [2.75, 8.06], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 90.0, "activity": [5.21, 4.26], "aggression": [4.81, 0.61], "ring_control": [0.85, 0.47], "pressure": [4.99, 2.28], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 91.0, "activity": [13.46, 2.77], "aggression": [0.83, 1.9], "ring_control": [0.8, 0.39], "pressure": [1.75, 1.93], "distance": "Outside", "round_pts": [10, 9]}, {"time": 92.0, "activity": [16.65, 11.12], "aggression": [6.08, 1.55], "ring_control": [0.37, 0.6], "pressure": [5.25, 2.1], "distance": "Outside", "round_pts": [10, 9]}, {"time": 93.0, "activity": [7.97, 8.5], "aggression": [2.25, 4.5], "ring_control": [0.44, 0.81], "pressure": [3.92, 4.74], "distance": "Outside", "round_pts": [9, 10]}, {"time": 94.0, "activity": [23.95, 11.72], "aggression": [6.86, 2.75], "ring_control": [0.58, 0.68], "pressure": [5.4, 3.73], "distance": "Outside", "round_pts": [10, 9]}, {"time": 95.0, "activity": [12.43, 8.27], "aggression": [6.68, 1.55], "ring_control": [0.9, 0.53], "pressure": [6.21, 2.39], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 96.0, "activity": [5.83, 4.17], "aggression": [4.47, 1.76], "ring_control": [0.87, 0.62], "pressure": [4.78, 2.43], "distance": "Inside", "round_pts": [10, 9]}, {"time": 97.0, "activity": [7.33, 10.53], "aggression": [1.63, 3.69], "ring_control": [0.74, 0.61], "pressure": [2.71, 3.29], "distance": "Outside", "round_pts": [9, 10]}, {"time": 98.0, "activity": [9.32, 7.94], "aggression": [6.2, 0.26], "ring_control": [0.81, 0.4], "pressure": [5.28, 0.91], "distance": "Outside", "round_pts": [10, 9]}, {"time": 99.0, "activity": [13.22, 17.44], "aggression": [6.66, 11.35], "ring_control": [0.63, 0.6], "pressure": [6.33, 8.67], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 100.0, "activity": [7.45, 7.25], "aggression": [2.78, 2.7], "ring_control": [0.68, 0.74], "pressure": [3.89, 4.12], "distance": "Mid-Range", "round_pts": [10, 10]}, {"time": 101.0, "activity": [9.46, 42.87], "aggression": [1.98, 2.48], "ring_control": [0.38, 0.74], "pressure": [2.27, 3.22], "distance": "Outside", "round_pts": [9, 10]}, {"time": 102.0, "activity": [14.81, 7.51], "aggression": [8.7, 4.72], "ring_control": [0.83, 0.67], "pressure": [8.06, 6.26], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 103.0, "activity": [13.28, 9.18], "aggression": [9.74, 2.07], "ring_control": [0.89, 0.37], "pressure": [8.33, 3.61], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 104.0, "activity": [11.48, 26.27], "aggression": [2.66, 11.31], "ring_control": [0.67, 0.66], "pressure": [4.66, 11.14], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 105.0, "activity": [7.51, 11.33], "aggression": [5.99, 5.34], "ring_control": [0.49, 0.62], "pressure": [5.2, 7.2], "distance": "Outside", "round_pts": [9, 10]}, {"time": 106.0, "activity": [25.82, 9.79], "aggression": [8.07, 6.43], "ring_control": [0.59, 0.75], "pressure": [5.86, 6.15], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 107.0, "activity": [15.22, 11.83], "aggression": [3.19, 5.73], "ring_control": [0.67, 0.8], "pressure": [4.28, 5.94], "distance": "Mid-Range", "round_pts": [10, 10]}, {"time": 108.0, "activity": [10.5, 7.63], "aggression": [5.78, 2.17], "ring_control": [0.78, 0.78], "pressure": [5.48, 3.42], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 109.0, "activity": [11.51, 14.81], "aggression": [7.64, 7.24], "ring_control": [0.83, 0.68], "pressure": [7.5, 7.06], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 110.0, "activity": [4.18, 8.53], "aggression": [1.17, 0.96], "ring_control": [0.88, 0.54], "pressure": [2.59, 2.54], "distance": "Outside", "round_pts": [9, 10]}, {"time": 111.0, "activity": [3.48, 10.29], "aggression": [0.29, 5.08], "ring_control": [0.73, 0.42], "pressure": [0.95, 4.47], "distance": "Outside", "round_pts": [9, 10]}, {"time": 112.0, "activity": [5.35, 7.48], "aggression": [3.25, 1.75], "ring_control": [0.58, 0.49], "pressure": [2.16, 2.88], "distance": "Outside", "round_pts": [10, 10]}, {"time": 113.0, "activity": [3.55, 4.68], "aggression": [2.96, 2.55], "ring_control": [0.84, 0.41], "pressure": [2.89, 2.51], "distance": "Mid-Range", "round_pts": [10, 10]}, {"time": 114.0, "activity": [2.18, 3.9], "aggression": [0.47, 0.7], "ring_control": [0.97, 0.5], "pressure": [1.14, 1.37], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 115.0, "activity": [9.74, 5.34], "aggression": [1.38, 3.11], "ring_control": [0.87, 0.58], "pressure": [1.23, 2.78], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 116.0, "activity": [8.8, 3.37], "aggression": [4.3, 1.06], "ring_control": [0.78, 0.59], "pressure": [3.19, 1.53], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 117.0, "activity": [9.41, 15.85], "aggression": [5.9, 4.73], "ring_control": [0.74, 0.74], "pressure": [4.62, 4.08], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 118.0, "activity": [2.92, 3.72], "aggression": [2.24, 1.47], "ring_control": [0.79, 0.69], "pressure": [2.59, 2.19], "distance": "Mid-Range", "round_pts": [10, 10]}, {"time": 119.0, "activity": [2.6, 3.71], "aggression": [1.59, 1.06], "ring_control": [0.91, 0.62], "pressure": [1.89, 1.57], "distance": "Mid-Range", "round_pts": [10, 10]}, {"time": 120.0, "activity": [4.38, 10.53], "aggression": [2.45, 3.57], "ring_control": [0.93, 0.61], "pressure": [2.4, 2.79], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 121.0, "activity": [3.14, 4.4], "aggression": [0.47, 3.25], "ring_control": [0.87, 0.79], "pressure": [1.19, 3.32], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 122.0, "activity": [8.26, 7.53], "aggression": [0.2, 5.26], "ring_control": [0.29, 0.81], "pressure": [0.5, 4.89], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 123.0, "activity": [1.96, 3.65], "aggression": [0.54, 2.12], "ring_control": [0.17, 0.92], "pressure": [0.79, 2.41], "distance": "Outside", "round_pts": [9, 10]}, {"time": 124.0, "activity": [1.65, 8.76], "aggression": [0.26, 0.35], "ring_control": [0.15, 0.68], "pressure": [0.45, 0.97], "distance": "Outside", "round_pts": [9, 10]}, {"time": 125.0, "activity": [13.72, 16.0], "aggression": [5.42, 5.26], "ring_control": [0.64, 0.74], "pressure": [5.94, 4.42], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 126.0, "activity": [6.8, 10.13], "aggression": [4.06, 3.66], "ring_control": [0.77, 0.77], "pressure": [4.44, 3.53], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 127.0, "activity": [10.47, 57.42], "aggression": [4.42, 15.54], "ring_control": [0.68, 0.39], "pressure": [4.97, 9.19], "distance": "Outside", "round_pts": [9, 10]}, {"time": 128.0, "activity": [5.88, 9.62], "aggression": [2.42, 4.4], "ring_control": [0.71, 0.75], "pressure": [3.65, 5.38], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 129.0, "activity": [3.12, 7.89], "aggression": [1.94, 4.41], "ring_control": [0.67, 0.8], "pressure": [2.22, 4.27], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 130.0, "activity": [6.91, 13.7], "aggression": [1.4, 1.04], "ring_control": [0.52, 0.71], "pressure": [1.34, 2.27], "distance": "Outside", "round_pts": [9, 10]}, {"time": 131.0, "activity": [4.54, 3.48], "aggression": [2.91, 1.26], "ring_control": [0.66, 0.57], "pressure": [2.87, 1.96], "distance": "Outside", "round_pts": [10, 9]}, {"time": 132.0, "activity": [12.07, 10.57], "aggression": [3.32, 6.24], "ring_control": [0.75, 0.59], "pressure": [3.48, 4.92], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 133.0, "activity": [10.64, 6.84], "aggression": [1.38, 1.86], "ring_control": [0.45, 0.79], "pressure": [2.09, 3.07], "distance": "Outside", "round_pts": [10, 9]}, {"time": 134.0, "activity": [8.42, 6.6], "aggression": [3.05, 0.4], "ring_control": [0.28, 0.42], "pressure": [2.3, 1.11], "distance": "Outside", "round_pts": [10, 9]}, {"time": 135.0, "activity": [5.58, 10.45], "aggression": [3.82, 7.78], "ring_control": [0.76, 0.51], "pressure": [4.88, 5.59], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 136.0, "activity": [4.99, 9.38], "aggression": [3.51, 3.73], "ring_control": [0.87, 0.48], "pressure": [4.27, 3.53], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 137.0, "activity": [5.23, 36.78], "aggression": [1.1, 12.02], "ring_control": [0.84, 0.56], "pressure": [2.18, 13.41], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 138.0, "activity": [9.54, 2.09], "aggression": [1.78, 1.7], "ring_control": [0.84, 0.51], "pressure": [2.39, 4.56], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 139.0, "activity": [11.17, 32.88], "aggression": [6.21, 9.5], "ring_control": [0.88, 0.56], "pressure": [8.33, 6.6], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 140.0, "activity": [15.71, 8.81], "aggression": [9.26, 2.14], "ring_control": [0.85, 0.49], "pressure": [7.54, 2.9], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 141.0, "activity": [38.53, 7.2], "aggression": [27.31, 0.8], "ring_control": [0.45, 0.33], "pressure": [18.09, 1.3], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 142.0, "activity": [9.94, 10.52], "aggression": [5.41, 7.44], "ring_control": [0.83, 0.54], "pressure": [8.29, 5.51], "distance": "Inside", "round_pts": [9, 10]}, {"time": 143.0, "activity": [8.85, 4.32], "aggression": [5.67, 2.25], "ring_control": [0.49, 0.92], "pressure": [6.03, 2.7], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 144.0, "activity": [3.1, 3.24], "aggression": [1.93, 1.6], "ring_control": [0.64, 0.96], "pressure": [3.28, 2.26], "distance": "Mid-Range", "round_pts": [10, 10]}, {"time": 145.0, "activity": [2.57, 2.27], "aggression": [1.65, 0.92], "ring_control": [0.63, 0.87], "pressure": [1.82, 1.21], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 146.0, "activity": [5.83, 2.0], "aggression": [3.63, 0.71], "ring_control": [0.81, 0.81], "pressure": [3.03, 0.72], "distance": "Inside", "round_pts": [10, 9]}, {"time": 147.0, "activity": [6.01, 10.44], "aggression": [1.94, 0.23], "ring_control": [0.39, 0.74], "pressure": [2.27, 0.47], "distance": "Outside", "round_pts": [9, 10]}, {"time": 148.0, "activity": [14.79, 2.67], "aggression": [12.14, 0.03], "ring_control": [0.68, 0.27], "pressure": [9.53, 0.14], "distance": "Outside", "round_pts": [10, 9]}, {"time": 149.0, "activity": [8.41, 28.89], "aggression": [5.09, 1.8], "ring_control": [0.79, 0.29], "pressure": [5.53, 1.65], "distance": "Outside", "round_pts": [9, 10]}, {"time": 150.0, "activity": [4.55, 10.55], "aggression": [1.66, 1.36], "ring_control": [0.8, 0.32], "pressure": [2.71, 1.38], "distance": "Outside", "round_pts": [9, 10]}, {"time": 151.0, "activity": [12.99, 5.18], "aggression": [4.48, 2.02], "ring_control": [0.83, 0.33], "pressure": [5.56, 1.45], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 152.0, "activity": [4.1, 4.72], "aggression": [0.54, 3.19], "ring_control": [0.8, 0.52], "pressure": [1.76, 2.6], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 153.0, "activity": [2.53, 3.84], "aggression": [0.53, 3.95], "ring_control": [0.72, 0.86], "pressure": [0.84, 3.95], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 154.0, "activity": [2.8, 2.28], "aggression": [1.02, 0.48], "ring_control": [0.83, 0.57], "pressure": [1.33, 1.34], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 155.0, "activity": [0.61, 0.55], "aggression": [0.21, 0.11], "ring_control": [0.84, 0.49], "pressure": [0.5, 0.42], "distance": "Mid-Range", "round_pts": [10, 10]}, {"time": 156.0, "activity": [1.36, 0.68], "aggression": [0.05, 0.26], "ring_control": [0.85, 0.48], "pressure": [0.18, 0.27], "distance": "Mid-Range", "round_pts": [10, 10]}, {"time": 157.0, "activity": [9.38, 0.62], "aggression": [2.08, 0.16], "ring_control": [0.72, 0.49], "pressure": [1.89, 0.22], "distance": "Outside", "round_pts": [10, 9]}, {"time": 158.0, "activity": [10.05, 21.87], "aggression": [1.44, 15.13], "ring_control": [0.53, 0.66], "pressure": [1.56, 9.02], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 159.0, "activity": [7.76, 4.15], "aggression": [0.35, 1.71], "ring_control": [0.33, 0.84], "pressure": [0.73, 3.47], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 160.0, "activity": [5.15, 5.01], "aggression": [1.48, 2.31], "ring_control": [0.2, 0.77], "pressure": [1.99, 2.78], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 161.0, "activity": [10.09, 5.91], "aggression": [2.97, 1.62], "ring_control": [0.21, 0.69], "pressure": [2.82, 2.31], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 162.0, "activity": [19.29, 4.45], "aggression": [4.95, 2.03], "ring_control": [0.53, 0.81], "pressure": [4.56, 2.25], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 163.0, "activity": [5.88, 8.76], "aggression": [1.94, 2.75], "ring_control": [0.56, 0.7], "pressure": [2.32, 2.52], "distance": "Outside", "round_pts": [9, 10]}, {"time": 164.0, "activity": [6.82, 8.11], "aggression": [3.23, 5.39], "ring_control": [0.48, 0.29], "pressure": [2.59, 6.39], "distance": "Inside", "round_pts": [9, 10]}, {"time": 165.0, "activity": [5.32, 15.37], "aggression": [0.85, 8.05], "ring_control": [0.45, 0.22], "pressure": [1.51, 8.21], "distance": "Inside", "round_pts": [9, 10]}, {"time": 166.0, "activity": [13.57, 14.85], "aggression": [4.48, 8.06], "ring_control": [0.51, 0.24], "pressure": [3.64, 9.99], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 167.0, "activity": [12.92, 5.64], "aggression": [7.25, 1.49], "ring_control": [0.61, 0.36], "pressure": [6.08, 3.54], "distance": "Outside", "round_pts": [10, 9]}, {"time": 168.0, "activity": [7.65, 4.56], "aggression": [6.6, 0.33], "ring_control": [0.76, 0.34], "pressure": [6.41, 1.21], "distance": "Outside", "round_pts": [10, 9]}, {"time": 169.0, "activity": [7.72, 37.67], "aggression": [1.86, 2.89], "ring_control": [0.88, 0.34], "pressure": [3.47, 2.98], "distance": "Outside", "round_pts": [9, 10]}, {"time": 170.0, "activity": [7.72, 37.67], "aggression": [1.86, 2.89], "ring_control": [0.88, 0.34], "pressure": [3.47, 2.98], "distance": "Outside", "round_pts": [9, 10]}, {"time": 171.0, "activity": [7.72, 37.67], "aggression": [1.86, 2.89], "ring_control": [0.88, 0.34], "pressure": [3.47, 2.98], "distance": "Outside", "round_pts": [9, 10]}, {"time": 172.0, "activity": [7.72, 37.67], "aggression": [1.86, 2.89], "ring_control": [0.88, 0.34], "pressure": [3.47, 2.98], "distance": "Outside", "round_pts": [9, 10]}, {"time": 173.0, "activity": [18.03, 29.85], "aggression": [0.89, 1.73], "ring_control": [0.61, 0.56], "pressure": [2.42, 2.31], "distance": "Outside", "round_pts": [9, 10]}, {"time": 174.0, "activity": [18.03, 29.85], "aggression": [0.89, 1.73], "ring_control": [0.61, 0.56], "pressure": [2.42, 2.31], "distance": "Outside", "round_pts": [9, 10]}, {"time": 175.0, "activity": [18.03, 29.85], "aggression": [0.89, 1.73], "ring_control": [0.61, 0.56], "pressure": [2.42, 2.31], "distance": "Outside", "round_pts": [9, 10]}, {"time": 176.0, "activity": [18.03, 29.85], "aggression": [0.89, 1.73], "ring_control": [0.61, 0.56], "pressure": [2.42, 2.31], "distance": "Outside", "round_pts": [9, 10]}, {"time": 177.0, "activity": [18.03, 29.85], "aggression": [0.89, 1.73], "ring_control": [0.61, 0.56], "pressure": [2.42, 2.31], "distance": "Outside", "round_pts": [9, 10]}, {"time": 178.0, "activity": [18.03, 29.85], "aggression": [0.89, 1.73], "ring_control": [0.61, 0.56], "pressure": [2.42, 2.31], "distance": "Outside", "round_pts": [9, 10]}, {"time": 179.0, "activity": [18.03, 29.85], "aggression": [0.89, 1.73], "ring_control": [0.61, 0.56], "pressure": [2.42, 2.31], "distance": "Outside", "round_pts": [9, 10]}, {"time": 180.0, "activity": [14.05, 17.49], "aggression": [5.66, 0.86], "ring_control": [0.74, 0.47], "pressure": [4.75, 1.63], "distance": "Mid-Range", "round_pts": [10, 9]}, {"time": 181.0, "activity": [2.56, 6.91], "aggression": [0.82, 2.32], "ring_control": [0.91, 0.49], "pressure": [1.7, 2.5], "distance": "Mid-Range", "round_pts": [9, 10]}, {"time": 182.0, "activity": [12.74, 3.44], "aggression": [0.5, 1.69], "ring_control": [0.81, 0.45], "pressure": [1.12, 1.98], "distance": "Outside", "round_pts": [10, 9]}, {"time": 183.0, "activity": [12.74, 3.44], "aggression": [0.5, 1.69], "ring_control": [0.81, 0.45], "pressure": [1.12, 1.98], "distance": "Outside", "round_pts": [10, 9]}]}
+{
+  "total_frames": 5012,
+  "fps": 25.0,
+  "duration": 200.5,
+  "processing_time": 532.8,
+  "final_scores": [
+    10,
+    9
+  ],
+  "final_activity": [
+    12.74,
+    3.44
+  ],
+  "final_aggression": [
+    0.5,
+    1.69
+  ],
+  "final_ring_control": [
+    0.81,
+    0.45
+  ],
+  "final_pressure": [
+    1.12,
+    1.98
+  ],
+  "events": [
+    {
+      "frame": 4910,
+      "text": "Fighter A Cross - Thrown"
+    },
+    {
+      "frame": 4931,
+      "text": "Fighter B Jab - Thrown"
+    },
+    {
+      "frame": 4933,
+      "text": "Fighter B Hook - Thrown"
+    },
+    {
+      "frame": 4942,
+      "text": "Fighter B Hook - Thrown"
+    },
+    {
+      "frame": 4943,
+      "text": "Fighter B Hook - Thrown"
+    },
+    {
+      "frame": 4961,
+      "text": "Fighter B Uppercut - Thrown"
+    }
+  ],
+  "timeline": [
+    {
+      "time": 1.0,
+      "activity": [
+        0.0,
+        0.0
+      ],
+      "aggression": [
+        0.0,
+        0.0
+      ],
+      "ring_control": [
+        0.0,
+        0.0
+      ],
+      "pressure": [
+        0.0,
+        0.0
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 2.0,
+      "activity": [
+        2.62,
+        8.96
+      ],
+      "aggression": [
+        0.0,
+        5.72
+      ],
+      "ring_control": [
+        0.18,
+        0.36
+      ],
+      "pressure": [
+        0.0,
+        3.01
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 3.0,
+      "activity": [
+        4.46,
+        10.51
+      ],
+      "aggression": [
+        2.06,
+        3.75
+      ],
+      "ring_control": [
+        0.26,
+        0.54
+      ],
+      "pressure": [
+        1.03,
+        2.45
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 4.0,
+      "activity": [
+        4.46,
+        10.51
+      ],
+      "aggression": [
+        2.06,
+        3.75
+      ],
+      "ring_control": [
+        0.26,
+        0.54
+      ],
+      "pressure": [
+        1.03,
+        2.45
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 5.0,
+      "activity": [
+        4.46,
+        10.51
+      ],
+      "aggression": [
+        2.06,
+        3.75
+      ],
+      "ring_control": [
+        0.26,
+        0.54
+      ],
+      "pressure": [
+        1.03,
+        2.45
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 6.0,
+      "activity": [
+        4.46,
+        10.51
+      ],
+      "aggression": [
+        2.06,
+        3.75
+      ],
+      "ring_control": [
+        0.26,
+        0.54
+      ],
+      "pressure": [
+        1.03,
+        2.45
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 7.0,
+      "activity": [
+        4.46,
+        10.51
+      ],
+      "aggression": [
+        2.06,
+        3.75
+      ],
+      "ring_control": [
+        0.26,
+        0.54
+      ],
+      "pressure": [
+        1.03,
+        2.45
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 8.0,
+      "activity": [
+        4.46,
+        10.51
+      ],
+      "aggression": [
+        2.06,
+        3.75
+      ],
+      "ring_control": [
+        0.26,
+        0.54
+      ],
+      "pressure": [
+        1.03,
+        2.45
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 9.0,
+      "activity": [
+        4.46,
+        10.51
+      ],
+      "aggression": [
+        2.06,
+        3.75
+      ],
+      "ring_control": [
+        0.26,
+        0.54
+      ],
+      "pressure": [
+        1.03,
+        2.45
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 10.0,
+      "activity": [
+        4.46,
+        10.51
+      ],
+      "aggression": [
+        2.06,
+        3.75
+      ],
+      "ring_control": [
+        0.26,
+        0.54
+      ],
+      "pressure": [
+        1.03,
+        2.45
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 11.0,
+      "activity": [
+        4.46,
+        10.51
+      ],
+      "aggression": [
+        2.06,
+        3.75
+      ],
+      "ring_control": [
+        0.26,
+        0.54
+      ],
+      "pressure": [
+        1.03,
+        2.45
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 12.0,
+      "activity": [
+        7.72,
+        4.22
+      ],
+      "aggression": [
+        0.38,
+        0.74
+      ],
+      "ring_control": [
+        0.51,
+        0.69
+      ],
+      "pressure": [
+        0.46,
+        1.11
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 13.0,
+      "activity": [
+        5.2,
+        2.21
+      ],
+      "aggression": [
+        0.13,
+        0.26
+      ],
+      "ring_control": [
+        0.47,
+        0.67
+      ],
+      "pressure": [
+        0.28,
+        0.67
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 14.0,
+      "activity": [
+        5.2,
+        2.21
+      ],
+      "aggression": [
+        0.13,
+        0.26
+      ],
+      "ring_control": [
+        0.47,
+        0.67
+      ],
+      "pressure": [
+        0.28,
+        0.67
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 15.0,
+      "activity": [
+        5.2,
+        2.21
+      ],
+      "aggression": [
+        0.13,
+        0.26
+      ],
+      "ring_control": [
+        0.47,
+        0.67
+      ],
+      "pressure": [
+        0.28,
+        0.67
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 16.0,
+      "activity": [
+        5.2,
+        2.21
+      ],
+      "aggression": [
+        0.13,
+        0.26
+      ],
+      "ring_control": [
+        0.47,
+        0.67
+      ],
+      "pressure": [
+        0.28,
+        0.67
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 17.0,
+      "activity": [
+        4.63,
+        13.88
+      ],
+      "aggression": [
+        1.04,
+        7.06
+      ],
+      "ring_control": [
+        0.65,
+        0.79
+      ],
+      "pressure": [
+        0.74,
+        5.03
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 18.0,
+      "activity": [
+        6.25,
+        16.41
+      ],
+      "aggression": [
+        0.38,
+        1.37
+      ],
+      "ring_control": [
+        0.85,
+        0.45
+      ],
+      "pressure": [
+        0.49,
+        2.27
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 19.0,
+      "activity": [
+        2.11,
+        7.24
+      ],
+      "aggression": [
+        0.6,
+        5.0
+      ],
+      "ring_control": [
+        0.62,
+        0.86
+      ],
+      "pressure": [
+        0.52,
+        6.56
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 20.0,
+      "activity": [
+        12.14,
+        9.9
+      ],
+      "aggression": [
+        7.67,
+        4.27
+      ],
+      "ring_control": [
+        0.53,
+        0.91
+      ],
+      "pressure": [
+        5.1,
+        5.64
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 21.0,
+      "activity": [
+        4.53,
+        2.78
+      ],
+      "aggression": [
+        3.94,
+        1.08
+      ],
+      "ring_control": [
+        0.9,
+        0.72
+      ],
+      "pressure": [
+        4.38,
+        2.02
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 22.0,
+      "activity": [
+        2.45,
+        1.75
+      ],
+      "aggression": [
+        1.48,
+        0.7
+      ],
+      "ring_control": [
+        0.92,
+        0.77
+      ],
+      "pressure": [
+        2.22,
+        1.23
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 23.0,
+      "activity": [
+        3.48,
+        1.76
+      ],
+      "aggression": [
+        1.7,
+        0.47
+      ],
+      "ring_control": [
+        0.82,
+        0.87
+      ],
+      "pressure": [
+        2.01,
+        0.83
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 24.0,
+      "activity": [
+        4.77,
+        2.91
+      ],
+      "aggression": [
+        0.62,
+        0.72
+      ],
+      "ring_control": [
+        0.71,
+        0.92
+      ],
+      "pressure": [
+        1.0,
+        0.68
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 25.0,
+      "activity": [
+        4.86,
+        2.69
+      ],
+      "aggression": [
+        1.05,
+        2.19
+      ],
+      "ring_control": [
+        0.63,
+        0.83
+      ],
+      "pressure": [
+        1.04,
+        1.82
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 26.0,
+      "activity": [
+        4.22,
+        2.44
+      ],
+      "aggression": [
+        0.82,
+        0.64
+      ],
+      "ring_control": [
+        0.56,
+        0.79
+      ],
+      "pressure": [
+        0.88,
+        0.89
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 27.0,
+      "activity": [
+        7.8,
+        5.65
+      ],
+      "aggression": [
+        3.89,
+        0.09
+      ],
+      "ring_control": [
+        0.77,
+        0.92
+      ],
+      "pressure": [
+        3.2,
+        0.32
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 28.0,
+      "activity": [
+        4.41,
+        2.53
+      ],
+      "aggression": [
+        0.72,
+        0.26
+      ],
+      "ring_control": [
+        0.77,
+        0.72
+      ],
+      "pressure": [
+        1.32,
+        0.23
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 29.0,
+      "activity": [
+        2.95,
+        2.18
+      ],
+      "aggression": [
+        0.92,
+        1.18
+      ],
+      "ring_control": [
+        0.66,
+        0.8
+      ],
+      "pressure": [
+        1.18,
+        1.31
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 30.0,
+      "activity": [
+        5.65,
+        3.02
+      ],
+      "aggression": [
+        1.19,
+        1.25
+      ],
+      "ring_control": [
+        0.67,
+        0.76
+      ],
+      "pressure": [
+        1.41,
+        1.32
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 31.0,
+      "activity": [
+        22.55,
+        1.88
+      ],
+      "aggression": [
+        0.86,
+        0.61
+      ],
+      "ring_control": [
+        0.48,
+        0.81
+      ],
+      "pressure": [
+        1.38,
+        1.32
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 32.0,
+      "activity": [
+        3.37,
+        2.33
+      ],
+      "aggression": [
+        1.28,
+        0.57
+      ],
+      "ring_control": [
+        0.93,
+        0.8
+      ],
+      "pressure": [
+        2.56,
+        0.83
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 33.0,
+      "activity": [
+        8.62,
+        17.87
+      ],
+      "aggression": [
+        1.3,
+        10.49
+      ],
+      "ring_control": [
+        0.83,
+        0.77
+      ],
+      "pressure": [
+        1.67,
+        5.93
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 34.0,
+      "activity": [
+        10.37,
+        5.1
+      ],
+      "aggression": [
+        6.96,
+        1.56
+      ],
+      "ring_control": [
+        0.65,
+        0.26
+      ],
+      "pressure": [
+        5.02,
+        2.54
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 35.0,
+      "activity": [
+        9.23,
+        11.16
+      ],
+      "aggression": [
+        4.54,
+        6.24
+      ],
+      "ring_control": [
+        0.8,
+        0.65
+      ],
+      "pressure": [
+        4.11,
+        6.37
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 36.0,
+      "activity": [
+        4.8,
+        115.78
+      ],
+      "aggression": [
+        1.34,
+        14.16
+      ],
+      "ring_control": [
+        0.82,
+        0.44
+      ],
+      "pressure": [
+        1.98,
+        14.85
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 37.0,
+      "activity": [
+        5.03,
+        5.89
+      ],
+      "aggression": [
+        2.0,
+        1.09
+      ],
+      "ring_control": [
+        0.93,
+        0.21
+      ],
+      "pressure": [
+        2.39,
+        4.24
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 38.0,
+      "activity": [
+        11.65,
+        31.82
+      ],
+      "aggression": [
+        8.37,
+        2.24
+      ],
+      "ring_control": [
+        0.7,
+        0.28
+      ],
+      "pressure": [
+        7.01,
+        2.62
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 39.0,
+      "activity": [
+        14.0,
+        29.58
+      ],
+      "aggression": [
+        2.29,
+        7.64
+      ],
+      "ring_control": [
+        0.62,
+        0.51
+      ],
+      "pressure": [
+        3.63,
+        6.91
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 40.0,
+      "activity": [
+        14.88,
+        15.0
+      ],
+      "aggression": [
+        2.21,
+        9.2
+      ],
+      "ring_control": [
+        0.49,
+        0.79
+      ],
+      "pressure": [
+        2.6,
+        8.79
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 41.0,
+      "activity": [
+        7.17,
+        13.96
+      ],
+      "aggression": [
+        2.54,
+        1.62
+      ],
+      "ring_control": [
+        0.51,
+        0.63
+      ],
+      "pressure": [
+        3.16,
+        3.55
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 42.0,
+      "activity": [
+        20.6,
+        6.58
+      ],
+      "aggression": [
+        12.02,
+        3.69
+      ],
+      "ring_control": [
+        0.76,
+        0.52
+      ],
+      "pressure": [
+        8.93,
+        3.63
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 43.0,
+      "activity": [
+        2.64,
+        4.11
+      ],
+      "aggression": [
+        1.52,
+        3.13
+      ],
+      "ring_control": [
+        0.94,
+        0.67
+      ],
+      "pressure": [
+        3.29,
+        3.01
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 44.0,
+      "activity": [
+        3.74,
+        4.27
+      ],
+      "aggression": [
+        0.87,
+        0.43
+      ],
+      "ring_control": [
+        0.84,
+        0.25
+      ],
+      "pressure": [
+        1.36,
+        1.11
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 45.0,
+      "activity": [
+        10.03,
+        4.78
+      ],
+      "aggression": [
+        5.03,
+        3.18
+      ],
+      "ring_control": [
+        0.67,
+        0.21
+      ],
+      "pressure": [
+        5.25,
+        2.19
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 46.0,
+      "activity": [
+        16.67,
+        7.62
+      ],
+      "aggression": [
+        7.61,
+        1.83
+      ],
+      "ring_control": [
+        0.64,
+        0.68
+      ],
+      "pressure": [
+        6.91,
+        2.41
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 47.0,
+      "activity": [
+        30.61,
+        2.29
+      ],
+      "aggression": [
+        4.99,
+        0.82
+      ],
+      "ring_control": [
+        0.71,
+        0.8
+      ],
+      "pressure": [
+        5.17,
+        1.4
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 48.0,
+      "activity": [
+        10.0,
+        6.8
+      ],
+      "aggression": [
+        3.49,
+        0.73
+      ],
+      "ring_control": [
+        0.81,
+        0.74
+      ],
+      "pressure": [
+        4.04,
+        0.8
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 49.0,
+      "activity": [
+        11.8,
+        8.14
+      ],
+      "aggression": [
+        0.9,
+        0.72
+      ],
+      "ring_control": [
+        0.65,
+        0.8
+      ],
+      "pressure": [
+        2.05,
+        0.88
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 50.0,
+      "activity": [
+        15.22,
+        4.21
+      ],
+      "aggression": [
+        10.81,
+        1.74
+      ],
+      "ring_control": [
+        0.52,
+        0.4
+      ],
+      "pressure": [
+        6.98,
+        1.46
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 51.0,
+      "activity": [
+        5.03,
+        58.33
+      ],
+      "aggression": [
+        1.43,
+        22.82
+      ],
+      "ring_control": [
+        0.73,
+        0.55
+      ],
+      "pressure": [
+        2.92,
+        13.96
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 52.0,
+      "activity": [
+        9.85,
+        8.88
+      ],
+      "aggression": [
+        1.94,
+        2.92
+      ],
+      "ring_control": [
+        0.71,
+        0.42
+      ],
+      "pressure": [
+        2.7,
+        5.73
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 53.0,
+      "activity": [
+        19.69,
+        10.39
+      ],
+      "aggression": [
+        9.31,
+        4.99
+      ],
+      "ring_control": [
+        0.74,
+        0.47
+      ],
+      "pressure": [
+        6.96,
+        5.12
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 54.0,
+      "activity": [
+        2.47,
+        3.7
+      ],
+      "aggression": [
+        0.83,
+        2.58
+      ],
+      "ring_control": [
+        0.25,
+        0.8
+      ],
+      "pressure": [
+        2.09,
+        4.27
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 55.0,
+      "activity": [
+        0.91,
+        5.9
+      ],
+      "aggression": [
+        0.27,
+        2.24
+      ],
+      "ring_control": [
+        0.21,
+        0.78
+      ],
+      "pressure": [
+        0.86,
+        2.41
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 56.0,
+      "activity": [
+        0.9,
+        10.89
+      ],
+      "aggression": [
+        0.2,
+        6.26
+      ],
+      "ring_control": [
+        0.16,
+        0.76
+      ],
+      "pressure": [
+        0.35,
+        4.49
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 57.0,
+      "activity": [
+        5.8,
+        8.04
+      ],
+      "aggression": [
+        4.37,
+        4.34
+      ],
+      "ring_control": [
+        0.34,
+        0.79
+      ],
+      "pressure": [
+        3.18,
+        4.58
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 58.0,
+      "activity": [
+        10.9,
+        3.3
+      ],
+      "aggression": [
+        5.46,
+        0.65
+      ],
+      "ring_control": [
+        0.54,
+        0.77
+      ],
+      "pressure": [
+        6.29,
+        1.63
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 59.0,
+      "activity": [
+        12.47,
+        14.82
+      ],
+      "aggression": [
+        1.58,
+        9.59
+      ],
+      "ring_control": [
+        0.55,
+        0.84
+      ],
+      "pressure": [
+        2.84,
+        5.96
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 60.0,
+      "activity": [
+        6.72,
+        13.6
+      ],
+      "aggression": [
+        2.15,
+        5.18
+      ],
+      "ring_control": [
+        0.44,
+        0.85
+      ],
+      "pressure": [
+        2.66,
+        5.37
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 61.0,
+      "activity": [
+        17.79,
+        9.2
+      ],
+      "aggression": [
+        4.5,
+        3.32
+      ],
+      "ring_control": [
+        0.74,
+        0.82
+      ],
+      "pressure": [
+        4.72,
+        3.34
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 62.0,
+      "activity": [
+        10.47,
+        7.94
+      ],
+      "aggression": [
+        3.29,
+        3.87
+      ],
+      "ring_control": [
+        0.75,
+        0.85
+      ],
+      "pressure": [
+        4.16,
+        4.57
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 63.0,
+      "activity": [
+        5.87,
+        2.92
+      ],
+      "aggression": [
+        4.27,
+        2.33
+      ],
+      "ring_control": [
+        0.68,
+        0.95
+      ],
+      "pressure": [
+        3.71,
+        2.85
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 64.0,
+      "activity": [
+        4.68,
+        3.38
+      ],
+      "aggression": [
+        0.4,
+        0.81
+      ],
+      "ring_control": [
+        0.47,
+        0.95
+      ],
+      "pressure": [
+        1.19,
+        1.25
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 65.0,
+      "activity": [
+        2.77,
+        2.76
+      ],
+      "aggression": [
+        0.32,
+        1.16
+      ],
+      "ring_control": [
+        0.3,
+        0.95
+      ],
+      "pressure": [
+        0.48,
+        1.21
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 66.0,
+      "activity": [
+        7.75,
+        4.82
+      ],
+      "aggression": [
+        0.5,
+        1.14
+      ],
+      "ring_control": [
+        0.22,
+        0.89
+      ],
+      "pressure": [
+        0.64,
+        1.66
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 67.0,
+      "activity": [
+        14.21,
+        6.21
+      ],
+      "aggression": [
+        8.33,
+        0.23
+      ],
+      "ring_control": [
+        0.77,
+        0.77
+      ],
+      "pressure": [
+        9.49,
+        0.6
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 68.0,
+      "activity": [
+        15.33,
+        12.18
+      ],
+      "aggression": [
+        2.9,
+        4.77
+      ],
+      "ring_control": [
+        0.5,
+        0.75
+      ],
+      "pressure": [
+        4.23,
+        3.2
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 69.0,
+      "activity": [
+        90.36,
+        7.54
+      ],
+      "aggression": [
+        46.98,
+        0.8
+      ],
+      "ring_control": [
+        0.74,
+        0.61
+      ],
+      "pressure": [
+        35.36,
+        1.48
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 70.0,
+      "activity": [
+        42.75,
+        23.36
+      ],
+      "aggression": [
+        7.95,
+        8.41
+      ],
+      "ring_control": [
+        0.72,
+        0.58
+      ],
+      "pressure": [
+        13.95,
+        7.12
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 71.0,
+      "activity": [
+        10.85,
+        7.59
+      ],
+      "aggression": [
+        4.12,
+        3.78
+      ],
+      "ring_control": [
+        0.77,
+        0.33
+      ],
+      "pressure": [
+        8.85,
+        4.15
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 72.0,
+      "activity": [
+        6.33,
+        11.03
+      ],
+      "aggression": [
+        3.35,
+        1.69
+      ],
+      "ring_control": [
+        0.76,
+        0.24
+      ],
+      "pressure": [
+        4.88,
+        2.12
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 73.0,
+      "activity": [
+        21.67,
+        8.37
+      ],
+      "aggression": [
+        12.34,
+        4.0
+      ],
+      "ring_control": [
+        0.81,
+        0.41
+      ],
+      "pressure": [
+        9.34,
+        4.59
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 74.0,
+      "activity": [
+        29.25,
+        7.11
+      ],
+      "aggression": [
+        15.26,
+        3.6
+      ],
+      "ring_control": [
+        0.83,
+        0.47
+      ],
+      "pressure": [
+        10.95,
+        4.36
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 75.0,
+      "activity": [
+        31.69,
+        7.38
+      ],
+      "aggression": [
+        20.82,
+        1.43
+      ],
+      "ring_control": [
+        0.74,
+        0.35
+      ],
+      "pressure": [
+        15.42,
+        2.61
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 76.0,
+      "activity": [
+        3.58,
+        12.11
+      ],
+      "aggression": [
+        3.13,
+        6.82
+      ],
+      "ring_control": [
+        0.55,
+        0.81
+      ],
+      "pressure": [
+        5.75,
+        5.87
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 77.0,
+      "activity": [
+        9.13,
+        4.49
+      ],
+      "aggression": [
+        6.69,
+        1.06
+      ],
+      "ring_control": [
+        0.8,
+        0.79
+      ],
+      "pressure": [
+        6.2,
+        2.22
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 78.0,
+      "activity": [
+        2.57,
+        2.92
+      ],
+      "aggression": [
+        2.5,
+        0.17
+      ],
+      "ring_control": [
+        0.88,
+        0.62
+      ],
+      "pressure": [
+        3.5,
+        0.68
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 79.0,
+      "activity": [
+        7.68,
+        11.37
+      ],
+      "aggression": [
+        0.99,
+        8.77
+      ],
+      "ring_control": [
+        0.75,
+        0.8
+      ],
+      "pressure": [
+        1.95,
+        6.46
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 80.0,
+      "activity": [
+        12.42,
+        8.28
+      ],
+      "aggression": [
+        0.26,
+        4.58
+      ],
+      "ring_control": [
+        0.85,
+        0.88
+      ],
+      "pressure": [
+        0.91,
+        5.07
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 81.0,
+      "activity": [
+        7.07,
+        20.67
+      ],
+      "aggression": [
+        1.59,
+        0.85
+      ],
+      "ring_control": [
+        0.66,
+        0.6
+      ],
+      "pressure": [
+        1.83,
+        2.23
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 82.0,
+      "activity": [
+        9.48,
+        7.51
+      ],
+      "aggression": [
+        0.58,
+        5.07
+      ],
+      "ring_control": [
+        0.44,
+        0.38
+      ],
+      "pressure": [
+        0.85,
+        4.01
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 83.0,
+      "activity": [
+        9.62,
+        7.16
+      ],
+      "aggression": [
+        6.29,
+        5.91
+      ],
+      "ring_control": [
+        0.51,
+        0.59
+      ],
+      "pressure": [
+        4.31,
+        4.73
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 84.0,
+      "activity": [
+        3.37,
+        4.46
+      ],
+      "aggression": [
+        1.24,
+        1.13
+      ],
+      "ring_control": [
+        0.64,
+        0.6
+      ],
+      "pressure": [
+        2.1,
+        2.1
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 85.0,
+      "activity": [
+        5.25,
+        4.96
+      ],
+      "aggression": [
+        3.9,
+        1.1
+      ],
+      "ring_control": [
+        0.74,
+        0.47
+      ],
+      "pressure": [
+        3.19,
+        1.24
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 86.0,
+      "activity": [
+        6.72,
+        6.61
+      ],
+      "aggression": [
+        1.41,
+        3.25
+      ],
+      "ring_control": [
+        0.95,
+        0.78
+      ],
+      "pressure": [
+        2.22,
+        3.13
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 87.0,
+      "activity": [
+        9.88,
+        6.8
+      ],
+      "aggression": [
+        1.86,
+        3.54
+      ],
+      "ring_control": [
+        0.61,
+        0.9
+      ],
+      "pressure": [
+        2.15,
+        3.04
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 88.0,
+      "activity": [
+        4.04,
+        3.45
+      ],
+      "aggression": [
+        2.05,
+        0.64
+      ],
+      "ring_control": [
+        0.59,
+        0.89
+      ],
+      "pressure": [
+        2.09,
+        1.32
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 89.0,
+      "activity": [
+        3.31,
+        2.86
+      ],
+      "aggression": [
+        0.48,
+        1.65
+      ],
+      "ring_control": [
+        0.69,
+        0.96
+      ],
+      "pressure": [
+        1.08,
+        1.45
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 90.0,
+      "activity": [
+        6.18,
+        5.91
+      ],
+      "aggression": [
+        0.03,
+        1.58
+      ],
+      "ring_control": [
+        0.31,
+        0.88
+      ],
+      "pressure": [
+        0.3,
+        1.32
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 91.0,
+      "activity": [
+        8.38,
+        6.54
+      ],
+      "aggression": [
+        4.9,
+        4.79
+      ],
+      "ring_control": [
+        0.66,
+        0.88
+      ],
+      "pressure": [
+        5.68,
+        3.93
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 92.0,
+      "activity": [
+        82.25,
+        11.42
+      ],
+      "aggression": [
+        40.1,
+        3.39
+      ],
+      "ring_control": [
+        0.45,
+        0.66
+      ],
+      "pressure": [
+        22.31,
+        3.83
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 93.0,
+      "activity": [
+        24.08,
+        5.2
+      ],
+      "aggression": [
+        5.65,
+        2.69
+      ],
+      "ring_control": [
+        0.71,
+        0.9
+      ],
+      "pressure": [
+        8.73,
+        3.21
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 94.0,
+      "activity": [
+        6.08,
+        20.64
+      ],
+      "aggression": [
+        3.44,
+        3.05
+      ],
+      "ring_control": [
+        0.38,
+        0.63
+      ],
+      "pressure": [
+        6.16,
+        3.35
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 95.0,
+      "activity": [
+        9.29,
+        4.17
+      ],
+      "aggression": [
+        3.65,
+        1.74
+      ],
+      "ring_control": [
+        0.52,
+        0.6
+      ],
+      "pressure": [
+        5.26,
+        1.95
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 96.0,
+      "activity": [
+        13.14,
+        32.83
+      ],
+      "aggression": [
+        3.95,
+        3.56
+      ],
+      "ring_control": [
+        0.9,
+        0.72
+      ],
+      "pressure": [
+        5.77,
+        3.08
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 97.0,
+      "activity": [
+        8.31,
+        50.75
+      ],
+      "aggression": [
+        0.71,
+        6.1
+      ],
+      "ring_control": [
+        0.4,
+        0.59
+      ],
+      "pressure": [
+        2.0,
+        5.73
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 98.0,
+      "activity": [
+        5.6,
+        9.02
+      ],
+      "aggression": [
+        1.57,
+        6.6
+      ],
+      "ring_control": [
+        0.68,
+        0.77
+      ],
+      "pressure": [
+        1.59,
+        6.33
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 99.0,
+      "activity": [
+        19.33,
+        7.6
+      ],
+      "aggression": [
+        3.2,
+        2.38
+      ],
+      "ring_control": [
+        0.4,
+        0.91
+      ],
+      "pressure": [
+        3.77,
+        3.35
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 100.0,
+      "activity": [
+        6.0,
+        4.71
+      ],
+      "aggression": [
+        3.48,
+        0.81
+      ],
+      "ring_control": [
+        0.66,
+        0.8
+      ],
+      "pressure": [
+        3.92,
+        1.5
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 101.0,
+      "activity": [
+        27.08,
+        6.88
+      ],
+      "aggression": [
+        7.26,
+        2.86
+      ],
+      "ring_control": [
+        0.44,
+        0.86
+      ],
+      "pressure": [
+        5.4,
+        3.05
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 102.0,
+      "activity": [
+        3.23,
+        10.48
+      ],
+      "aggression": [
+        1.79,
+        4.73
+      ],
+      "ring_control": [
+        0.35,
+        0.94
+      ],
+      "pressure": [
+        2.59,
+        3.81
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 103.0,
+      "activity": [
+        10.28,
+        5.18
+      ],
+      "aggression": [
+        5.01,
+        2.45
+      ],
+      "ring_control": [
+        0.7,
+        0.86
+      ],
+      "pressure": [
+        5.99,
+        2.57
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 104.0,
+      "activity": [
+        34.16,
+        10.67
+      ],
+      "aggression": [
+        9.82,
+        0.68
+      ],
+      "ring_control": [
+        0.6,
+        0.54
+      ],
+      "pressure": [
+        9.83,
+        1.5
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 105.0,
+      "activity": [
+        5.67,
+        7.3
+      ],
+      "aggression": [
+        2.34,
+        0.81
+      ],
+      "ring_control": [
+        0.48,
+        0.29
+      ],
+      "pressure": [
+        3.91,
+        1.3
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 106.0,
+      "activity": [
+        4.74,
+        15.63
+      ],
+      "aggression": [
+        2.15,
+        7.64
+      ],
+      "ring_control": [
+        0.49,
+        0.81
+      ],
+      "pressure": [
+        2.75,
+        8.06
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 107.0,
+      "activity": [
+        5.21,
+        4.26
+      ],
+      "aggression": [
+        4.81,
+        0.61
+      ],
+      "ring_control": [
+        0.85,
+        0.47
+      ],
+      "pressure": [
+        4.99,
+        2.28
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 108.0,
+      "activity": [
+        13.46,
+        2.77
+      ],
+      "aggression": [
+        0.83,
+        1.9
+      ],
+      "ring_control": [
+        0.8,
+        0.39
+      ],
+      "pressure": [
+        1.75,
+        1.93
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 109.0,
+      "activity": [
+        16.65,
+        11.12
+      ],
+      "aggression": [
+        6.08,
+        1.55
+      ],
+      "ring_control": [
+        0.37,
+        0.6
+      ],
+      "pressure": [
+        5.25,
+        2.1
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 110.0,
+      "activity": [
+        7.97,
+        8.5
+      ],
+      "aggression": [
+        2.25,
+        4.5
+      ],
+      "ring_control": [
+        0.44,
+        0.81
+      ],
+      "pressure": [
+        3.92,
+        4.74
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 111.0,
+      "activity": [
+        23.95,
+        11.72
+      ],
+      "aggression": [
+        6.86,
+        2.75
+      ],
+      "ring_control": [
+        0.58,
+        0.68
+      ],
+      "pressure": [
+        5.4,
+        3.73
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 112.0,
+      "activity": [
+        12.43,
+        8.27
+      ],
+      "aggression": [
+        6.68,
+        1.55
+      ],
+      "ring_control": [
+        0.9,
+        0.53
+      ],
+      "pressure": [
+        6.21,
+        2.39
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 113.0,
+      "activity": [
+        5.83,
+        4.17
+      ],
+      "aggression": [
+        4.47,
+        1.76
+      ],
+      "ring_control": [
+        0.87,
+        0.62
+      ],
+      "pressure": [
+        4.78,
+        2.43
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 114.0,
+      "activity": [
+        7.33,
+        10.53
+      ],
+      "aggression": [
+        1.63,
+        3.69
+      ],
+      "ring_control": [
+        0.74,
+        0.61
+      ],
+      "pressure": [
+        2.71,
+        3.29
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 115.0,
+      "activity": [
+        9.32,
+        7.94
+      ],
+      "aggression": [
+        6.2,
+        0.26
+      ],
+      "ring_control": [
+        0.81,
+        0.4
+      ],
+      "pressure": [
+        5.28,
+        0.91
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 116.0,
+      "activity": [
+        13.22,
+        17.44
+      ],
+      "aggression": [
+        6.66,
+        11.35
+      ],
+      "ring_control": [
+        0.63,
+        0.6
+      ],
+      "pressure": [
+        6.33,
+        8.67
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 117.0,
+      "activity": [
+        7.45,
+        7.25
+      ],
+      "aggression": [
+        2.78,
+        2.7
+      ],
+      "ring_control": [
+        0.68,
+        0.74
+      ],
+      "pressure": [
+        3.89,
+        4.12
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 118.0,
+      "activity": [
+        9.46,
+        42.87
+      ],
+      "aggression": [
+        1.98,
+        2.48
+      ],
+      "ring_control": [
+        0.38,
+        0.74
+      ],
+      "pressure": [
+        2.27,
+        3.22
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 119.0,
+      "activity": [
+        14.81,
+        7.51
+      ],
+      "aggression": [
+        8.7,
+        4.72
+      ],
+      "ring_control": [
+        0.83,
+        0.67
+      ],
+      "pressure": [
+        8.06,
+        6.26
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 120.0,
+      "activity": [
+        13.28,
+        9.18
+      ],
+      "aggression": [
+        9.74,
+        2.07
+      ],
+      "ring_control": [
+        0.89,
+        0.37
+      ],
+      "pressure": [
+        8.33,
+        3.61
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 121.0,
+      "activity": [
+        11.48,
+        26.27
+      ],
+      "aggression": [
+        2.66,
+        11.31
+      ],
+      "ring_control": [
+        0.67,
+        0.66
+      ],
+      "pressure": [
+        4.66,
+        11.14
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 122.0,
+      "activity": [
+        7.51,
+        11.33
+      ],
+      "aggression": [
+        5.99,
+        5.34
+      ],
+      "ring_control": [
+        0.49,
+        0.62
+      ],
+      "pressure": [
+        5.2,
+        7.2
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 123.0,
+      "activity": [
+        25.82,
+        9.79
+      ],
+      "aggression": [
+        8.07,
+        6.43
+      ],
+      "ring_control": [
+        0.59,
+        0.75
+      ],
+      "pressure": [
+        5.86,
+        6.15
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 124.0,
+      "activity": [
+        15.22,
+        11.83
+      ],
+      "aggression": [
+        3.19,
+        5.73
+      ],
+      "ring_control": [
+        0.67,
+        0.8
+      ],
+      "pressure": [
+        4.28,
+        5.94
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 125.0,
+      "activity": [
+        10.5,
+        7.63
+      ],
+      "aggression": [
+        5.78,
+        2.17
+      ],
+      "ring_control": [
+        0.78,
+        0.78
+      ],
+      "pressure": [
+        5.48,
+        3.42
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 126.0,
+      "activity": [
+        11.51,
+        14.81
+      ],
+      "aggression": [
+        7.64,
+        7.24
+      ],
+      "ring_control": [
+        0.83,
+        0.68
+      ],
+      "pressure": [
+        7.5,
+        7.06
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 127.0,
+      "activity": [
+        4.18,
+        8.53
+      ],
+      "aggression": [
+        1.17,
+        0.96
+      ],
+      "ring_control": [
+        0.88,
+        0.54
+      ],
+      "pressure": [
+        2.59,
+        2.54
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 128.0,
+      "activity": [
+        3.48,
+        10.29
+      ],
+      "aggression": [
+        0.29,
+        5.08
+      ],
+      "ring_control": [
+        0.73,
+        0.42
+      ],
+      "pressure": [
+        0.95,
+        4.47
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 129.0,
+      "activity": [
+        5.35,
+        7.48
+      ],
+      "aggression": [
+        3.25,
+        1.75
+      ],
+      "ring_control": [
+        0.58,
+        0.49
+      ],
+      "pressure": [
+        2.16,
+        2.88
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 130.0,
+      "activity": [
+        3.55,
+        4.68
+      ],
+      "aggression": [
+        2.96,
+        2.55
+      ],
+      "ring_control": [
+        0.84,
+        0.41
+      ],
+      "pressure": [
+        2.89,
+        2.51
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 131.0,
+      "activity": [
+        2.18,
+        3.9
+      ],
+      "aggression": [
+        0.47,
+        0.7
+      ],
+      "ring_control": [
+        0.97,
+        0.5
+      ],
+      "pressure": [
+        1.14,
+        1.37
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 132.0,
+      "activity": [
+        9.74,
+        5.34
+      ],
+      "aggression": [
+        1.38,
+        3.11
+      ],
+      "ring_control": [
+        0.87,
+        0.58
+      ],
+      "pressure": [
+        1.23,
+        2.78
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 133.0,
+      "activity": [
+        8.8,
+        3.37
+      ],
+      "aggression": [
+        4.3,
+        1.06
+      ],
+      "ring_control": [
+        0.78,
+        0.59
+      ],
+      "pressure": [
+        3.19,
+        1.53
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 134.0,
+      "activity": [
+        9.41,
+        15.85
+      ],
+      "aggression": [
+        5.9,
+        4.73
+      ],
+      "ring_control": [
+        0.74,
+        0.74
+      ],
+      "pressure": [
+        4.62,
+        4.08
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 135.0,
+      "activity": [
+        2.92,
+        3.72
+      ],
+      "aggression": [
+        2.24,
+        1.47
+      ],
+      "ring_control": [
+        0.79,
+        0.69
+      ],
+      "pressure": [
+        2.59,
+        2.19
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 136.0,
+      "activity": [
+        2.6,
+        3.71
+      ],
+      "aggression": [
+        1.59,
+        1.06
+      ],
+      "ring_control": [
+        0.91,
+        0.62
+      ],
+      "pressure": [
+        1.89,
+        1.57
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 137.0,
+      "activity": [
+        4.38,
+        10.53
+      ],
+      "aggression": [
+        2.45,
+        3.57
+      ],
+      "ring_control": [
+        0.93,
+        0.61
+      ],
+      "pressure": [
+        2.4,
+        2.79
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 138.0,
+      "activity": [
+        3.14,
+        4.4
+      ],
+      "aggression": [
+        0.47,
+        3.25
+      ],
+      "ring_control": [
+        0.87,
+        0.79
+      ],
+      "pressure": [
+        1.19,
+        3.32
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 139.0,
+      "activity": [
+        8.26,
+        7.53
+      ],
+      "aggression": [
+        0.2,
+        5.26
+      ],
+      "ring_control": [
+        0.29,
+        0.81
+      ],
+      "pressure": [
+        0.5,
+        4.89
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 140.0,
+      "activity": [
+        1.96,
+        3.65
+      ],
+      "aggression": [
+        0.54,
+        2.12
+      ],
+      "ring_control": [
+        0.17,
+        0.92
+      ],
+      "pressure": [
+        0.79,
+        2.41
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 141.0,
+      "activity": [
+        1.65,
+        8.76
+      ],
+      "aggression": [
+        0.26,
+        0.35
+      ],
+      "ring_control": [
+        0.15,
+        0.68
+      ],
+      "pressure": [
+        0.45,
+        0.97
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 142.0,
+      "activity": [
+        13.72,
+        16.0
+      ],
+      "aggression": [
+        5.42,
+        5.26
+      ],
+      "ring_control": [
+        0.64,
+        0.74
+      ],
+      "pressure": [
+        5.94,
+        4.42
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 143.0,
+      "activity": [
+        6.8,
+        10.13
+      ],
+      "aggression": [
+        4.06,
+        3.66
+      ],
+      "ring_control": [
+        0.77,
+        0.77
+      ],
+      "pressure": [
+        4.44,
+        3.53
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 144.0,
+      "activity": [
+        10.47,
+        57.42
+      ],
+      "aggression": [
+        4.42,
+        15.54
+      ],
+      "ring_control": [
+        0.68,
+        0.39
+      ],
+      "pressure": [
+        4.97,
+        9.19
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 145.0,
+      "activity": [
+        5.88,
+        9.62
+      ],
+      "aggression": [
+        2.42,
+        4.4
+      ],
+      "ring_control": [
+        0.71,
+        0.75
+      ],
+      "pressure": [
+        3.65,
+        5.38
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 146.0,
+      "activity": [
+        3.12,
+        7.89
+      ],
+      "aggression": [
+        1.94,
+        4.41
+      ],
+      "ring_control": [
+        0.67,
+        0.8
+      ],
+      "pressure": [
+        2.22,
+        4.27
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 147.0,
+      "activity": [
+        6.91,
+        13.7
+      ],
+      "aggression": [
+        1.4,
+        1.04
+      ],
+      "ring_control": [
+        0.52,
+        0.71
+      ],
+      "pressure": [
+        1.34,
+        2.27
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 148.0,
+      "activity": [
+        4.54,
+        3.48
+      ],
+      "aggression": [
+        2.91,
+        1.26
+      ],
+      "ring_control": [
+        0.66,
+        0.57
+      ],
+      "pressure": [
+        2.87,
+        1.96
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 149.0,
+      "activity": [
+        12.07,
+        10.57
+      ],
+      "aggression": [
+        3.32,
+        6.24
+      ],
+      "ring_control": [
+        0.75,
+        0.59
+      ],
+      "pressure": [
+        3.48,
+        4.92
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 150.0,
+      "activity": [
+        10.64,
+        6.84
+      ],
+      "aggression": [
+        1.38,
+        1.86
+      ],
+      "ring_control": [
+        0.45,
+        0.79
+      ],
+      "pressure": [
+        2.09,
+        3.07
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 151.0,
+      "activity": [
+        8.42,
+        6.6
+      ],
+      "aggression": [
+        3.05,
+        0.4
+      ],
+      "ring_control": [
+        0.28,
+        0.42
+      ],
+      "pressure": [
+        2.3,
+        1.11
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 152.0,
+      "activity": [
+        5.58,
+        10.45
+      ],
+      "aggression": [
+        3.82,
+        7.78
+      ],
+      "ring_control": [
+        0.76,
+        0.51
+      ],
+      "pressure": [
+        4.88,
+        5.59
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 153.0,
+      "activity": [
+        4.99,
+        9.38
+      ],
+      "aggression": [
+        3.51,
+        3.73
+      ],
+      "ring_control": [
+        0.87,
+        0.48
+      ],
+      "pressure": [
+        4.27,
+        3.53
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 154.0,
+      "activity": [
+        5.23,
+        36.78
+      ],
+      "aggression": [
+        1.1,
+        12.02
+      ],
+      "ring_control": [
+        0.84,
+        0.56
+      ],
+      "pressure": [
+        2.18,
+        13.41
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 155.0,
+      "activity": [
+        9.54,
+        2.09
+      ],
+      "aggression": [
+        1.78,
+        1.7
+      ],
+      "ring_control": [
+        0.84,
+        0.51
+      ],
+      "pressure": [
+        2.39,
+        4.56
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 156.0,
+      "activity": [
+        11.17,
+        32.88
+      ],
+      "aggression": [
+        6.21,
+        9.5
+      ],
+      "ring_control": [
+        0.88,
+        0.56
+      ],
+      "pressure": [
+        8.33,
+        6.6
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 157.0,
+      "activity": [
+        15.71,
+        8.81
+      ],
+      "aggression": [
+        9.26,
+        2.14
+      ],
+      "ring_control": [
+        0.85,
+        0.49
+      ],
+      "pressure": [
+        7.54,
+        2.9
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 158.0,
+      "activity": [
+        38.53,
+        7.2
+      ],
+      "aggression": [
+        27.31,
+        0.8
+      ],
+      "ring_control": [
+        0.45,
+        0.33
+      ],
+      "pressure": [
+        18.09,
+        1.3
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 159.0,
+      "activity": [
+        9.94,
+        10.52
+      ],
+      "aggression": [
+        5.41,
+        7.44
+      ],
+      "ring_control": [
+        0.83,
+        0.54
+      ],
+      "pressure": [
+        8.29,
+        5.51
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 160.0,
+      "activity": [
+        8.85,
+        4.32
+      ],
+      "aggression": [
+        5.67,
+        2.25
+      ],
+      "ring_control": [
+        0.49,
+        0.92
+      ],
+      "pressure": [
+        6.03,
+        2.7
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 161.0,
+      "activity": [
+        3.1,
+        3.24
+      ],
+      "aggression": [
+        1.93,
+        1.6
+      ],
+      "ring_control": [
+        0.64,
+        0.96
+      ],
+      "pressure": [
+        3.28,
+        2.26
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 162.0,
+      "activity": [
+        2.57,
+        2.27
+      ],
+      "aggression": [
+        1.65,
+        0.92
+      ],
+      "ring_control": [
+        0.63,
+        0.87
+      ],
+      "pressure": [
+        1.82,
+        1.21
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 163.0,
+      "activity": [
+        5.83,
+        2.0
+      ],
+      "aggression": [
+        3.63,
+        0.71
+      ],
+      "ring_control": [
+        0.81,
+        0.81
+      ],
+      "pressure": [
+        3.03,
+        0.72
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 164.0,
+      "activity": [
+        6.01,
+        10.44
+      ],
+      "aggression": [
+        1.94,
+        0.23
+      ],
+      "ring_control": [
+        0.39,
+        0.74
+      ],
+      "pressure": [
+        2.27,
+        0.47
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 165.0,
+      "activity": [
+        14.79,
+        2.67
+      ],
+      "aggression": [
+        12.14,
+        0.03
+      ],
+      "ring_control": [
+        0.68,
+        0.27
+      ],
+      "pressure": [
+        9.53,
+        0.14
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 166.0,
+      "activity": [
+        8.41,
+        28.89
+      ],
+      "aggression": [
+        5.09,
+        1.8
+      ],
+      "ring_control": [
+        0.79,
+        0.29
+      ],
+      "pressure": [
+        5.53,
+        1.65
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 167.0,
+      "activity": [
+        4.55,
+        10.55
+      ],
+      "aggression": [
+        1.66,
+        1.36
+      ],
+      "ring_control": [
+        0.8,
+        0.32
+      ],
+      "pressure": [
+        2.71,
+        1.38
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 168.0,
+      "activity": [
+        12.99,
+        5.18
+      ],
+      "aggression": [
+        4.48,
+        2.02
+      ],
+      "ring_control": [
+        0.83,
+        0.33
+      ],
+      "pressure": [
+        5.56,
+        1.45
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 169.0,
+      "activity": [
+        4.1,
+        4.72
+      ],
+      "aggression": [
+        0.54,
+        3.19
+      ],
+      "ring_control": [
+        0.8,
+        0.52
+      ],
+      "pressure": [
+        1.76,
+        2.6
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 170.0,
+      "activity": [
+        2.53,
+        3.84
+      ],
+      "aggression": [
+        0.53,
+        3.95
+      ],
+      "ring_control": [
+        0.72,
+        0.86
+      ],
+      "pressure": [
+        0.84,
+        3.95
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 171.0,
+      "activity": [
+        2.8,
+        2.28
+      ],
+      "aggression": [
+        1.02,
+        0.48
+      ],
+      "ring_control": [
+        0.83,
+        0.57
+      ],
+      "pressure": [
+        1.33,
+        1.34
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 172.0,
+      "activity": [
+        0.61,
+        0.55
+      ],
+      "aggression": [
+        0.21,
+        0.11
+      ],
+      "ring_control": [
+        0.84,
+        0.49
+      ],
+      "pressure": [
+        0.5,
+        0.42
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 173.0,
+      "activity": [
+        1.36,
+        0.68
+      ],
+      "aggression": [
+        0.05,
+        0.26
+      ],
+      "ring_control": [
+        0.85,
+        0.48
+      ],
+      "pressure": [
+        0.18,
+        0.27
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        10
+      ]
+    },
+    {
+      "time": 174.0,
+      "activity": [
+        9.38,
+        0.62
+      ],
+      "aggression": [
+        2.08,
+        0.16
+      ],
+      "ring_control": [
+        0.72,
+        0.49
+      ],
+      "pressure": [
+        1.89,
+        0.22
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 175.0,
+      "activity": [
+        10.05,
+        21.87
+      ],
+      "aggression": [
+        1.44,
+        15.13
+      ],
+      "ring_control": [
+        0.53,
+        0.66
+      ],
+      "pressure": [
+        1.56,
+        9.02
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 176.0,
+      "activity": [
+        7.76,
+        4.15
+      ],
+      "aggression": [
+        0.35,
+        1.71
+      ],
+      "ring_control": [
+        0.33,
+        0.84
+      ],
+      "pressure": [
+        0.73,
+        3.47
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 177.0,
+      "activity": [
+        5.15,
+        5.01
+      ],
+      "aggression": [
+        1.48,
+        2.31
+      ],
+      "ring_control": [
+        0.2,
+        0.77
+      ],
+      "pressure": [
+        1.99,
+        2.78
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 178.0,
+      "activity": [
+        10.09,
+        5.91
+      ],
+      "aggression": [
+        2.97,
+        1.62
+      ],
+      "ring_control": [
+        0.21,
+        0.69
+      ],
+      "pressure": [
+        2.82,
+        2.31
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 179.0,
+      "activity": [
+        19.29,
+        4.45
+      ],
+      "aggression": [
+        4.95,
+        2.03
+      ],
+      "ring_control": [
+        0.53,
+        0.81
+      ],
+      "pressure": [
+        4.56,
+        2.25
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 180.0,
+      "activity": [
+        5.88,
+        8.76
+      ],
+      "aggression": [
+        1.94,
+        2.75
+      ],
+      "ring_control": [
+        0.56,
+        0.7
+      ],
+      "pressure": [
+        2.32,
+        2.52
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 181.0,
+      "activity": [
+        6.82,
+        8.11
+      ],
+      "aggression": [
+        3.23,
+        5.39
+      ],
+      "ring_control": [
+        0.48,
+        0.29
+      ],
+      "pressure": [
+        2.59,
+        6.39
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 182.0,
+      "activity": [
+        5.32,
+        15.37
+      ],
+      "aggression": [
+        0.85,
+        8.05
+      ],
+      "ring_control": [
+        0.45,
+        0.22
+      ],
+      "pressure": [
+        1.51,
+        8.21
+      ],
+      "distance": "Inside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 183.0,
+      "activity": [
+        13.57,
+        14.85
+      ],
+      "aggression": [
+        4.48,
+        8.06
+      ],
+      "ring_control": [
+        0.51,
+        0.24
+      ],
+      "pressure": [
+        3.64,
+        9.99
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 184.0,
+      "activity": [
+        12.92,
+        5.64
+      ],
+      "aggression": [
+        7.25,
+        1.49
+      ],
+      "ring_control": [
+        0.61,
+        0.36
+      ],
+      "pressure": [
+        6.08,
+        3.54
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 185.0,
+      "activity": [
+        7.65,
+        4.56
+      ],
+      "aggression": [
+        6.6,
+        0.33
+      ],
+      "ring_control": [
+        0.76,
+        0.34
+      ],
+      "pressure": [
+        6.41,
+        1.21
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 186.0,
+      "activity": [
+        7.72,
+        37.67
+      ],
+      "aggression": [
+        1.86,
+        2.89
+      ],
+      "ring_control": [
+        0.88,
+        0.34
+      ],
+      "pressure": [
+        3.47,
+        2.98
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 187.0,
+      "activity": [
+        7.72,
+        37.67
+      ],
+      "aggression": [
+        1.86,
+        2.89
+      ],
+      "ring_control": [
+        0.88,
+        0.34
+      ],
+      "pressure": [
+        3.47,
+        2.98
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 188.0,
+      "activity": [
+        7.72,
+        37.67
+      ],
+      "aggression": [
+        1.86,
+        2.89
+      ],
+      "ring_control": [
+        0.88,
+        0.34
+      ],
+      "pressure": [
+        3.47,
+        2.98
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 189.0,
+      "activity": [
+        7.72,
+        37.67
+      ],
+      "aggression": [
+        1.86,
+        2.89
+      ],
+      "ring_control": [
+        0.88,
+        0.34
+      ],
+      "pressure": [
+        3.47,
+        2.98
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 190.0,
+      "activity": [
+        18.03,
+        29.85
+      ],
+      "aggression": [
+        0.89,
+        1.73
+      ],
+      "ring_control": [
+        0.61,
+        0.56
+      ],
+      "pressure": [
+        2.42,
+        2.31
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 191.0,
+      "activity": [
+        18.03,
+        29.85
+      ],
+      "aggression": [
+        0.89,
+        1.73
+      ],
+      "ring_control": [
+        0.61,
+        0.56
+      ],
+      "pressure": [
+        2.42,
+        2.31
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 192.0,
+      "activity": [
+        18.03,
+        29.85
+      ],
+      "aggression": [
+        0.89,
+        1.73
+      ],
+      "ring_control": [
+        0.61,
+        0.56
+      ],
+      "pressure": [
+        2.42,
+        2.31
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 193.0,
+      "activity": [
+        18.03,
+        29.85
+      ],
+      "aggression": [
+        0.89,
+        1.73
+      ],
+      "ring_control": [
+        0.61,
+        0.56
+      ],
+      "pressure": [
+        2.42,
+        2.31
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 194.0,
+      "activity": [
+        18.03,
+        29.85
+      ],
+      "aggression": [
+        0.89,
+        1.73
+      ],
+      "ring_control": [
+        0.61,
+        0.56
+      ],
+      "pressure": [
+        2.42,
+        2.31
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 195.0,
+      "activity": [
+        18.03,
+        29.85
+      ],
+      "aggression": [
+        0.89,
+        1.73
+      ],
+      "ring_control": [
+        0.61,
+        0.56
+      ],
+      "pressure": [
+        2.42,
+        2.31
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 196.0,
+      "activity": [
+        18.03,
+        29.85
+      ],
+      "aggression": [
+        0.89,
+        1.73
+      ],
+      "ring_control": [
+        0.61,
+        0.56
+      ],
+      "pressure": [
+        2.42,
+        2.31
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 197.0,
+      "activity": [
+        14.05,
+        17.49
+      ],
+      "aggression": [
+        5.66,
+        0.86
+      ],
+      "ring_control": [
+        0.74,
+        0.47
+      ],
+      "pressure": [
+        4.75,
+        1.63
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 198.0,
+      "activity": [
+        2.56,
+        6.91
+      ],
+      "aggression": [
+        0.82,
+        2.32
+      ],
+      "ring_control": [
+        0.91,
+        0.49
+      ],
+      "pressure": [
+        1.7,
+        2.5
+      ],
+      "distance": "Mid-Range",
+      "round_pts": [
+        9,
+        10
+      ]
+    },
+    {
+      "time": 199.0,
+      "activity": [
+        12.74,
+        3.44
+      ],
+      "aggression": [
+        0.5,
+        1.69
+      ],
+      "ring_control": [
+        0.81,
+        0.45
+      ],
+      "pressure": [
+        1.12,
+        1.98
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    },
+    {
+      "time": 200.0,
+      "activity": [
+        12.74,
+        3.44
+      ],
+      "aggression": [
+        0.5,
+        1.69
+      ],
+      "ring_control": [
+        0.81,
+        0.45
+      ],
+      "pressure": [
+        1.12,
+        1.98
+      ],
+      "distance": "Outside",
+      "round_pts": [
+        10,
+        9
+      ]
+    }
+  ]
+}

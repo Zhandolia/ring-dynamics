@@ -5,10 +5,13 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 const BASE_PATH = process.env.NODE_ENV === 'production' ? '/ring-dynamics' : '';
 
-// Pre-processed sample served as static files from public/sample (no backend needed)
+// Pre-processed sample served as static files from public/sample (no backend needed).
+// Bump SAMPLE_VERSION whenever the sample files change so browsers skip stale caches.
 const SAMPLE_ID = 'sample';
-const SAMPLE_VIDEO_URL = `${BASE_PATH}/sample/sample_annotated.mp4`;
-const SAMPLE_METRICS_URL = `${BASE_PATH}/sample/sample_metrics.json`;
+const SAMPLE_VERSION = '3';
+const SAMPLE_START_SEC = 17; // skip broadcast intro
+const SAMPLE_VIDEO_URL = `${BASE_PATH}/sample/sample_annotated.mp4?v=${SAMPLE_VERSION}`;
+const SAMPLE_METRICS_URL = `${BASE_PATH}/sample/sample_metrics.json?v=${SAMPLE_VERSION}`;
 
 interface FightData {
     id: string;
@@ -397,6 +400,10 @@ export default function FightPage() {
                             autoPlay
                             muted
                             playsInline
+                            onLoadedMetadata={isSample ? (e) => { e.currentTarget.currentTime = SAMPLE_START_SEC; } : undefined}
+                            onSeeking={isSample ? (e) => {
+                                if (e.currentTarget.currentTime < SAMPLE_START_SEC) e.currentTarget.currentTime = SAMPLE_START_SEC;
+                            } : undefined}
                             className="w-full h-full object-contain"
                         >
                             <source
