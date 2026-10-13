@@ -184,9 +184,6 @@ export default function Home() {
                             </div>
                         </div>
                         <div className="flex-1 p-6 md:p-8 flex flex-col justify-center text-left">
-                            <span className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#ff6b6b' }}>
-                                No upload needed
-                            </span>
                             <h2 className="text-2xl font-bold mb-2">See It In Action</h2>
                             <p className="text-sm text-gray-400 mb-5">
                                 A 3-minute fight clip analyzed end to end: fighter tracking, live activity &amp; aggression metrics, event feed, and scorecard.
