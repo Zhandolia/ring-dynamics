@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import Logo from '../../components/Logo';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 const BASE_PATH = process.env.NODE_ENV === 'production' ? '/ring-dynamics' : '';
@@ -225,9 +226,9 @@ export default function FightPage() {
                         className="text-gray-500 hover:text-white transition-colors text-sm">
                         ←
                     </button>
-                    <h1 className="text-lg font-bold tracking-wider uppercase"
+                    <h1 className="flex items-center gap-2 text-lg font-bold tracking-wider uppercase"
                         style={{ color: '#e53e3e' }}>
-                        🥊 Ring Dynamics
+                        <Logo size={26} /> Ring Dynamics
                     </h1>
                 </div>
                 <div className="flex items-center gap-4 text-xs">

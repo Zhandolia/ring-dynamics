@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { readSubmission } from '../lib/api';
+import Logo from '../components/Logo';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 const BASE_PATH = process.env.NODE_ENV === 'production' ? '/ring-dynamics' : '';
@@ -134,8 +135,8 @@ export default function Home() {
                 {/* Nav */}
                 <nav className="flex items-center justify-between px-6 py-3"
                     style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                    <h1 className="text-lg font-bold tracking-wider uppercase" style={{ color: '#e53e3e' }}>
-                        🥊 Ring Dynamics
+                    <h1 className="flex items-center gap-2 text-lg font-bold tracking-wider uppercase" style={{ color: '#e53e3e' }}>
+                        <Logo size={26} /> Ring Dynamics
                     </h1>
                     <span className={`text-xs ${apiStatus === 'online' ? 'text-green-400' :
                         apiStatus === 'offline' ? 'text-red-400' : 'text-gray-500'
